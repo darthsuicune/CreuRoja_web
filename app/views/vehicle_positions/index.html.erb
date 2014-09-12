@@ -18,18 +18,28 @@ function initialize() {
 	};
 	var map = new google.maps.Map(document.getElementById("map"), mapOptions);
 	startTimer(map);
+	
+	$.get("vehicle_positions.json").done(function(data) { 
+		drawVehicles(map, data); 
+	});
 }
 
 function startTimer(map) {
-	loadMarkers(map);
-	
-	var interval = window.setInterval(function() {
-		loadMarkers(map);
+	//setInterval would not stop the calls after moving inside the page (such as user profile)
+	setTimeout(function() {
+		$.get("vehicle_positions.json").done(function(data) { 
+			if ($(location).attr("pathname").match("vehicle_positions") != null) {
+				drawVehicles(map, data);
+				startTimer(map);
+			}
+		})
 	}, 5000);
 }
 
 function loadMarkers(map) {
-	$.get("vehicle_positions.json",{}, function(data) { drawVehicles(map, data); })
+	$.get("vehicle_positions.json",{}, function(data) { 
+		drawVehicles(map, data); 
+	});
 }
 
 function drawVehicles(map, vehicles) {

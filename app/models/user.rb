@@ -14,7 +14,8 @@ class User < ActiveRecord::Base
 	before_save { email.downcase!
 	              role.downcase unless role.nil? }
 	
-	before_validation :defaults
+	before_create :defaults
+	before_validation :set_initial_password
 
 	VALID_EMAIL_FORMAT = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 	validates :email, presence: true, format: { with: VALID_EMAIL_FORMAT }, 
@@ -112,12 +113,13 @@ class User < ActiveRecord::Base
 			self.language ||= "ca"
 			self.role ||= "volunteer"
 			self.phone ||= 0
-			set_initial_password if self.password_digest.nil?
 		end
 		
 		def set_initial_password
-			temp = SecureRandom.urlsafe_base64
-			self.password = temp 
-			self.password_confirmation = temp
+			if self.password_digest.nil?
+				temp = SecureRandom.urlsafe_base64
+				self.password = temp 
+				self.password_confirmation = temp
+			end
 		end
 end
