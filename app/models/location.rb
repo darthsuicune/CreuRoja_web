@@ -6,6 +6,8 @@ class Location < ActiveRecord::Base
 	has_many :location_services, dependent: :destroy
 	has_many :services, through: :location_services
 	has_many :service_users, dependent: :destroy
+	has_many :vehicle_assemblies, dependent: :destroy
+	has_many :vehicles, through: :vehicle_assemblies
 	
 	before_validation :defaults
 	

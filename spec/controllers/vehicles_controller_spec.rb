@@ -66,19 +66,25 @@ describe VehiclesController do
 	end
 	
 	describe "signed in" do
-		let(:user) { FactoryGirl.create(:admin) }
-		before { sign_in user }
+		let(:admin) { FactoryGirl.create(:admin) }
+		let(:vehicle) { FactoryGirl.create(:vehicle) }
+		before { sign_in admin }
 
 		describe "GET index" do
-			let(:vehicle) { FactoryGirl.create(:vehicle) }
 			it "assigns all vehicles as @vehicles" do
 				get :index, {}, valid_session
 				expect(assigns(:vehicles)).to eq([vehicle])
 			end
+			describe "as technician" do
+				let(:tech) { FactoryGirl.create(:technician) }
+				it "doesn't assign vehicles that are outside the assembly" do
+					get :index, {}, valid_session
+					expect(assigns(:vehicles)).not_to eq([vehicle])
+				end
+			end
 		end
 
 		describe "GET show" do
-			let(:vehicle) { FactoryGirl.create(:vehicle) }
 			it "assigns the requested vehicle as @vehicle" do
 				get :show, {:id => vehicle.to_param}, valid_session
 				expect(assigns(:vehicle)).to eq(vehicle)
@@ -93,7 +99,6 @@ describe VehiclesController do
 		end
 
 		describe "GET edit" do
-			let(:vehicle) { FactoryGirl.create(:vehicle) }
 			it "assigns the requested vehicle as @vehicle" do
 				get :edit, {:id => vehicle.to_param}, valid_session
 				expect(assigns(:vehicle)).to eq(vehicle)
@@ -138,7 +143,6 @@ describe VehiclesController do
 		end
 
 		describe "PUT update" do
-			let(:vehicle) { FactoryGirl.create(:vehicle) }
 			describe "with valid params" do
 				it "updates the requested vehicle" do
 					# Assuming there are no other vehicles in the database, this
@@ -178,7 +182,7 @@ describe VehiclesController do
 		end
 
 		describe "DELETE destroy" do
-			before { @vehicle = FactoryGirl.create(:vehicle) }
+			before { @vehicle = vehicle }
 			
 			it "destroys the requested vehicle" do
 				expect {

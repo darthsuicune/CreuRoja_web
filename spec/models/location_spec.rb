@@ -13,6 +13,7 @@ describe Location do
 	it { should respond_to("services") }
 	it { should respond_to("users") }
 	it { should respond_to("active") }
+	it { should respond_to("vehicles") }
 	
 	describe "with invalid parameters" do
 		let(:location) { Location.new(name: "asdf", address: "asdf", latitude: 0, longitude: 0, location_type: "asdf") }

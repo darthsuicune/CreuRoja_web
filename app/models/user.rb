@@ -47,6 +47,8 @@ class User < ActiveRecord::Base
 			role == "technician"
 		when :see_vehicle_list
 			role == "technician"
+		when :see_all_vehicles
+			false
 		when :see_service_list
 			role == "technician"
 		when :add_to_own_assembly
@@ -108,6 +110,20 @@ class User < ActiveRecord::Base
 	
 	def self.positions
 		[[I18n.t(:position_b1), "b1"], [I18n.t(:position_per), "per"]]
+	end
+	
+	def accesible_vehicles
+		if self.allowed_to?(:see_all_vehicles)
+			Vehicle.all
+		else
+			vehicles = []
+			Vehicle.operative.each do |vehicle|
+				vehicle.assemblies.each do |assembly|
+					vehicles << vehicle if assemblies.include?(assembly)
+				end
+			end
+			vehicles
+		end
 	end
 	
 	private
