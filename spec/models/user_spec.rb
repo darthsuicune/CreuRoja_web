@@ -101,7 +101,8 @@ describe User do
 		end
 		describe "confirmation is nil" do
 			before { @user.password = "asdfgh"
-			         @user.password_confirmation = nil }
+						@user.password_confirmation = nil
+						@user.save}
 			it { should_not be_valid }
 		end
 	end

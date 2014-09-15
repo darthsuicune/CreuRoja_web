@@ -24,8 +24,7 @@ describe UsersController do
 	# User. As you add validations to User, be sure to
 	# adjust the attributes here as well.
 	let(:valid_attributes) { { "name" => "MyString", "surname" => "MyString2",
-										"email" => "email1@something.com", "password" => "MyPass", 
-										"password_confirmation" => "MyPass", "assemblies" => { "location_id" => 1 } } }
+										"email" => "email1@something.com", "assemblies" => { "location_id" => 1 } } }
 	
 	let(:full_attributes) { { "name" => "MyString", 
 										"surname" => "MyString2",
@@ -130,6 +129,7 @@ describe UsersController do
 				expect {
 					post :create, { :user => valid_attributes }, valid_session
 				}.to change(User, :count).by(1)
+				expect(User.last.password_digest).not_to be_nil
 			end
 			
 			it "creates a full user" do
