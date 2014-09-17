@@ -116,13 +116,13 @@ class User < ActiveRecord::Base
 		if self.allowed_to?(:see_all_vehicles)
 			Vehicle.all
 		else
-			vehicles = []
-			Vehicle.operative.each do |vehicle|
-				vehicle.assemblies.each do |assembly|
-					vehicles << vehicle if assemblies.include?(assembly)
+			result = []
+			self.assemblies.each do |assembly|
+				assembly.vehicles.each do |vehicle|
+					result << vehicle if vehicle.assemblies.include? assembly
 				end
 			end
-			vehicles
+			result
 		end
 	end
 	
