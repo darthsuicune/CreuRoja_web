@@ -75,13 +75,6 @@ describe VehiclesController do
 				get :index, {}, valid_session
 				expect(assigns(:vehicles)).to eq([vehicle])
 			end
-			describe "as technician" do
-				let(:tech) { FactoryGirl.create(:technician) }
-				it "doesn't assign vehicles that are outside the assembly" do
-					get :index, {}, valid_session
-					expect(assigns(:vehicles)).not_to eq([vehicle])
-				end
-			end
 		end
 
 		describe "GET show" do
@@ -194,6 +187,17 @@ describe VehiclesController do
 				delete :destroy, {id: @vehicle.to_param}, valid_session
 				expect(response).to redirect_to(vehicles_url)
 			end
+		end
+	end
+	
+	describe "signed in as technician" do
+		let(:tech) { FactoryGirl.create(:tech) }
+		let(:vehicle) { FactoryGirl.create(:vehicle) }
+		
+		before { sign_in tech }
+		it "doesn't assign vehicles that are outside the assembly" do
+			get :index, {}, valid_session
+			expect(assigns(:vehicles)).not_to eq([vehicle])
 		end
 	end
 end
