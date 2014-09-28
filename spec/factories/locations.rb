@@ -12,7 +12,7 @@ FactoryGirl.define do
 		location_type "MyType"
 		active true
 	
-		factory :assembly do
+		factory :assembly_location do
 			location_type "assembly"
 		end
 	end
