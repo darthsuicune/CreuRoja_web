@@ -37,7 +37,7 @@
 			<td><%= link_to t(:resource_show), vehicle %></td>
 			<% if current_user && current_user.allowed_to?(:manage_vehicles) %>
 				<td><%= link_to t(:resource_edit), edit_vehicle_path(vehicle) %></td>
-				<% if vehicle.operative %>
+				<% if vehicle.available? %>
 					<td><%= link_to t(:deactivate_vehicle), vehicle_path(vehicle, :vehicle => {:operative => false}), method: :put, data: { confirm: t(:resource_destroy_confirm) } %></td>
 				<% else %>
 					<td><%= link_to t(:reactivate_vehicle), vehicle_path(vehicle, :vehicle => {:operative => true}), method: :put %></td>

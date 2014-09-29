@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140929121227) do
+ActiveRecord::Schema.define(version: 20140929200250) do
 
   create_table "assemblies", force: true do |t|
     t.string   "name"
@@ -23,9 +23,9 @@ ActiveRecord::Schema.define(version: 20140929121227) do
     t.integer  "location_id"
   end
 
-  add_index "assemblies", ["description"], name: "index_assemblies_on_description"
-  add_index "assemblies", ["level"], name: "index_assemblies_on_level"
-  add_index "assemblies", ["name"], name: "index_assemblies_on_name", unique: true
+  add_index "assemblies", ["description"], name: "index_assemblies_on_description", using: :btree
+  add_index "assemblies", ["level"], name: "index_assemblies_on_level", using: :btree
+  add_index "assemblies", ["name"], name: "index_assemblies_on_name", unique: true, using: :btree
 
   create_table "assembly_locations", force: true do |t|
     t.integer  "location_id"
@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(version: 20140929121227) do
     t.datetime "updated_at"
   end
 
-  add_index "assembly_locations", ["location_id", "assembly_id"], name: "index_assembly_locations_on_location_id_and_assembly_id", unique: true
+  add_index "assembly_locations", ["location_id", "assembly_id"], name: "index_assembly_locations_on_location_id_and_assembly_id", unique: true, using: :btree
 
   create_table "issues", force: true do |t|
     t.string   "status"
@@ -62,7 +62,7 @@ ActiveRecord::Schema.define(version: 20140929121227) do
     t.integer  "per"
   end
 
-  add_index "location_services", ["location_id", "service_id"], name: "index_location_services_on_location_id_and_service_id", unique: true
+  add_index "location_services", ["location_id", "service_id"], name: "index_location_services_on_location_id_and_service_id", unique: true, using: :btree
 
   create_table "locations", force: true do |t|
     t.string   "name"
@@ -75,17 +75,12 @@ ActiveRecord::Schema.define(version: 20140929121227) do
     t.boolean  "active",        default: true
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "expiredate"
+    t.integer  "expiredate",    default: 0
   end
 
-  add_index "locations", ["address"], name: "index_locations_on_address"
-  add_index "locations", ["latitude", "longitude"], name: "index_locations_on_latitude_and_longitude", unique: true
-  add_index "locations", ["name"], name: "index_locations_on_name"
-
-  create_table "locations_users", id: false, force: true do |t|
-    t.integer "location_id"
-    t.integer "user_id"
-  end
+  add_index "locations", ["address"], name: "index_locations_on_address", using: :btree
+  add_index "locations", ["latitude", "longitude"], name: "index_locations_on_latitude_and_longitude", unique: true, using: :btree
+  add_index "locations", ["name"], name: "index_locations_on_name", using: :btree
 
   create_table "logs", force: true do |t|
     t.integer  "user_id"
@@ -96,10 +91,10 @@ ActiveRecord::Schema.define(version: 20140929121227) do
     t.string   "controller"
   end
 
-  add_index "logs", ["action"], name: "index_logs_on_action"
-  add_index "logs", ["controller"], name: "index_logs_on_controller"
-  add_index "logs", ["ip"], name: "index_logs_on_ip"
-  add_index "logs", ["user_id"], name: "index_logs_on_user_id"
+  add_index "logs", ["action"], name: "index_logs_on_action", using: :btree
+  add_index "logs", ["controller"], name: "index_logs_on_controller", using: :btree
+  add_index "logs", ["ip"], name: "index_logs_on_ip", using: :btree
+  add_index "logs", ["user_id"], name: "index_logs_on_user_id", using: :btree
 
   create_table "service_users", force: true do |t|
     t.integer  "user_id"
@@ -111,10 +106,10 @@ ActiveRecord::Schema.define(version: 20140929121227) do
     t.integer  "vehicle_id"
   end
 
-  add_index "service_users", ["location_id"], name: "index_service_users_on_location_id"
-  add_index "service_users", ["service_id"], name: "index_service_users_on_service_id"
-  add_index "service_users", ["user_id", "service_id"], name: "index_service_users_on_user_id_and_service_id", unique: true
-  add_index "service_users", ["user_id"], name: "index_service_users_on_user_id"
+  add_index "service_users", ["location_id"], name: "index_service_users_on_location_id", using: :btree
+  add_index "service_users", ["service_id"], name: "index_service_users_on_service_id", using: :btree
+  add_index "service_users", ["user_id", "service_id"], name: "index_service_users_on_user_id_and_service_id", unique: true, using: :btree
+  add_index "service_users", ["user_id"], name: "index_service_users_on_user_id", using: :btree
 
   create_table "services", force: true do |t|
     t.string   "name"
@@ -129,7 +124,7 @@ ActiveRecord::Schema.define(version: 20140929121227) do
     t.boolean  "archived",    default: false
   end
 
-  add_index "services", ["assembly_id"], name: "index_services_on_assembly_id"
+  add_index "services", ["assembly_id"], name: "index_services_on_assembly_id", using: :btree
 
   create_table "sessions", force: true do |t|
     t.integer  "user_id"
@@ -138,7 +133,7 @@ ActiveRecord::Schema.define(version: 20140929121227) do
     t.datetime "updated_at"
   end
 
-  add_index "sessions", ["token"], name: "index_sessions_on_token", unique: true
+  add_index "sessions", ["token"], name: "index_sessions_on_token", unique: true, using: :btree
 
   create_table "user_assemblies", force: true do |t|
     t.integer  "assembly_id"
@@ -147,18 +142,7 @@ ActiveRecord::Schema.define(version: 20140929121227) do
     t.datetime "updated_at"
   end
 
-  add_index "user_assemblies", ["assembly_id", "user_id"], name: "index_user_assemblies_on_assembly_id_and_user_id", unique: true
-
-  create_table "user_services", id: false, force: true do |t|
-    t.string   "user_type"
-    t.integer  "user_id"
-    t.integer  "service_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "user_services", ["user_id", "service_id"], name: "index_user_services_on_user_id_and_service_id", unique: true
-  add_index "user_services", ["user_type"], name: "index_user_services_on_user_type"
+  add_index "user_assemblies", ["assembly_id", "user_id"], name: "index_user_assemblies_on_assembly_id_and_user_id", unique: true, using: :btree
 
   create_table "user_types", force: true do |t|
     t.integer  "user_id"
@@ -167,7 +151,7 @@ ActiveRecord::Schema.define(version: 20140929121227) do
     t.datetime "updated_at"
   end
 
-  add_index "user_types", ["user_id", "user_type"], name: "index_user_types_on_user_id_and_user_type", unique: true
+  add_index "user_types", ["user_id", "user_type"], name: "index_user_types_on_user_id_and_user_type", unique: true, using: :btree
 
   create_table "users", force: true do |t|
     t.string   "name"
@@ -185,10 +169,10 @@ ActiveRecord::Schema.define(version: 20140929121227) do
     t.string   "notes"
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true
-  add_index "users", ["name"], name: "index_users_on_name"
-  add_index "users", ["resettoken"], name: "index_users_on_resettoken", unique: true
-  add_index "users", ["surname"], name: "index_users_on_surname"
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["name"], name: "index_users_on_name", using: :btree
+  add_index "users", ["resettoken"], name: "index_users_on_resettoken", unique: true, using: :btree
+  add_index "users", ["surname"], name: "index_users_on_surname", using: :btree
 
   create_table "vehicle_assemblies", force: true do |t|
     t.integer  "vehicle_id"
@@ -200,13 +184,13 @@ ActiveRecord::Schema.define(version: 20140929121227) do
   create_table "vehicle_positions", force: true do |t|
     t.integer  "vehicle_id"
     t.string   "indicative"
-    t.float    "latitude",   limit: 50
-    t.float    "longitude",  limit: 50
+    t.float    "latitude"
+    t.float    "longitude"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "vehicle_positions", ["vehicle_id"], name: "index_vehicle_positions_on_vehicle_id"
+  add_index "vehicle_positions", ["vehicle_id"], name: "index_vehicle_positions_on_vehicle_id", using: :btree
 
   create_table "vehicle_services", force: true do |t|
     t.integer  "vehicle_id"
@@ -224,7 +208,7 @@ ActiveRecord::Schema.define(version: 20140929121227) do
     t.datetime "updated_at"
   end
 
-  add_index "vehicle_services", ["vehicle_id", "service_id"], name: "index_vehicle_services_on_vehicle_id_and_service_id", unique: true
+  add_index "vehicle_services", ["vehicle_id", "service_id"], name: "index_vehicle_services_on_vehicle_id_and_service_id", unique: true, using: :btree
 
   create_table "vehicles", force: true do |t|
     t.string   "brand"
@@ -234,13 +218,15 @@ ActiveRecord::Schema.define(version: 20140929121227) do
     t.string   "vehicle_type"
     t.integer  "places"
     t.string   "notes"
-    t.boolean  "operative",    default: true
+    t.boolean  "operative",     default: true
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.date     "itv"
+    t.date     "sanitary_cert"
   end
 
-  add_index "vehicles", ["indicative"], name: "index_vehicles_on_indicative"
-  add_index "vehicles", ["license"], name: "index_vehicles_on_license"
-  add_index "vehicles", ["vehicle_type"], name: "index_vehicles_on_vehicle_type"
+  add_index "vehicles", ["indicative"], name: "index_vehicles_on_indicative", using: :btree
+  add_index "vehicles", ["license"], name: "index_vehicles_on_license", using: :btree
+  add_index "vehicles", ["vehicle_type"], name: "index_vehicles_on_vehicle_type", using: :btree
 
 end

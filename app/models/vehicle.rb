@@ -15,12 +15,10 @@ class Vehicle < ActiveRecord::Base
 	validates :vehicle_type, presence: true
 	validates :places, presence: true
 	
+	after_initialize :validate_licenses
+	
 	def to_s
 		"#{indicative}"
-	end
-	
-	def self.operative
-		Vehicle.where(operative: true)
 	end
 	
 	def translated_vehicle_type
@@ -43,8 +41,19 @@ class Vehicle < ActiveRecord::Base
 	def driver(service)
 		self.service_users.where(user_position: ["b1","btp","per"], service_id: service.id).first
 	end
+	
+	def available?
+		validate_licenses
+	end
 
 	protected
-	def defaults
-	end
+		def defaults
+		end
+		
+		def validate_licenses
+			self.operative = false if self.itv && self.itv < Date.today
+			self.operative = false if self.sanitary_cert && self.sanitary_cert < Date.today
+			self.save if self.operative == false
+			self.operative
+		end
 end
