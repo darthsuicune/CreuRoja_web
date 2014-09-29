@@ -34,4 +34,8 @@ class Service < ActiveRecord::Base
 	def finished?(time)
 		time >= end_time
 	end
+	
+	def self.last_date
+		Service.order("end_time DESC").first.end_time
+	end
 end

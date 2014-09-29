@@ -28,6 +28,7 @@ class UserAssembliesController < ApplicationController
 		def user_assembly_params
 			params.require(:user_assembly).permit(:assembly_id, :user_id)
 		end
+		
 		def is_valid_user
 			redirect_to root_url unless current_user && current_user.allowed_to?(:assign_users_to_assemblies)
 		end

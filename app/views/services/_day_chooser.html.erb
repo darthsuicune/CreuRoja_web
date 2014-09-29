@@ -1,0 +1,6 @@
+<div class="date-selector">
+	<%= form_tag 'graphic', method: :get do %>
+		<%= select_date @date, prefix: :date %>
+		<%= submit_tag t(:form_service_submit) %>
+	<% end %>
+</div>

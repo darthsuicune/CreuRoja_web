@@ -14,6 +14,11 @@ class ServicesController < ApplicationController
 	# GET /services/graphic
 	def graphic
 		@services = services
+		@date = if params[:date]
+			Date.new(params[:date][:year].to_i,params[:date][:month].to_i,params[:date][:day].to_i)
+		else
+			Date.today
+		end
 	end
 
 	# GET /services/1

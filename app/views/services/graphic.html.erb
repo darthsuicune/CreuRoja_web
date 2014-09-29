@@ -2,10 +2,13 @@
 
 <h1><%= t(:service_list_title) %></h1>
 
-<% day_services = @services.where(base_time: DateTime.now.beginning_of_day..DateTime.now.end_of_day) %>
+<% day_services = @services.where(base_time: @date.beginning_of_day..@date.end_of_day) %>
 <% not_occupied = "<td style=\"background-color: white; border:thin solid black; padding: 3px;\"></td>" %>
 <% base = "<td style=\"background-color: green; border:thin solid black; padding: 3px;\"></td>" %>
 <% started = "<td style=\"background-color: red; border:thin solid black; padding: 3px;\"></td>" %>
+
+<%= render 'day_chooser' %>
+
 <div id="services_graphic">
 	<table cellpadding="10" cellspacing="0">
 		<thead>
@@ -68,3 +71,4 @@
 </div>
 
 <%= link_to t(:form_service_new), new_service_path %>
+<%= link_to t(:resource_back), services_path %>
