@@ -21,6 +21,9 @@
 						<% if current_user.allowed_to?(:see_location_list) %>
 							<li> <%= link_to t(:location_list_title), locations_url %>
 						<% end %>
+						<% if current_user.allowed_to?(:see_assemblies) %>
+							<li> <%= link_to t(:assembly_list_title), assemblies_url %>
+						<% end %>
 					</ul>
 				</li>
 			<% end %>

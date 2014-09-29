@@ -24,7 +24,7 @@ describe UsersController do
 	# User. As you add validations to User, be sure to
 	# adjust the attributes here as well.
 	let(:valid_attributes) { { "name" => "MyString", "surname" => "MyString2",
-										"email" => "email1@something.com", "assemblies" => { "location_id" => 1 } } }
+										"email" => "email1@something.com", "assemblies" => { "assembly_id" => 1 } } }
 	
 	let(:full_attributes) { { "name" => "MyString", 
 										"surname" => "MyString2",
@@ -37,7 +37,7 @@ describe UsersController do
 										"active" => true,
 										"password" => "MyPass", 
 										"password_confirmation" => "MyPass", 
-										"assemblies" => { "location_id" => 1 } } }
+										"assemblies" => { "assembly_id" => 1 } } }
 	
 	let(:user_types) { { "name" => "MyString", 
 										"surname" => "MyString2",
@@ -50,7 +50,7 @@ describe UsersController do
 										"active" => true,
 										"password" => "MyPass", 
 										"password_confirmation" => "MyPass", 
-										"assemblies" => { "location_id" => 1 },
+										"assemblies" => { "assembly_id" => 1 },
 										"user_types_attributes" => { "0" => { "user_types" => "type1" } } } 
 							}
 
@@ -66,12 +66,12 @@ describe UsersController do
 
 	describe "GET index" do
 		let(:tech) { FactoryGirl.create(:user, role: "technician") }
-		let(:location) { FactoryGirl.create(:location) }
+		let(:assembly) { FactoryGirl.create(:assembly) }
 		let(:user1) { FactoryGirl.create(:user) }
 		let(:user2) { FactoryGirl.create(:user) }
 		before {
-			LocationUser.create(location_id: location.id, user_id: user.id)
-			LocationUser.create(location_id: location.id, user_id: user1.id)
+			UserAssembly.create(assembly_id: assembly.id, user_id: user.id)
+			UserAssembly.create(assembly_id: assembly.id, user_id: user1.id)
 		}
 		describe "for admins" do
 			it "assigns all users as @users for an admin" do

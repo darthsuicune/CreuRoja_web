@@ -18,7 +18,7 @@
 					<td><%= assembly.address %></td>
 					<td><%= assembly.phone %></td>
 					<% if current_user.allowed_to?(:manage_vehicles) %>
-						<% vehicle_assembly = VehicleAssembly.where(vehicle_id: @vehicle.id, location_id: assembly.id).first %>
+						<% vehicle_assembly = VehicleAssembly.where(vehicle_id: @vehicle.id, assembly_id: assembly.id).first %>
 						<td><%= link_to t(:resource_destroy), vehicle_assembly, method: :delete %></td>
 					<% end %>
 				</tr>

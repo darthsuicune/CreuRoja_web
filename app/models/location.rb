@@ -1,13 +1,10 @@
 class Location < ActiveRecord::Base
 	default_scope { order(location_type: :desc) }
-	has_many :services
-	has_many :location_users, dependent: :destroy
-	has_many :users, through: :location_users
+	has_many :assembly_locations, dependent: :destroy
+	has_many :assemblies, through: :assembly_locations
 	has_many :location_services, dependent: :destroy
 	has_many :services, through: :location_services
 	has_many :service_users, dependent: :destroy
-	has_many :vehicle_assemblies, dependent: :destroy
-	has_many :vehicles, through: :vehicle_assemblies
 	
 	before_validation :defaults
 	
@@ -17,7 +14,7 @@ class Location < ActiveRecord::Base
 	validates :longitude, presence: true
 	validates :location_type, presence: true
 	
-	def self.assemblies
+	def self.offices
 		Location.active_locations.where(location_type: "asamblea")
 	end
 	
@@ -26,7 +23,11 @@ class Location < ActiveRecord::Base
 	end
 	
 	def self.location_types
-		Location.active_locations.select(:location_type).distinct
+		types = []
+		Location.active_locations.select(:location_type).distinct.each do |location|
+			types << location.location_type
+		end
+		types
 	end
 	
 	private

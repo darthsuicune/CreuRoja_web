@@ -202,8 +202,8 @@ describe User do
 		let(:vehicle1) { FactoryGirl.create(:vehicle) }
 		let(:vehicle2) { FactoryGirl.create(:vehicle) }
 		let(:assembly) { FactoryGirl.create(:assembly) }
-		let(:vehicle_assembly) { FactoryGirl.create(:vehicle_assembly, location_id: assembly.id, vehicle_id: vehicle1.id) }
-		let(:vehicle_assembly2) { FactoryGirl.create(:vehicle_assembly, location_id: assembly.id + 1, vehicle_id: vehicle2.id) }
+		let(:vehicle_assembly) { FactoryGirl.create(:vehicle_assembly, assembly_id: assembly.id, vehicle_id: vehicle1.id) }
+		let(:vehicle_assembly2) { FactoryGirl.create(:vehicle_assembly, assembly_id: assembly.id + 1, vehicle_id: vehicle2.id) }
 		before {
 			vehicle1.save
 			vehicle2.save
@@ -213,7 +213,7 @@ describe User do
 		
 		describe "for normal users" do
 			let(:user) { FactoryGirl.create(:user) }
-			let(:user_assembly) { FactoryGirl.create(:location_user, location_id: assembly.id, user_id: user.id) }
+			let(:user_assembly) { FactoryGirl.create(:user_assembly, assembly_id: assembly.id, user_id: user.id) }
 			
 			before {
 				user.save
@@ -227,7 +227,7 @@ describe User do
 		
 		describe "for admins" do
 			let(:admin) { FactoryGirl.create(:admin) }
-			let(:user_assembly) { FactoryGirl.create(:location_user, location_id: assembly.id, user_id: admin.id) }
+			let(:user_assembly) { FactoryGirl.create(:user_assembly, assembly_id: assembly.id, user_id: admin.id) }
 			before {
 				admin.save
 				user_assembly.save

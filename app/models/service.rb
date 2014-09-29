@@ -1,7 +1,7 @@
 class Service < ActiveRecord::Base
 	default_scope { order(base_time: :desc) }
 	
-	belongs_to :assembly, class_name: "Location", foreign_key: :assembly_id
+	belongs_to :assembly
 	has_many :vehicle_services, dependent: :destroy
 	has_many :vehicles, through: :vehicle_services
 	has_many :service_users, dependent: :destroy

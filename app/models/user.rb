@@ -2,10 +2,10 @@ class User < ActiveRecord::Base
 	default_scope { order(name: :asc, surname: :asc) }
 	has_secure_password
 
+	has_many :user_assemblies, dependent: :destroy
+	has_many :assemblies, through: :user_assemblies
 	has_many :sessions, dependent: :destroy
 	has_many :user_types, dependent: :destroy
-	has_many :location_users, dependent: :destroy
-	has_many :assemblies, through: :location_users, source: :location
 	has_many :service_users
 	has_many :services, through: :service_users
 	
@@ -63,6 +63,8 @@ class User < ActiveRecord::Base
 			role == "technician"
 		when :manage_admin_users
 			false
+		when :manage_assemblies
+			role == "assemblies"
 		when :manage_issues
 			role == "technician"
 		when :manage_locations
@@ -109,6 +111,7 @@ class User < ActiveRecord::Base
 	end
 	
 	def self.positions
+		#TODO: Add more possible positions, or take it from a different place
 		[[I18n.t(:position_b1), "b1"], [I18n.t(:position_per), "per"]]
 	end
 	

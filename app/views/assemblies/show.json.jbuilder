@@ -1,0 +1,1 @@
+json.extract! @assembly, :id, :name, :description, :level, :address, :phone

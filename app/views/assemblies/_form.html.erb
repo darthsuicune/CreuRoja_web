@@ -1,0 +1,47 @@
+<%= form_for(@assembly) do |f| %>
+	<% if @assembly.errors.any? %>
+		<div id="error_explanation">
+			<h2><%= pluralize(@assembly.errors.count, "error") %> prohibited this assembly from being saved:</h2>
+
+			<ul>
+			<% @assembly.errors.full_messages.each do |message| %>
+			<li><%= message %></li>
+			<% end %>
+			</ul>
+		</div>
+	<% end %>
+	
+	<% locations = [] %>
+	<% Location.offices.each do |office| %>
+		<% locations << [office.name, office.id] %>
+	<% end %>
+	
+	<% parents = ["-"] %>
+	<% Assembly.not_locals.each do |assembly| %>
+		<% parents << [assembly.name, assembly.id] %>
+	<% end %>
+
+	<div class="field">
+		<%= f.label :name %><br>
+		<%= f.text_field :name %>
+	</div>
+	<div class="field">
+		<%= f.label :description %><br>
+		<%= f.text_field :description %>
+	</div>
+	<div class="field">
+		<%= f.label :level %><br>
+		<%= f.select :level, Assembly.levels %>
+	</div>
+	<div class="field">
+		<%= f.label :location_id %><br>
+		<%= f.select :location_id, locations %>
+	</div>
+	<div class="field">
+		<%= f.label :depends_on %><br>
+		<%= f.select :depends_on, parents %>
+	</div>
+	<div class="actions">
+		<%= f.submit %>
+	</div>
+<% end %>

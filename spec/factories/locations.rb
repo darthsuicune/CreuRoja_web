@@ -11,9 +11,5 @@ FactoryGirl.define do
 		longitude 1.5
 		location_type "MyType"
 		active true
-	
-		factory :assembly_location do
-			location_type "assembly"
-		end
 	end
 end

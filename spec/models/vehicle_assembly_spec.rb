@@ -5,7 +5,7 @@ RSpec.describe VehicleAssembly, :type => :model do
 	subject { vehicle_assembly }
 	
 	it "has its required properties" do
-		expect(vehicle_assembly).to respond_to (:vehicle)
-		expect(vehicle_assembly).to respond_to (:location)
+		expect(vehicle_assembly).to respond_to(:vehicle)
+		expect(vehicle_assembly).to respond_to(:assembly)
 	end
 end

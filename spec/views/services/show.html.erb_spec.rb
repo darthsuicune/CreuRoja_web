@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe "services/show" do
 	let(:user) { FactoryGirl.create(:user) }
-	let(:assembly) {FactoryGirl.create(:location) }
+	let(:assembly) {FactoryGirl.create(:assembly) }
 	before(:each) do
 		sign_in user
 		@service = FactoryGirl.create(:service)

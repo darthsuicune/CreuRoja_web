@@ -3,6 +3,6 @@
 FactoryGirl.define do
 	factory :vehicle_assembly do
 		vehicle_id 1
-		location_id 1
+		assembly_id 1
 	end
 end

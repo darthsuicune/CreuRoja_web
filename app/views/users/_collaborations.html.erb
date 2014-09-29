@@ -18,8 +18,8 @@
 					<td><%= assembly.address %></td>
 					<td><%= assembly.phone %></td>
 					<% if current_user.allowed_to?(:manage_users) %>
-						<% location_user = LocationUser.where(user_id: @user.id, location_id: assembly.id).first %>
-						<td><%= link_to t(:resource_destroy), location_user, method: :delete %></td>
+						<% user_assembly = UserAssembly.where(user_id: @user.id, assembly_id: assembly.id).first %>
+						<td><%= link_to t(:resource_destroy), user_assembly, method: :delete %></td>
 					<% end %>
 				</tr>
 			<% end %>

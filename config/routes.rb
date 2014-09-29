@@ -31,11 +31,12 @@ CreuRoja::Application.routes.draw do
 	resources :services do
 		resources :vehicles
 	end
+	resources :assemblies
 	resources :vehicles
 	resources :locations
 	resources :service_users, only: [:create, :update, :destroy]
 	resources :location_services, only: [:create, :update, :destroy]
-	resources :location_users, only: [:create, :update, :destroy]
+	resources :user_assemblies, only: [:create, :update, :destroy]
 	resources :vehicle_services, only: [:create, :update, :destroy]
 	resources :vehicle_assemblies, only: [:create, :update, :destroy]
 	resources :password_reset, only: [:new, :create, :edit, :update]

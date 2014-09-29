@@ -26,7 +26,7 @@ class VehicleAssembliesController < ApplicationController
 	
 	private
 		def vehicle_assembly_params
-			params.require(:vehicle_assembly).permit(:location_id, :vehicle_id)
+			params.require(:vehicle_assembly).permit(:assembly_id, :vehicle_id)
 		end
 		def is_valid_user
 			redirect_to root_url unless current_user && current_user.allowed_to?(:assign_users_to_assemblies)

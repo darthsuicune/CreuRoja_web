@@ -8,7 +8,7 @@
 <div id="map-legend">
 	<ul>
 		<% Location.location_types.each do |type| %>
-			<%= raw "<li><img src=\"assets/#{type.location_type}.png\" />#{type.location_type.humanize}</li>" %>
+			<%= raw "<li><img src=\"assets/#{type}.png\" />#{type.humanize}</li>" %>
 		<% end %>
 	</ul>
 </div>

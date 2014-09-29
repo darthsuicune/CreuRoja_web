@@ -2,9 +2,10 @@
 
 FactoryGirl.define do
 	factory :assembly do
-		name "MyString"
+		sequence(:name) { |n| "Name #{n}" }
 		description "MyString"
 		level "MyString"
-		depends_on 1
+		depends_on -1
+		location_id 1
 	end
 end
