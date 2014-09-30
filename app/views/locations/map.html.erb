@@ -14,6 +14,8 @@
 </div>
 
 <script type="text/javascript">
+var infoWindow;
+
 function initialize() {
 	var mapOptions = {
 			center: new google.maps.LatLng(41.3958, 2.1739),
@@ -34,7 +36,7 @@ function drawMarkers(map, markers) {
 }
 function drawMarker(map, location) {
 	var content = getMarkerContent(location);
-	var infoWindow = new google.maps.InfoWindow()
+	infoWindow = new google.maps.InfoWindow();
 	var marker = new google.maps.Marker({
 		position: new google.maps.LatLng(location.latitude, location.longitude),
 		map: map,
@@ -43,6 +45,7 @@ function drawMarker(map, location) {
 	});
 	(function(marker, content) {
 		google.maps.event.addListener(marker, "click", function() {
+			infoWindow.close();
 			infoWindow.setContent(content);
 			infoWindow.open(map,marker);
 		});
