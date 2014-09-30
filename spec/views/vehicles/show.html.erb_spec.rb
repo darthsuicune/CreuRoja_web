@@ -21,5 +21,7 @@ describe "vehicles/show" do
 		expect(rendered).to match(/1/)
 		expect(rendered).to match(/Notes/)
 		expect(rendered).to match("Address")
+		expect(rendered).to match("sanit")
+		expect(rendered).to match("itv")
 	end
 end

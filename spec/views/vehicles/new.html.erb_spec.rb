@@ -1,10 +1,7 @@
 require 'rails_helper'
 
 describe "vehicles/new" do
-	let(:user) { FactoryGirl.create(:user) }
-	
 	before(:each) do
-		sign_in user
 		@vehicle = Vehicle.new
 	end
 
@@ -21,6 +18,8 @@ describe "vehicles/new" do
 			assert_select "input#vehicle_places[name=?]", "vehicle[places]"
 			assert_select "input#vehicle_notes[name=?]", "vehicle[notes]"
 			assert_select "input#vehicle_operative[name=?]", "vehicle[operative]"
+			assert_select "select#vehicle_sanitary_cert_3i[name=?]", "vehicle[sanitary_cert(3i)]"
+			assert_select "select#vehicle_itv_3i[name=?]", "vehicle[itv(3i)]"
 		end
 	end
 end

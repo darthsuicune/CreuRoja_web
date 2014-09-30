@@ -40,7 +40,17 @@
 
 <p>
   <strong><%= t(:form_vehicle_operative) %>:</strong>
-  <%= @vehicle.operative %>
+  <%= @vehicle.available? %>
+</p>
+
+<p>
+  <strong><%= t(:form_vehicle_itv) %>:</strong>
+  <%= @vehicle.itv %>
+</p>
+
+<p>
+  <strong><%= t(:form_vehicle_sanitary_cert) %>:</strong>
+  <%= @vehicle.sanitary_cert %>
 </p>
 
 <%= render "assemblies" if @vehicle.assemblies.count > 0 %>

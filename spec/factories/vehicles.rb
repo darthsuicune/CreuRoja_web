@@ -10,5 +10,7 @@ FactoryGirl.define do
 		places 1
 		notes "MyString"
 		operative true
+		itv Date.today
+		sanitary_cert Date.today
 	end
 end
