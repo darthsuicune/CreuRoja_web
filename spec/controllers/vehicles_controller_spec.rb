@@ -25,7 +25,8 @@ describe VehiclesController do
   # adjust the attributes here as well.
 	let(:valid_attributes) { { "brand" => "MyString", "model" => "Model", "license" => "License",
 										"vehicle_type" => "type", "places" => 5, "operative" => true,
-	                           "indicative" => "Indicative"} }
+	                           "indicative" => "Indicative", "itv" => Date.today.to_s, 
+	                           "sanitary_cert" => Date.today.to_s } }
 
 	# This should return the minimal set of values that should be in the session
 	# in order to pass any filters (e.g. authentication) defined in
@@ -115,6 +116,12 @@ describe VehiclesController do
 				it "redirects to the created vehicle" do
 					post :create, {:vehicle => valid_attributes}, valid_session
 					expect(response).to redirect_to(Vehicle.last)
+				end
+				
+				it "sets correctly the itv and sanitary_cert dates" do
+					post :create, {:vehicle => valid_attributes}, valid_session
+					expect(assigns(:vehicle).itv).to eq(Date.today)
+					expect(assigns(:vehicle).sanitary_cert).to eq(Date.today)
 				end
 			end
 
