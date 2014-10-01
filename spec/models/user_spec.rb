@@ -241,12 +241,21 @@ describe User do
 
 	describe "for_session" do
 		before do
+			@user.save
 			@user.sessions.create(token: "asdf")
-			@user.types.create(user_type: "b1")
+			@user.user_types.create(user_type: "b1")
 		end
 		
 		it "should return a hash with the correct values" do
-			expect(user.for_session).to be_a(Hash)
+			expect(@user.for_session).to be_a(Hash)
+			expect(@user.for_session[:name]).to eq(@user.name)
+			expect(@user.for_session[:surname]).to eq(@user.surname)
+			expect(@user.for_session[:email]).to eq(@user.email)
+			expect(@user.for_session[:phone]).to eq(@user.phone)
+			expect(@user.for_session[:accessToken]).to eq(@user.sessions.last.token)
+			expect(@user.for_session[:role]).to eq(@user.role)
+			expect(@user.for_session[:active]).to eq(@user.active)
+			expect(@user.for_session[:types]).to eq(@user.types)
 		end
 	end
 end
