@@ -9,7 +9,7 @@ class SessionsController < ApplicationController
 			sign_in user
 			respond_to do |format|
 				format.html { redirect_back_or user }
-				format.json { render :json => { token: @session } }
+				format.json { render :json => { token: @session, user: user.for_session } }
 			end
 		else
 			respond_to do |format|

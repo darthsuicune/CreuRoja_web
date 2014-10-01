@@ -238,4 +238,15 @@ describe User do
 			end
 		end
 	end
+
+	describe "for_session" do
+		before do
+			@user.sessions.create(token: "asdf")
+			@user.types.create(user_type: "b1")
+		end
+		
+		it "should return a hash with the correct values" do
+			expect(user.for_session).to be_a(Hash)
+		end
+	end
 end

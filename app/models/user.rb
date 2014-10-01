@@ -129,6 +129,18 @@ class User < ActiveRecord::Base
 		end
 	end
 	
+	def types
+		combined = ""
+		self.user_types.each do |type|
+			combined << type.to_s << ";"
+		end
+		combined[0, combined.length - 1]
+	end
+	
+	def for_session
+		{ name: self.name, surname: self.surname, email: self.email, phone: self.phone, accessToken: self.sessions.last.token, role: self.role, active: self.active, types: self.types }
+	end
+	
 	private
 		def defaults
 			self.language ||= "ca"
