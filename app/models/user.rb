@@ -138,7 +138,7 @@ class User < ActiveRecord::Base
 	end
 	
 	def for_session
-		{ name: self.name, surname: self.surname, email: self.email, phone: self.phone, accessToken: self.sessions.last.token, role: self.role, active: self.active, types: self.types }
+		{ id: self.id, name: self.name, surname: self.surname, email: self.email, phone: self.phone, accessToken: self.sessions.last.token, role: self.role, active: self.active, types: self.types }
 	end
 	
 	private

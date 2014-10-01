@@ -248,6 +248,7 @@ describe User do
 		
 		it "should return a hash with the correct values" do
 			expect(@user.for_session).to be_a(Hash)
+			expect(@user.for_session[:id]).to eq(@user.id)
 			expect(@user.for_session[:name]).to eq(@user.name)
 			expect(@user.for_session[:surname]).to eq(@user.surname)
 			expect(@user.for_session[:email]).to eq(@user.email)
