@@ -27,6 +27,10 @@ class ApplicationController < ActionController::Base
 					user_id = (current_user) ? current_user.id : 0
 					Log.log(user_id, controller_name, action_name, request.remote_ip)
 				end
+				if (action_name == "index" && controller_name == "locations")
+					user_id = (current_user) ? current_user.id : 0
+					Log.log(user_id, controller_name, action_name, request.remote_ip)
+				end
 			end
 		end
 		
