@@ -29,6 +29,15 @@ class User < ActiveRecord::Base
   
 	after_validation { self.errors.messages.delete(:password_digest) }
 	
+	def add_to_assembly(assembly)
+		user_assemblies.create(assembly_id: assembly.id)
+	end
+	
+	def add_to_service(service, user_position, location = nil, vehicle = nil)
+		service_users.create(service_id: service.id, vehicle_id: vehicle.id, user_position: user_position) if location.nil?
+		service_users.create(service_id: service.id, location_id: location.id, user_position: user_position) if vehicle.nil?
+	end
+	
 	def get_visible_locations
 		Location.active_locations
 	end
@@ -119,10 +128,9 @@ class User < ActiveRecord::Base
 		if self.allowed_to?(:see_all_vehicles)
 			Vehicle.all
 		else
-			result = []
 			self.assemblies.each do |assembly|
 				assembly.vehicles.each do |vehicle|
-					result << vehicle if vehicle.assemblies.include? assembly
+					result == vehicle if vehicle.assemblies.include? assembly
 				end
 			end
 			result

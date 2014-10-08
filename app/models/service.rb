@@ -15,6 +15,19 @@ class Service < ActiveRecord::Base
 	validates :start_time, presence: true
 	validates :end_time, presence: true
 	
+	def add_location(location)
+		location_services.create(location_id: location.id)
+	end
+	
+	def add_user(user, user_position, location = nil, vehicle = nil)
+		service_users.create(user_id: user.id, vehicle_id: vehicle.id, user_position: user_position) if location.nil?
+		service_users.create(user_id: user.id, location_id: location.id, user_position: user_position) if vehicle.nil?
+	end
+	
+	def add_vehicle(vehicle)
+		vehicle_services.create(vehicle_id: vehicle.id)
+	end
+	
 	def first_location_id
 		locations.first.id
 	end

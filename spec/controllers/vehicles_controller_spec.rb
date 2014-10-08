@@ -206,5 +206,10 @@ describe VehiclesController do
 			get :index, {}, valid_session
 			expect(assigns(:vehicles)).not_to eq([vehicle])
 		end
+		it "assigns the requested vehicle as @vehicle" do
+			get :show, {:id => vehicle.to_param}, valid_session
+			expect(assigns(:vehicle)).to eq(vehicle)
+		end
+		
 	end
 end
