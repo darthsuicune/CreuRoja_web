@@ -50,7 +50,7 @@ describe Location do
 		end
 	end
 	
-	describe "location types" do
+	describe "types" do
 		let(:location1) { FactoryGirl.create(:location, location_type: "asdf") }
 		let(:location2) { FactoryGirl.create(:location, location_type: "asdf") }
 		before {
@@ -59,7 +59,7 @@ describe Location do
 			location2.save
 		}
 		it "should display all location types" do
-			expect(Location.location_types).to match_array([location.location_type,location1.location_type])
+			expect(Location.location_types).to match_array([location,location1])
 		end
 	end
 	
@@ -91,7 +91,7 @@ describe Location do
 			ls.save
 		end
 		
-		it "should list location1 and 2 but not 3" do
+		it "should list general and serviced but not without assigned services" do
 			expect(Location.serviced).to match_array([location1, location2])
 		end
 	end

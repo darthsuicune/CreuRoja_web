@@ -37,7 +37,7 @@ class Location < ActiveRecord::Base
 	end
 	
 	def self.general
-		["asamblea", "hospital", "cuap", "nostrum"]
+		["asamblea", "hospital", "cuap", "nostrum", "gasolinera", "salvamento"]
 	end
 	
 	def self.offices
