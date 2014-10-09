@@ -38,9 +38,8 @@ class User < ActiveRecord::Base
 		service_users.create(service_id: service.id, location_id: location.id, user_position: user_position) if vehicle.nil?
 	end
 	
-	def get_visible_locations
-		#Location.filter_by_user_types(user_types)
-		Location.active_locations
+	def locations(updated_at = nil)
+		Location.filter_by_user_types(user_types, updated_at)
 	end
 
 	def allowed_to?(action)
@@ -120,11 +119,6 @@ class User < ActiveRecord::Base
 		else #when "volunteer"
 			I18n.t(:role_volunteer)
 		end
-	end
-	
-	def self.positions
-		#TODO: Add more possible positions, or take it from a different place
-		[[I18n.t(:position_b1), "b1"], [I18n.t(:position_per), "per"]]
 	end
 	
 	def vehicles

@@ -95,4 +95,12 @@ describe Location do
 			expect(Location.serviced).to match_array([location1, location2])
 		end
 	end
+
+	describe "filter_by_user_types" do
+		let(:user) { FactoryGirl.create(:user) }
+		let(:user_types) { ["b1","soc"] }
+		before do
+		end
+		it "should show a filtered list"
+	end
 end

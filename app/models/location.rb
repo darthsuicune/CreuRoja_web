@@ -32,6 +32,14 @@ class Location < ActiveRecord::Base
 		location_type != "terrestre" && location_type != "maritimo" && location_type != "salvamento"
 	end
 	
+	def self.filter_by_user_types(user_types, updated_at = nil)
+		if updated_at
+			updated_after updated_at 
+		else
+			active_locations
+		end
+	end
+	
 	def self.serviced
 		where(location_type: Location.general)
 	end

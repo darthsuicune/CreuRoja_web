@@ -13,11 +13,7 @@ class LocationsController < ApplicationController
 				@locations = Location.all 
 			}
 			format.json {
-				@locations = if params[:updated_at]
-					Location.updated_after params[:updated_at]
-				else
-					Location.active_locations
-				end
+				@locations = current_user.locations params[:updated_at]
 			}
 		end
 	end
