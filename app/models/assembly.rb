@@ -1,4 +1,6 @@
 class Assembly < ActiveRecord::Base
+	default_scope { order(name: :asc) }
+	
 	has_many :user_assemblies, dependent: :destroy
 	has_many :users, through: :user_assemblies
 	has_many :assembly_locations, dependent: :destroy
