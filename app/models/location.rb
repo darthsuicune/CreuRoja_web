@@ -1,5 +1,7 @@
 class Location < ActiveRecord::Base
 	default_scope { order(location_type: :desc) }
+	scope :newer_than, ->(time) { where("updated_at > ?", time) }
+	
 	has_many :assembly_locations, dependent: :destroy
 	has_many :assemblies, through: :assembly_locations
 	has_many :location_services, dependent: :destroy
