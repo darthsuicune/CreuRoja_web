@@ -13,7 +13,6 @@ class AssembliesController < ApplicationController
 
 	def create
 		@assembly = Assembly.new(assembly_params)
-		@assembly.depends_on = nil if @assembly.depends_on = "-"
 		if @assembly.save
 			redirect_to @assembly
 		else

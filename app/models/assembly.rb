@@ -9,6 +9,8 @@ class Assembly < ActiveRecord::Base
 	has_many :vehicles, through: :vehicle_assemblies
 	has_many :services
 	
+	before_validation :defaults
+	
 	validates :name, presence: true
 	validates :level, presence: true
 	validates :location_id, presence: true
@@ -64,5 +66,9 @@ class Assembly < ActiveRecord::Base
 			dependants = Assembly.where(depends_on: assembly.id)
 			assemblies << assembly
 			dependants.each { |child| child_assemblies(assemblies, child) } if dependants.count != 0
+		end
+		
+		def defaults
+			self.depends_on = nil if self.depends_on == "-"
 		end
 end

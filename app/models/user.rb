@@ -140,7 +140,7 @@ class User < ActiveRecord::Base
 	def types
 		combined = ""
 		self.user_types.each do |type|
-			combined << type.to_s << ";"
+			"#{combined}#{type.to_s};"
 		end
 		combined[0, combined.length - 1]
 	end

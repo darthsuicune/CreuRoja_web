@@ -28,7 +28,6 @@ class LocationsController < ApplicationController
 	end
 	
 	def map
-		@locations = current_user.get_visible_locations
 	end
 
 	# GET /locations/new

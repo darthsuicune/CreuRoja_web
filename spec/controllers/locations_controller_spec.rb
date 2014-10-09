@@ -267,11 +267,6 @@ describe LocationsController do
 						get :map
 						expect(response.status).to eq(200)
 					end
-					
-					it "assigns all locations as @locations" do
-						get :map, {}, valid_session
-						expect(assigns(:locations)).to eq([location, location1])
-					end
 				end
 				describe "GET show" do
 					it "does not assign the location" do
