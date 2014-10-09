@@ -39,6 +39,7 @@ class User < ActiveRecord::Base
 	end
 	
 	def get_visible_locations
+		#Location.filter_by_user_types(user_types)
 		Location.active_locations
 	end
 
