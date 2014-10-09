@@ -1,6 +1,6 @@
 class Location < ActiveRecord::Base
 	default_scope { order(location_type: :desc) }
-	scope :newer_than, ->(time) { where("updated_at > ?", time) }
+	scope :updated_after, ->(time) { where("updated_at > ?", time) }
 	
 	has_many :assembly_locations, dependent: :destroy
 	has_many :assemblies, through: :assembly_locations
@@ -32,20 +32,24 @@ class Location < ActiveRecord::Base
 		location_type != "terrestre" && location_type != "maritimo" && location_type != "salvamento"
 	end
 	
+	def self.serviced
+		where(location_type: Location.general)
+	end
+	
+	def self.general
+		["asamblea", "hospital", "cuap", "nostrum"]
+	end
+	
 	def self.offices
-		Location.active_locations.where(location_type: "asamblea")
+		active_locations.where(location_type: "asamblea")
 	end
 	
 	def self.active_locations
-		Location.where(active: true)
+		where(active: true)
 	end
 	
 	def self.location_types
-		types = []
-		Location.active_locations.select(:location_type).distinct.each do |location|
-			types << location.location_type
-		end
-		types
+		Location.active_locations.select(:location_type).distinct
 	end
 	
 	private

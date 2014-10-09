@@ -76,4 +76,23 @@ describe Location do
 			expect(location2.general?).to be true
 		end
 	end
+	
+	describe "serviced locations" do
+		let(:location1) { FactoryGirl.create(:location, location_type: "terrestre") }
+		let(:location2) { FactoryGirl.create(:location, location_type: "hospital") }
+		let(:location3) { FactoryGirl.create(:location, location_type: "maritimo") }
+		let(:service1) { FactoryGirl.create(:service) }
+		before do
+			location1.save
+			location2.save
+			location3.save
+			service1.save
+			ls = service1.location_services.create(location_id: location1.id)
+			ls.save
+		end
+		
+		it "should list location1 and 2 but not 3" do
+			expect(Location.serviced).to match_array([location1, location2])
+		end
+	end
 end
