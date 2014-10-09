@@ -29,6 +29,15 @@ class User < ActiveRecord::Base
   
 	after_validation { self.errors.messages.delete(:password_digest) }
 	
+	def add_to_assembly(assembly)
+		user_assemblies.create(assembly_id: assembly.id)
+	end
+	
+	def add_to_service(service, user_position, location = nil, vehicle = nil)
+		service_users.create(service_id: service.id, vehicle_id: vehicle.id, user_position: user_position) if location.nil?
+		service_users.create(service_id: service.id, location_id: location.id, user_position: user_position) if vehicle.nil?
+	end
+	
 	def get_visible_locations
 		Location.active_locations
 	end
@@ -57,8 +66,6 @@ class User < ActiveRecord::Base
 			false
 		when :manage_users
 			role == "technician"
-		when :assign_vehicle_to_service
-			role == "technician"
 		when :destroy_users
 			role == "technician"
 		when :manage_admin_users
@@ -74,6 +81,12 @@ class User < ActiveRecord::Base
 		when :manage_vehicles
 			role == "technician"
 		when :edit_user
+			role == "technician"
+		when :assign_service_to_location
+			role == "technician"
+		when :assign_vehicle_to_service
+			role == "technician"
+		when :assign_user_to_service
 			role == "technician"
 		else
 			false

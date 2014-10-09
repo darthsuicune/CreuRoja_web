@@ -14,6 +14,18 @@ class Location < ActiveRecord::Base
 	validates :longitude, presence: true
 	validates :location_type, presence: true
 	
+	def add_to_assembly(assembly)
+		assembly_locations.create(assembly_id: assembly.id)
+	end
+	
+	def add_to_service(service)
+		location_services.create(service_id: service.id)
+	end
+	
+	def add_user_to_service(user, user_position, service)
+		service_users.create(user_id: user.id, service_id: service.id, user_position: user_position)
+	end
+	
 	def self.offices
 		Location.active_locations.where(location_type: "asamblea")
 	end

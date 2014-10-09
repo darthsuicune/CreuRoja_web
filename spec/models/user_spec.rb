@@ -201,13 +201,17 @@ describe User do
 	describe "accesible vehicles" do
 		let(:vehicle1) { FactoryGirl.create(:vehicle) }
 		let(:vehicle2) { FactoryGirl.create(:vehicle) }
+		let(:vehicle3) { FactoryGirl.create(:vehicle) }
 		let(:assembly) { FactoryGirl.create(:assembly) }
 		let(:vehicle_assembly) { FactoryGirl.create(:vehicle_assembly, assembly_id: assembly.id, vehicle_id: vehicle1.id) }
+		let(:vehicle_assembly1) { FactoryGirl.create(:vehicle_assembly, assembly_id: assembly.id, vehicle_id: vehicle3.id) }
 		let(:vehicle_assembly2) { FactoryGirl.create(:vehicle_assembly, assembly_id: assembly.id + 1, vehicle_id: vehicle2.id) }
 		before {
 			vehicle1.save
 			vehicle2.save
+			vehicle3.save
 			vehicle_assembly.save
+			vehicle_assembly1.save
 			vehicle_assembly2.save
 		}
 		
@@ -221,7 +225,7 @@ describe User do
 			}
 			
 			it "the array contains only the vehicles from the same assembly" do
-				expect(user.accesible_vehicles).to match_array([vehicle1])
+				expect(user.accesible_vehicles).to match_array([vehicle1, vehicle3])
 			end
 		end
 		
@@ -234,7 +238,7 @@ describe User do
 			}
 
 			it "the array contains all vehicles" do
-				expect(admin.accesible_vehicles).to match_array([vehicle1, vehicle2])
+				expect(admin.accesible_vehicles).to match_array([vehicle1, vehicle3, vehicle2])
 			end
 		end
 	end

@@ -1,7 +1,7 @@
 class AssembliesController < ApplicationController
 	before_filter :signed_in_user
 	before_filter :is_valid_user
-	before_filter :set_assembly, only: [:show, :edit, :update]
+	before_filter :set_assembly, only: [:show, :edit, :update, :destroy]
 	
 	def index
 		@assemblies = Assembly.all
@@ -33,6 +33,7 @@ class AssembliesController < ApplicationController
 	end
 
 	def destroy
+		@assembly.destroy
 		redirect_to assemblies_url
 	end
 	

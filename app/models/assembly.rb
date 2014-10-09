@@ -14,7 +14,7 @@ class Assembly < ActiveRecord::Base
 	validates :location_id, presence: true
 	
 	def office
-		Location.where(id: location_id).first
+		Location.find(location_id)
 	end
 	
 	def address
@@ -30,15 +30,15 @@ class Assembly < ActiveRecord::Base
 	end
 	
 	def add_vehicle(vehicle)
-		VehicleAssembly.create(vehicle_id: vehicle.id, assembly_id: self.id)
+		vehicle_assemblies.create(vehicle_id: vehicle.id)
 	end
 	
 	def add_user(user)
-		UserAssembly.create(user_id: user.id, assembly_id: self.id)
+		user_assemblies.create(user_id: user.id)
 	end
 	
 	def add_location(location)
-		AssemblyLocation.create(location_id: location.id, assembly_id: self.id)
+		assembly_locations.create(location_id: location.id)
 	end
 	
 	def dependant_assemblies
