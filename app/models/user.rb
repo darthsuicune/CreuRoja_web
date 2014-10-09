@@ -66,8 +66,6 @@ class User < ActiveRecord::Base
 			false
 		when :manage_users
 			role == "technician"
-		when :assign_vehicle_to_service
-			role == "technician"
 		when :destroy_users
 			role == "technician"
 		when :manage_admin_users
@@ -83,6 +81,12 @@ class User < ActiveRecord::Base
 		when :manage_vehicles
 			role == "technician"
 		when :edit_user
+			role == "technician"
+		when :assign_service_to_location
+			role == "technician"
+		when :assign_vehicle_to_service
+			role == "technician"
+		when :assign_user_to_service
 			role == "technician"
 		else
 			false
@@ -128,9 +132,10 @@ class User < ActiveRecord::Base
 		if self.allowed_to?(:see_all_vehicles)
 			Vehicle.all
 		else
+			result = []
 			self.assemblies.each do |assembly|
 				assembly.vehicles.each do |vehicle|
-					result == vehicle if vehicle.assemblies.include? assembly
+					result << vehicle if vehicle.assemblies.include? assembly
 				end
 			end
 			result
