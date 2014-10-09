@@ -26,6 +26,10 @@ class Location < ActiveRecord::Base
 		service_users.create(user_id: user.id, service_id: service.id, user_position: user_position)
 	end
 	
+	def general?
+		location_type != "terrestre" && location_type != "maritimo" && location_type != "salvamento"
+	end
+	
 	def self.offices
 		Location.active_locations.where(location_type: "asamblea")
 	end

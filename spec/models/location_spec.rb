@@ -62,4 +62,18 @@ describe Location do
 			expect(Location.location_types).to match_array([location.location_type,location1.location_type])
 		end
 	end
+	
+	describe "is general" do
+		let(:location1) { FactoryGirl.create(:location, location_type: "terrestre") }
+		let(:location2) { FactoryGirl.create(:location, location_type: "hospital") }
+		before do
+			location.save
+			location1.save
+		end
+		
+		it "should be true for 1, false for 2" do
+			expect(location1.general?).to be false
+			expect(location2.general?).to be true
+		end
+	end
 end

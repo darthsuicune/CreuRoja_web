@@ -80,8 +80,6 @@ class User < ActiveRecord::Base
 			role == "technician"
 		when :manage_vehicles
 			role == "technician"
-		when :edit_user
-			role == "technician"
 		when :assign_service_to_location
 			role == "technician"
 		when :assign_vehicle_to_service

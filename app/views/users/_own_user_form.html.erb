@@ -1,0 +1,51 @@
+<p>
+	<h2><strong><%= "#{@user.name} #{@user.surname}" %></strong></h2>
+</p>
+
+<p>
+	<strong><%= t(:form_user_email) %>:</strong>
+	<%= @user.email %>
+</p>
+
+<p>
+	<strong><%= t(:form_user_language) %>:</strong>
+	<%= @user.language %>
+</p>
+
+<p>
+	<strong><%= t(:form_user_phone) %>:</strong>
+	<%= @user.phone %>
+</p>
+
+<p>
+	<strong><%= t(:form_user_types) %>:</strong>
+	<%= @user.types %>
+</p>
+
+<div id="user_form">
+	<%= form_for(@user) do |f| %>
+		<% if @user.errors.any? %>
+			<div id="error_explanation">
+				<h2><%= "#{pluralize(@user.errors.count, "error")} #{t(:form_errors_found)}" %> :</h2>
+				<ul>
+					<% @user.errors.full_messages.each do |msg| %>
+					<li><%= msg %></li>
+					<% end %>
+				</ul>
+			</div>
+		<% end %>
+		
+		<div class="field">
+			<%= f.label :password, t(:form_user_password) %><br>
+			<%= f.password_field :password %>
+		</div>
+		<div class="field">
+			<%= f.label :password_confirmation, t(:form_user_password_confirmation)  %><br>
+			<%= f.password_field :password_confirmation %>
+		</div>
+		
+		<div class="actions btn">
+			<%= f.submit t(:form_user_submit) %>
+		</div>
+	<% end %>
+</div>

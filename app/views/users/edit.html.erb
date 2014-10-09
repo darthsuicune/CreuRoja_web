@@ -1,7 +1,10 @@
 <% provide(:title, t(:form_user_edit_title)) %>
 <h1><%= t(:form_user_edit_title) %></h1>
-
-<%= render 'form' %>
+<% if current_user.allowed_to?(:manage_users) %>
+	<%= render 'form'  %>
+<% else %>
+	<%= render 'own_user_form'  %>
+<% end %>
 
 <%= link_to t(:resource_show), @user %> |
 <%= link_to t(:resource_back), users_path %>
