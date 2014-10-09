@@ -200,14 +200,21 @@ describe VehiclesController do
 	describe "signed in as technician" do
 		let(:tech) { FactoryGirl.create(:tech) }
 		let(:vehicle) { FactoryGirl.create(:vehicle) }
+		let(:vehicle1) { FactoryGirl.create(:vehicle) }
+		let(:assembly) { FactoryGirl.create(:assembly) }
 		
-		before { sign_in tech }
+		before do
+			sign_in tech 
+			tech.add_to_assembly(assembly)
+			vehicle.add_to_assembly(assembly)
+		end
+		
 		it "doesn't assign vehicles that are outside the assembly" do
 			get :index, {}, valid_session
-			expect(assigns(:vehicles)).not_to eq([vehicle])
+			expect(assigns(:vehicles)).not_to include vehicle1
 		end
 		it "assigns the requested vehicle as @vehicle" do
-			get :show, {:id => vehicle.to_param}, valid_session
+			get :show, {:id => vehicle.id}, valid_session
 			expect(assigns(:vehicle)).to eq(vehicle)
 		end
 		

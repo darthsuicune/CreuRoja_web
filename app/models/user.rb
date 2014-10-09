@@ -128,17 +128,12 @@ class User < ActiveRecord::Base
 		[[I18n.t(:position_b1), "b1"], [I18n.t(:position_per), "per"]]
 	end
 	
-	def accesible_vehicles
+	def vehicles
 		if self.allowed_to?(:see_all_vehicles)
 			Vehicle.all
 		else
-			result = []
-			self.assemblies.each do |assembly|
-				assembly.vehicles.each do |vehicle|
-					result << vehicle if vehicle.assemblies.include? assembly
-				end
-			end
-			result
+			ids = UserAssembly.select(:assembly_id).joins(:user).where(user_id: self.id)
+			Vehicle.distinct.joins(:vehicle_assemblies).where(vehicle_assemblies: { assembly_id: ids })
 		end
 	end
 	

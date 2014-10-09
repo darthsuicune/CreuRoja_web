@@ -70,7 +70,7 @@ class VehiclesController < ApplicationController
 		end
 		
 		def vehicles
-			(@service) ? @service.vehicles : current_user.accesible_vehicles
+			(@service) ? @service.vehicles : current_user.vehicles
 		end
 		
 		# Use callbacks to share common setup or constraints between actions.

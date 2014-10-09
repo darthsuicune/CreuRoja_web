@@ -226,8 +226,8 @@ describe User do
 			}
 			
 			it "the array contains only the vehicles from the same assembly" do
-				expect(user.accesible_vehicles).to match_array([vehicle1, vehicle3])
-				expect(user.accesible_vehicles).to be_an(ActiveRecord::Relation)
+				expect(user.vehicles).to match_array([vehicle1, vehicle3])
+				expect(user.vehicles).to be_an(ActiveRecord::Relation)
 			end
 		end
 		
@@ -240,8 +240,8 @@ describe User do
 			}
 
 			it "the array contains all vehicles" do
-				expect(admin.accesible_vehicles).to match_array([vehicle1, vehicle3, vehicle2])
-				expect(admin.accesible_vehicles).to be_an(ActiveRecord::Relation)
+				expect(admin.vehicles).to match_array([vehicle1, vehicle3, vehicle2])
+				expect(admin.vehicles).to be_an(ActiveRecord::Relation)
 			end
 		end
 	end
