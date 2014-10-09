@@ -14,7 +14,7 @@ class LocationsController < ApplicationController
 			}
 			format.json {
 				@locations = if params[:updated_at]
-					Location.all.where("updated_at > ?", params[:updated_at])
+					Location.newer_than params[:updated_at]
 				else
 					Location.active_locations
 				end
