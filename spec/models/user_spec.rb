@@ -20,6 +20,7 @@ describe User do
 	it { should respond_to(:sessions) }
 	it { should respond_to(:user_types) }
 	it { should respond_to(:assemblies) }
+	it { should respond_to(:services) }
 	it { should respond_to(:resettoken) }
 	it { should respond_to(:resettime) }
 
@@ -226,6 +227,7 @@ describe User do
 			
 			it "the array contains only the vehicles from the same assembly" do
 				expect(user.accesible_vehicles).to match_array([vehicle1, vehicle3])
+				expect(user.accesible_vehicles).to be_an(ActiveRecord::Relation)
 			end
 		end
 		
@@ -239,6 +241,7 @@ describe User do
 
 			it "the array contains all vehicles" do
 				expect(admin.accesible_vehicles).to match_array([vehicle1, vehicle3, vehicle2])
+				expect(admin.accesible_vehicles).to be_an(ActiveRecord::Relation)
 			end
 		end
 	end
