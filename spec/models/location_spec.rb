@@ -59,7 +59,7 @@ describe Location do
 			location2.save
 		}
 		it "should display all location types" do
-			expect(Location.location_types).to match_array([location,location1])
+			expect(Location.location_types).to match_array([location.location_type,location1.location_type])
 		end
 	end
 	
@@ -92,7 +92,7 @@ describe Location do
 		end
 		
 		it "should list general and serviced but not without assigned services" do
-			expect(Location.serviced).to match_array([location1.location_type, location2.location_type])
+			expect(Location.serviced).to match_array([location1, location2])
 		end
 	end
 
