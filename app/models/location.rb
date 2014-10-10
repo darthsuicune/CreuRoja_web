@@ -1,6 +1,9 @@
 class Location < ActiveRecord::Base
 	default_scope { order(location_type: :desc) }
 	scope :updated_after, ->(time) { where("updated_at > ?", time) }
+	scope :serviced, -> { where(location_type: Location.general) }
+	scope :active_locations, -> { where(active: true) }
+	scope :offices, -> { where(active: true, location_type: "asamblea") }
 	
 	has_many :assembly_locations, dependent: :destroy
 	has_many :assemblies, through: :assembly_locations
@@ -29,7 +32,7 @@ class Location < ActiveRecord::Base
 	end
 	
 	def general?
-		location_type != "terrestre" && location_type != "maritimo" && location_type != "salvamento"
+		location_type != "terrestre" && location_type != "maritimo"
 	end
 	
 	def self.filter_by_user_types(user_types, updated_at = nil)
@@ -40,20 +43,8 @@ class Location < ActiveRecord::Base
 		end
 	end
 	
-	def self.serviced
-		where(location_type: Location.general)
-	end
-	
 	def self.general
 		["asamblea", "hospital", "cuap", "nostrum", "gasolinera", "salvamento"]
-	end
-	
-	def self.offices
-		active_locations.where(location_type: "asamblea")
-	end
-	
-	def self.active_locations
-		where(active: true)
 	end
 	
 	def self.location_types

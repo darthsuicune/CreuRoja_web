@@ -92,7 +92,7 @@ describe Location do
 		end
 		
 		it "should list general and serviced but not without assigned services" do
-			expect(Location.serviced).to match_array([location1, location2])
+			expect(Location.serviced).to match_array([location1.location_type, location2.location_type])
 		end
 	end
 
