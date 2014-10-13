@@ -2,7 +2,6 @@
 
 FactoryGirl.define do
 	factory :location do
-		sequence(:id) { |n| n }
 		sequence(:name) { |n| "Name #{n}" }
 		sequence(:description) { |n| "Description #{n}" }
 		sequence(:address) { |n| "Address #{n}" }

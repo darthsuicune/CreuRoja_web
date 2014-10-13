@@ -59,7 +59,12 @@ describe Location do
 			location2.save
 		}
 		it "should display all location types" do
-			expect(Location.location_types).to match_array([location.location_type,location1.location_type])
+			expect(Location.location_types).to be_an(ActiveRecord::Relation)
+		end
+		it "should contain only the current types" do
+			types = Location.location_types
+			expect(types[0].location_type).to eq("asdf")
+			expect(types[1].location_type).to eq("MyType")
 		end
 	end
 	
@@ -81,7 +86,7 @@ describe Location do
 		let(:location1) { FactoryGirl.create(:location, location_type: "terrestre") }
 		let(:location2) { FactoryGirl.create(:location, location_type: "hospital") }
 		let(:location3) { FactoryGirl.create(:location, location_type: "maritimo") }
-		let(:service1) { FactoryGirl.create(:service) }
+		let(:service1) { FactoryGirl.create(:service, end_time: 1.month.from_now) }
 		before do
 			location1.save
 			location2.save
@@ -91,8 +96,15 @@ describe Location do
 			ls.save
 		end
 		
+		it "should be a relation" do
+			expect(Location.serviced).to be_an(ActiveRecord::Relation)
+		end
+		
 		it "should list general and serviced but not without assigned services" do
-			expect(Location.serviced).to match_array([location1, location2])
+			locations = Location.serviced
+			expect(locations).to include(location1)
+			expect(locations).to include(location2)
+			expect(locations).not_to include(location3)
 		end
 	end
 
@@ -101,6 +113,8 @@ describe Location do
 		let(:user_types) { ["b1","soc"] }
 		before do
 		end
-		it "should show a filtered list"
+		it "should show a filtered list" do
+			locations = Location.filter_by_user_types(user_types)
+		end
 	end
 end

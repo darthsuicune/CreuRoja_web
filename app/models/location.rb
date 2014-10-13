@@ -1,7 +1,6 @@
 class Location < ActiveRecord::Base
 	default_scope { order(location_type: :desc) }
 	scope :updated_after, ->(time) { where("updated_at > ?", time) }
-	scope :serviced, -> { where(location_type: Location.general) }
 	scope :active_locations, -> { where(active: true) }
 	scope :offices, -> { where(active: true, location_type: "asamblea") }
 	
@@ -33,6 +32,11 @@ class Location < ActiveRecord::Base
 	
 	def general?
 		location_type != "terrestre" && location_type != "maritimo"
+	end
+	
+	def self.serviced
+		pending_services = LocationService.joins(:service).where("end_time > ?", Time.now.to_s).distinct.ids
+		where("(id IN (?)) OR (location_type IN (?))", pending_services, Location.general) unless pending_services.empty?
 	end
 	
 	def self.filter_by_user_types(user_types, updated_at = nil)
