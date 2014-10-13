@@ -35,6 +35,8 @@ class Location < ActiveRecord::Base
 	end
 	
 	def self.serviced
+		#Add filter by assembly:
+		#where(... AND assembly_id IN (?)), current_user.assemblies.ids
 		pending_services = LocationService.joins(:service).where("end_time > ?", Time.now.to_s).distinct.ids
 		where("(id IN (?)) OR (location_type IN (?))", pending_services, Location.general) unless pending_services.empty?
 	end
