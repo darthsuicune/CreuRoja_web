@@ -1,4 +1,5 @@
 class Assembly < ActiveRecord::Base
+	default_scope { order(name: :asc, level: :asc) }
 	default_scope { order(name: :asc) }
 	
 	has_many :user_assemblies, dependent: :destroy
@@ -55,6 +56,17 @@ class Assembly < ActiveRecord::Base
 	
 	def self.not_locals
 		Assembly.where.not(level: "local")
+	end
+	
+	def translated_level
+		case level
+		when "autonomica"
+			I18n.t(:level_region)
+		when "provincial"
+			I18n.t(:level_province)
+		else #when "local"
+			I18n.t(:level_local)
+		end
 	end
 	
 	def to_s

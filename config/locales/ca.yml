@@ -116,6 +116,11 @@ ca:
    form_add_vehicle_to_service_per: "Patró d'embarcacions"
    form_add_vehicle_to_service_submit: "Afegir"
    
+   assembly_list_title: "Assembleas"
+   level_local: "Assemblea Local de"
+   level_province: "Assemblea Provincial de"
+   level_region: "Assemblea Autonòmica de"
+   
    date:
     abbr_day_names:
     - "dom"

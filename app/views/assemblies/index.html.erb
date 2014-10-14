@@ -8,7 +8,6 @@
 		<tr>
 			<th><%= t(:form_location_name) %></th>
 			<th><%= t(:form_location_description) %></th>
-			<th><%= t(:form_location_level) %></th>
 			<th><%= t(:form_location_address) %></th>
 			<th><%= t(:form_location_phone) %></th>
 			<th colspan="3"></th>
@@ -18,9 +17,8 @@
 	<tbody>
 		<% @assemblies.each do |assembly| %>
 			<tr>
-			<td><%= assembly.name %></td>
+			<td><%= "#{assembly.translated_level} #{assembly.name}" %></td>
 			<td><%= assembly.description %></td>
-			<td><%= assembly.level %></td>
 			<td><%= assembly.address %></td>
 			<td><%= assembly.phone %></td>
 			<td><%= link_to t(:resource_show), assembly %></td>

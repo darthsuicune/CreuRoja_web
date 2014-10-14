@@ -116,6 +116,11 @@ es:
    form_add_vehicle_to_service_per: "Patrón de embarcación"
    form_add_vehicle_to_service_submit: "Añadir"
    
+   assembly_list_title: "Asambleas"
+   level_local: "Asamblea Local de"
+   level_province: "Asamblea Provincial de"
+   level_region: "Asamblea Autonómica de"
+   
    date:
     abbr_day_names:
     - "dom"
