@@ -37,7 +37,7 @@ class UsersController < ApplicationController
 		respond_to do |format|
 			if @user.save
 				parse_user_types
-				add_to_assembly @user
+				@user.add_to_assembly current_user.assemblies.first
 				@user.create_reset_password_token(2.years.from_now)
 				format.html { redirect_to users_path, notice: I18n.t(:user_created) }
 				format.json { render action: 'show', status: :created, location: @user }
@@ -54,7 +54,7 @@ class UsersController < ApplicationController
 		respond_to do |format|
 			parse_user_types
 			if @user.update(user_params)
-				add_to_assembly @user
+				@user.add_to_assembly current_user.assemblies.first
 				verify_active @user
 				format.html { redirect_to @user, notice: I18n.t(:user_updated) }
 				format.json { head :no_content }
@@ -88,17 +88,9 @@ class UsersController < ApplicationController
 	
 	def is_valid_user
 		if current_user? @user
-			unless current_user.allowed_to?(:see_own_profile)
-				redirect_to root_url
-			end
+			redirect_to root_url unless current_user.allowed_to?(:see_own_profile)
 		elsif !current_user.allowed_to?(:manage_users)
 			redirect_to root_url
-		end
-	end
-	
-	def add_to_assembly(user)
-		if params[:user][:assemblies] && UserAssembly.all.where(user: user.id, assembly_id: params[:user][:assemblies][:assembly_id]).empty?
-			UserAssembly.create!(assembly_id: params[:user][:assemblies][:assembly_id], user_id: user.id)
 		end
 	end
 	

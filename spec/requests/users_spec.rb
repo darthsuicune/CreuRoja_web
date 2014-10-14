@@ -5,7 +5,7 @@ describe "Users" do
 
 	describe "Http requests" do
 		let(:another_user) { FactoryGirl.create(:user) }
-		before { @user = FactoryGirl.create(:user) }
+		let(:user) { FactoryGirl.create(:user) }
 		describe "without signing in" do
 			describe "GET /users" do
 				before { get users_path }
@@ -27,7 +27,10 @@ describe "Users" do
 			end
 		end
 		describe "signed in" do
-			before { sign_in @user }
+			before do
+				user.save
+				sign_in user
+			end
 			subject { page }
 			describe "navigation menu" do
 				before { visit users_path }
@@ -43,18 +46,17 @@ describe "Users" do
 					it { should redirect_to(root_url) }
 				end
 				describe "same profile" do
-					before { get user_path( { :id => @user.id } ) }
+					before { get user_path( { :id => user.id } ) }
 					it "should not redirect to root" do
-						expect(response.status).not_to eq(302)
-						expect(response.status).to eq(200)
+						expect(response).not_to redirect_to root_url
 					end
-					it { should have_content(@user.name) }
-					it { should have_content(@user.surname) }
-					it { should have_content(@user.email) }
+					it { should have_content(user.name)  }
+					it { should have_content(user.surname)  }
+					it { should have_content(user.email) }
 				end
 				describe "non existing user" do
 					it "should raise a RecordNotFound error" do
-						expect { 
+						expect{
 							get user_path( { :id => 555 } ) 
 						}.to raise_error(ActiveRecord::RecordNotFound)
 					end

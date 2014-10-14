@@ -87,21 +87,27 @@ describe Location do
 		let(:location2) { FactoryGirl.create(:location, location_type: "hospital") }
 		let(:location3) { FactoryGirl.create(:location, location_type: "maritimo") }
 		let(:service1) { FactoryGirl.create(:service, end_time: 1.month.from_now) }
+		let(:assembly) { FactoryGirl.create(:assembly, id: 1) }
+		let(:user) { FactoryGirl.create(:user) }
 		before do
+			assembly.save
+			user.save
 			location1.save
 			location2.save
 			location3.save
 			service1.save
+			ua = user.user_assemblies.create(assembly_id: service1.assembly_id)
+			ua.save
 			ls = service1.location_services.create(location_id: location1.id)
 			ls.save
 		end
 		
 		it "should be a relation" do
-			expect(Location.serviced).to be_an(ActiveRecord::Relation)
+			expect(Location.serviced user).to be_an(ActiveRecord::Relation)
 		end
 		
 		it "should list general and serviced but not without assigned services" do
-			locations = Location.serviced
+			locations = Location.serviced user
 			expect(locations).to include(location1)
 			expect(locations).to include(location2)
 			expect(locations).not_to include(location3)

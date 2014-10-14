@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
 		if user && user.active && user.authenticate(password)
 			sign_in user
 			respond_to do |format|
-				format.html { redirect_back_or user }
+				format.html { redirect_back_or root_url }
 				format.json { render :json => { token: @session, user: user.for_session } }
 			end
 		else

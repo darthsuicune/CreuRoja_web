@@ -47,9 +47,9 @@ class User < ActiveRecord::Base
 		return true if role == "admin"
 		case action
 		when :see_map
-			role == "volunteer" || role == "technician"
+			true
 		when :see_own_profile
-			role == "volunteer" || role == "technician"
+			true
 		when :see_user_list
 			role == "technician"
 		when :see_location_list

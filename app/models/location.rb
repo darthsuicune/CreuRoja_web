@@ -34,11 +34,9 @@ class Location < ActiveRecord::Base
 		location_type != "terrestre" && location_type != "maritimo"
 	end
 	
-	def self.serviced
-		#Add filter by assembly:
-		#where(... AND assembly_id IN (?)), current_user.assemblies.ids
-		pending_services = LocationService.joins(:service).where("end_time > ?", Time.now.to_s).distinct.ids
-		where("(id IN (?)) OR (location_type IN (?))", pending_services, Location.general) unless pending_services.empty?
+	def self.serviced(user)
+		pending_services = LocationService.joins(:service).where("(end_time) > ? AND (assembly_id IN (?))", Time.now.to_s, user.assemblies.ids).distinct.ids
+		where("(id IN (?)) OR (location_type IN (?))", pending_services, Location.general)
 	end
 	
 	def self.filter_by_user_types(user_types, updated_at = nil)

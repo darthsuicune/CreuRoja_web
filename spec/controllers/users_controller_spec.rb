@@ -58,36 +58,51 @@ describe UsersController do
 	# in order to pass any filters (e.g. authentication) defined in
 	# UsersController. Be sure to keep this updated too.
 	let(:valid_session) { {} }
-	
-	let(:user) { FactoryGirl.create(:admin) }
-	before(:each) do
-		sign_in user
+
+	let(:user) { FactoryGirl.create(:user) }
+	let(:tech) { FactoryGirl.create(:tech) }
+	let(:assembly) { FactoryGirl.create(:assembly) }
+	before do
+		tech.save
+		tech.user_assemblies.create(assembly_id: assembly.id)
+		sign_in tech
 	end
 
 	describe "GET index" do
-		let(:tech) { FactoryGirl.create(:user, role: "technician") }
 		let(:assembly) { FactoryGirl.create(:assembly) }
 		let(:user1) { FactoryGirl.create(:user) }
 		let(:user2) { FactoryGirl.create(:user) }
-		before {
+		before do
 			UserAssembly.create(assembly_id: assembly.id, user_id: user.id)
 			UserAssembly.create(assembly_id: assembly.id, user_id: user1.id)
-		}
+		end
 		describe "for admins" do
-			it "assigns all users as @users for an admin" do
+			before do
+				tech.role = "admin"
+				tech.save
+			end
+			
+			it "assigns all users as @users" do
 				get :index
 				expect(assigns(:users)).to match_array([user, tech, user1, user2])
+			end
+			
+			after do
+				tech.role = "technician"
+				tech.save
+			end
+		end
+		describe "for technicians" do
+			it "only assigns the users from the same assembly" do
+				get :index
+				expect(assigns(:users)).to match_array([tech,user,user1])
 			end
 		end
 		
 		describe "for other users" do
-			before {
-				user.role = "technician"
-				user.save
-			}
 			it "only assigns the users from the same assembly" do
 				get :index
-				expect(assigns(:users)).to match_array([user,user1])
+				expect(assigns(:users)).to match_array([tech,user,user1])
 			end
 		end
 		
@@ -148,6 +163,12 @@ describe UsersController do
 				post :create, { :user => valid_attributes }, valid_session
 				expect(response).to redirect_to(users_path)
 			end
+			
+			it "assigns the user the creator assembly" do
+				expect {
+					post :create, { :user => valid_attributes }, valid_session
+				}.to change(UserAssembly, :count).by(1)
+			end
 		end
 
 		describe "with invalid params" do
@@ -189,6 +210,10 @@ describe UsersController do
 			end
 			
 			describe "deactivating the user" do
+				before do
+					user.save 
+					user.create_session_token
+				end
 				it "destroys its sessions" do
 					expect { 
 						put :update, {id: user.to_param, :user => { active: false } }

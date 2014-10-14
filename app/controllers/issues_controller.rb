@@ -1,7 +1,7 @@
 class IssuesController < ApplicationController
 	before_filter :signed_in_user
-	before_action :set_issue, only: [:show, :edit, :update, :destroy]
 	before_filter :is_valid_user
+	before_action :set_issue, only: [:show, :edit, :update, :destroy]
 
 	# GET /issues
 	# GET /issues.json
