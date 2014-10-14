@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 describe "Users" do
-	subject { response }
+	let(:another_user) { FactoryGirl.create(:user) }
+	let(:user) { FactoryGirl.create(:user) }
+	subject { page }
 
 	describe "Http requests" do
-		let(:another_user) { FactoryGirl.create(:user) }
-		let(:user) { FactoryGirl.create(:user) }
 		describe "without signing in" do
 			describe "GET /users" do
 				before { get users_path }
@@ -31,7 +31,6 @@ describe "Users" do
 				user.save
 				sign_in user
 			end
-			subject { page }
 			describe "navigation menu" do
 				before { visit users_path }
 				it { should_not have_content(I18n.t(:user_list_title)) }
@@ -39,17 +38,13 @@ describe "Users" do
 			end
 			describe "individual user" do
 				describe "other user profile" do
-					before { get user_path( { :id => another_user.id } ) }
+					before { visit user_path( { :id => another_user.id } ) }
 					it { should_not have_content(another_user.name) }
 					it { should_not have_content(another_user.surname) }
 					it { should_not have_content(another_user.email) }
-					it { should redirect_to(root_url) }
 				end
 				describe "same profile" do
-					before { get user_path( { :id => user.id } ) }
-					it "should not redirect to root" do
-						expect(response).not_to redirect_to root_url
-					end
+					before { visit user_path( { :id => user.id } ) }
 					it { should have_content(user.name)  }
 					it { should have_content(user.surname)  }
 					it { should have_content(user.email) }

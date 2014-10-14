@@ -150,14 +150,6 @@ describe User do
 		end
 	end
 	
-	describe "locations" do
-		let(:user) { FactoryGirl.create(:user) }
-		let(:user_type) { FactoryGirl.create(:user_type, user_type: "b1") }
-		before do
-		end
-		it "should show a filtered list of locations"
-	end
-	
 	describe "create_reset_password_token" do
 		let(:user) { FactoryGirl.create(:user) }
 		before { user.create_reset_password_token }
