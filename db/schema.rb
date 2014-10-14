@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140929200250) do
+ActiveRecord::Schema.define(version: 20141014211017) do
 
   create_table "assemblies", force: true do |t|
     t.string   "name"
@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 20140929200250) do
 
   add_index "assemblies", ["description"], name: "index_assemblies_on_description", using: :btree
   add_index "assemblies", ["level"], name: "index_assemblies_on_level", using: :btree
-  add_index "assemblies", ["name"], name: "index_assemblies_on_name", unique: true, using: :btree
+  add_index "assemblies", ["name", "level"], name: "index_assemblies_on_name_and_level", unique: true, using: :btree
 
   create_table "assembly_locations", force: true do |t|
     t.integer  "location_id"
@@ -75,7 +75,7 @@ ActiveRecord::Schema.define(version: 20140929200250) do
     t.boolean  "active",        default: true
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "expiredate"
+    t.integer  "expiredate",    default: 0
   end
 
   add_index "locations", ["address"], name: "index_locations_on_address", using: :btree
@@ -121,7 +121,7 @@ ActiveRecord::Schema.define(version: 20140929200250) do
     t.string   "code"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "archived"
+    t.boolean  "archived",    default: false
   end
 
   add_index "services", ["assembly_id"], name: "index_services_on_assembly_id", using: :btree
@@ -145,24 +145,13 @@ ActiveRecord::Schema.define(version: 20140929200250) do
   add_index "user_assemblies", ["assembly_id", "user_id"], name: "index_user_assemblies_on_assembly_id_and_user_id", unique: true, using: :btree
 
   create_table "user_types", force: true do |t|
-    t.integer  "user_id",    default: 0,  null: false
-    t.string   "user_type",  default: "", null: false
+    t.integer  "user_id"
+    t.string   "user_type"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "user_types", ["user_id", "user_type"], name: "index_user_types_on_user_id_and_user_type", unique: true, using: :btree
-
-  create_table "user_vehicles", force: true do |t|
-    t.integer  "user_id"
-    t.integer  "service_id"
-    t.integer  "vehicle_id"
-    t.string   "user_position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "user_vehicles", ["user_id", "service_id"], name: "index_user_vehicles_on_user_id_and_service_id", unique: true, using: :btree
 
   create_table "users", force: true do |t|
     t.string   "name"
