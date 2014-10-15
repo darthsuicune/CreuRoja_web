@@ -22,9 +22,13 @@ module SessionsHelper
 	end
 	
 	def current_user
-		token = cookies[:remember_token] || authenticate || params[:token] || nil
-		session = Session.find_by_token(token) if token
-		@current_user = session.user if session
+		if @current_user
+			@current_user
+		else
+			token = cookies[:remember_token] || authenticate || params[:token] || nil
+			session = Session.find_by_token(token) if token
+			@current_user = session.user if session
+		end
 	end
 	
 	def current_user?(user)

@@ -20,7 +20,7 @@ RSpec.describe Assembly, :type => :model do
 	describe "dependant_assemblies" do
 		let(:assembly1) { FactoryGirl.create(:assembly, depends_on: assembly.id) }
 		let(:assembly2) { FactoryGirl.create(:assembly, depends_on: assembly1.id) }
-		let(:assembly3) { FactoryGirl.create(:assembly, depends_on: assembly2.id + 1) }
+		let(:assembly3) { FactoryGirl.create(:assembly, depends_on: nil) }
 		
 		before {
 			assembly1.save
@@ -30,6 +30,22 @@ RSpec.describe Assembly, :type => :model do
 		
 		it "should retrieve child assemblies" do
 			expect(assembly.dependant_assemblies).to match_array([assembly, assembly1, assembly2])
+		end
+	end
+	
+	describe "dependant_ids" do
+		let(:assembly1) { FactoryGirl.create(:assembly, depends_on: assembly.id) }
+		let(:assembly2) { FactoryGirl.create(:assembly, depends_on: assembly1.id) }
+		let(:assembly3) { FactoryGirl.create(:assembly, depends_on: nil) }
+		
+		before {
+			assembly1.save
+			assembly2.save
+			assembly3.save
+		}
+		
+		it "should retrieve child assemblies" do
+			expect(assembly.dependant_ids).to match_array([assembly.id, assembly1.id, assembly2.id])
 		end
 	end
 	

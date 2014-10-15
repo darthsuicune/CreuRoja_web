@@ -50,6 +50,12 @@ class Assembly < ActiveRecord::Base
 		assemblies
 	end
 	
+	def dependant_ids
+		ids = []
+		child_ids(ids)
+		ids
+	end
+	
 	def self.levels
 		[[I18n.t(:assembly_level_local), "local"], [I18n.t(:assembly_level_province), "provincial"], [I18n.t(:assembly_level_region), "autonomica"]]
 	end
@@ -78,6 +84,12 @@ class Assembly < ActiveRecord::Base
 			dependants = Assembly.where(depends_on: assembly.id)
 			assemblies << assembly
 			dependants.each { |child| child_assemblies(assemblies, child) } if dependants.count != 0
+		end
+		
+		def child_ids(ids, assembly = self)
+			dependants = Assembly.where(depends_on: assembly.id)
+			ids << assembly.id
+			dependants.each { |child| child_ids(ids, child) } if dependants.count != 0
 		end
 		
 		def defaults
