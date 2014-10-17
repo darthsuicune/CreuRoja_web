@@ -17,7 +17,7 @@ RSpec.describe Assembly, :type => :model do
 	it { should respond_to(:location_id) }
 	it { should respond_to(:office) }
 	
-	describe "dependant_assemblies" do
+	describe "managed_assemblies" do
 		let(:assembly1) { FactoryGirl.create(:assembly, depends_on: assembly.id) }
 		let(:assembly2) { FactoryGirl.create(:assembly, depends_on: assembly1.id) }
 		let(:assembly3) { FactoryGirl.create(:assembly, depends_on: nil) }
@@ -29,11 +29,11 @@ RSpec.describe Assembly, :type => :model do
 		}
 		
 		it "should retrieve child assemblies" do
-			expect(assembly.dependant_assemblies).to match_array([assembly, assembly1, assembly2])
+			expect(assembly.managed_assemblies).to match_array([assembly, assembly1, assembly2])
 		end
 	end
 	
-	describe "dependant_ids" do
+	describe "managed_ids" do
 		let(:assembly1) { FactoryGirl.create(:assembly, depends_on: assembly.id) }
 		let(:assembly2) { FactoryGirl.create(:assembly, depends_on: assembly1.id) }
 		let(:assembly3) { FactoryGirl.create(:assembly, depends_on: nil) }
@@ -45,7 +45,7 @@ RSpec.describe Assembly, :type => :model do
 		}
 		
 		it "should retrieve child assemblies" do
-			expect(assembly.dependant_ids).to match_array([assembly.id, assembly1.id, assembly2.id])
+			expect(assembly.managed_ids).to match_array([assembly.id, assembly1.id, assembly2.id])
 		end
 	end
 	

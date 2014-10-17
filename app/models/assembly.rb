@@ -44,13 +44,13 @@ class Assembly < ActiveRecord::Base
 		assembly_locations.create(location_id: location.id)
 	end
 	
-	def dependant_assemblies
+	def managed_assemblies
 		assemblies = []
 		child_assemblies(assemblies)
 		assemblies
 	end
 	
-	def dependant_ids
+	def managed_ids
 		ids = []
 		child_ids(ids)
 		ids

@@ -130,6 +130,15 @@ class User < ActiveRecord::Base
 		end
 	end
 	
+	def assembly_ids
+		ids = []
+		assemblies.each do |assembly|
+			ids += assembly.managed_ids
+			ids << assembly.id
+		end
+		ids.uniq!
+	end
+	
 	def types
 		combined = ""
 		self.user_types.each do |type|

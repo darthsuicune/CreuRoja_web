@@ -196,7 +196,7 @@ describe User do
 		end
 	end
 	
-	describe "accesible vehicles" do
+	describe "vehicles" do
 		let(:vehicle1) { FactoryGirl.create(:vehicle) }
 		let(:vehicle2) { FactoryGirl.create(:vehicle) }
 		let(:vehicle3) { FactoryGirl.create(:vehicle) }
@@ -261,6 +261,25 @@ describe User do
 			expect(@user.for_session[:role]).to eq(@user.role)
 			expect(@user.for_session[:active]).to eq(@user.active)
 			expect(@user.for_session[:types]).to eq(@user.types)
+		end
+	end
+
+	describe "assembly_ids" do
+		let(:assembly1) { FactoryGirl.create(:assembly) }
+		let(:assembly2) { FactoryGirl.create(:assembly) }
+		let(:assembly3) { FactoryGirl.create(:assembly) }
+		let(:user) { FactoryGirl.create(:user) }
+		before do
+			assembly1.save
+			assembly2.depends_on = assembly1.id
+			assembly2.save
+			assembly3.depends_on = -1
+			assembly3.save
+			user.save
+			user.add_to_assembly(assembly1)
+		end
+		it "should contain the ids of its assemblies and dependants, but not others" do
+			expect(user.assembly_ids).to match_array([assembly1.id, assembly2.id])
 		end
 	end
 end
