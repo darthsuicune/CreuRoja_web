@@ -125,8 +125,7 @@ class User < ActiveRecord::Base
 		if self.allowed_to?(:see_all_vehicles)
 			Vehicle.all
 		else
-			ids = UserAssembly.select(:assembly_id).joins(:user).where(user_id: self.id)
-			Vehicle.distinct.joins(:vehicle_assemblies).where(vehicle_assemblies: { assembly_id: ids })
+			Vehicle.distinct.joins(:vehicle_assemblies).where(vehicle_assemblies: { assembly_id: assembly_ids })
 		end
 	end
 	
