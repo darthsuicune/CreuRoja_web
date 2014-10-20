@@ -30,12 +30,16 @@ class Location < ActiveRecord::Base
 		service_users.create(user_id: user.id, service_id: service.id, user_position: user_position)
 	end
 	
+	def self.general
+		["asamblea", "hospital", "cuap", "nostrum", "gasolinera", "salvamento"]
+	end
+	
 	def general?
 		location_type != "terrestre" && location_type != "maritimo"
 	end
 	
 	def self.serviced(user)
-		pending_services = LocationService.joins(:service).where("(end_time) > ? AND (assembly_id IN (?))", Time.now.to_s, user.assemblies.ids).distinct.ids
+		pending_services = LocationService.joins(:service).where("(end_time) > ? AND (assembly_id IN (?))", Time.now.to_s, user.assembly_ids).distinct.ids
 		where("(id IN (?)) OR (location_type IN (?))", pending_services, Location.general)
 	end
 	
@@ -45,10 +49,6 @@ class Location < ActiveRecord::Base
 		else
 			active_locations
 		end
-	end
-	
-	def self.general
-		["asamblea", "hospital", "cuap", "nostrum", "gasolinera", "salvamento"]
 	end
 	
 	def self.location_types

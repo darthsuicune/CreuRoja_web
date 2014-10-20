@@ -86,20 +86,14 @@ describe Location do
 		let(:location1) { FactoryGirl.create(:location, location_type: "terrestre") }
 		let(:location2) { FactoryGirl.create(:location, location_type: "hospital") }
 		let(:location3) { FactoryGirl.create(:location, location_type: "maritimo") }
-		let(:service1) { FactoryGirl.create(:service, end_time: 1.month.from_now) }
-		let(:assembly) { FactoryGirl.create(:assembly, id: 1) }
+		let(:assembly) { FactoryGirl.create(:assembly) }
+		let(:subassembly) { FactoryGirl.create(:assembly, depends_on: assembly.id) }
+		let(:service) { FactoryGirl.create(:service, end_time: 1.month.from_now, assembly_id: subassembly.id) }
 		let(:user) { FactoryGirl.create(:user) }
 		before do
-			assembly.save
-			user.save
-			location1.save
+			user.add_to_assembly(assembly)
+			service.add_location(location1)
 			location2.save
-			location3.save
-			service1.save
-			ua = user.user_assemblies.create(assembly_id: service1.assembly_id)
-			ua.save
-			ls = service1.location_services.create(location_id: location1.id)
-			ls.save
 		end
 		
 		it "should be a relation" do
