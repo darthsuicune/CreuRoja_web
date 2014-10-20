@@ -31,41 +31,34 @@ class Location < ActiveRecord::Base
 	end
 	
 	def self.general
-		["asamblea", "hospital", "cuap", "nostrum", "gasolinera", "salvamento"]
-	end
-	
-	def general?
-		location_type != "terrestre" && location_type != "maritimo" && location_type != "adaptadas" && location_type != "bravo"
-	end
-	
-	def self.serviced(user)
-		pending_services = LocationService.joins(:service).where("(end_time) > ? AND (assembly_id IN (?))", Time.now.to_s, user.assembly_ids).distinct.ids
-		where("(id IN (?)) OR (location_type IN (?))", pending_services, Location.general)
-	end
-	
-	def self.filter_by_user_types(user_types, updated_at = nil)
-		if updated_at
-			updated_after(updated_at).where(location_type: allowed_types(user_types))
-		else
-			active_locations.where(location_type: allowed_types(user_types))
-		end
+		["asamblea", "hospital", "cuap", "nostrum"]
 	end
 	
 	def self.location_types
 		Location.active_locations.select(:location_type).distinct
 	end
 	
-	def self.allowed_types(user_types)
-		types = ["asamblea", "hospital", "cuap", "nostrum"]
+	def general?
+		location_type != "terrestre" && location_type != "maritimo" && location_type != "adaptadas" && location_type != "bravo"
+	end
+	
+	def self.serviced(user, updated_at = nil)
+		where_query = "(id IN (?) AND location_type IN (?)) OR (location_type IN (?))"
+		pending_service_ids = Service.joins(:location_services).where("(end_time) > ?", Time.now.to_s).where(assembly_id: user.assembly_ids).distinct.ids
+		if updated_at
+			updated_after(updated_at).where(where_query, pending_service_ids, allowed_types(user.user_types), allowed_general_types(user.user_types))
+		else
+			active_locations.where(where_query, pending_service_ids, allowed_types(user.user_types), allowed_general_types(user.user_types))
+		end
+	end
+	
+	def self.allowed_general_types(user_types)
+		types = general
 		unless user_types.nil?
 			user_types.each do |user_type|
 				case user_type.user_type
 				when "acu"
-					types << "maritimo"
 					types << "salvamento"
-				when "asi"
-					types << "terrestre"
-					types << "bravo"
 				when "b1"
 					types << "gasolinera"
 				when "btp"
@@ -74,6 +67,23 @@ class Location < ActiveRecord::Base
 					types << "gasolinera"
 				when "per"
 					types << "salvamento"
+				end
+			end
+		end
+		types.uniq
+	end
+	
+	def self.allowed_types(user_types)
+		types = []
+		unless user_types.nil?
+			user_types.each do |user_type|
+				case user_type.user_type
+				when "acu"
+					types << "maritimo"
+				when "asi"
+					types << "terrestre"
+					types << "bravo"
+				when "per"
 					types << "maritimo"
 				when "soc"
 					types << "adaptadas"

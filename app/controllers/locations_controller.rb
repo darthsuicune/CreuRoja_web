@@ -13,7 +13,7 @@ class LocationsController < ApplicationController
 				@locations = Location.all 
 			}
 			format.json {
-				@locations = current_user.locations params[:updated_at]
+				@locations = current_user.map_elements params[:updated_at]
 			}
 		end
 	end

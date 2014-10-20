@@ -5,9 +5,9 @@ FactoryGirl.define do
 		sequence(:name) { |n| "Name #{n}" }
 		sequence(:description) { |n| "Description #{n}" }
 		assembly_id 1
-		base_time "2014-05-11 22:16:35"
-		start_time "2014-05-11 22:16:35"
-		end_time "2014-05-11 23:16:35"
+		base_time Time.now.to_s
+		start_time Time.now.to_s
+		end_time 1.month.from_now
 		code "MyCode"
 	end
 end

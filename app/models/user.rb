@@ -55,8 +55,8 @@ class User < ActiveRecord::Base
 		user_types.create(user_type: type)
 	end
 	
-	def locations(updated_at = nil)
-		Location.filter_by_user_types(user_types, updated_at)
+	def map_elements(updated_at = nil)
+		(allowed_to?(:see_all_locations)) ? Location.all : Location.serviced(self, updated_at)
 	end
 
 	def allowed_to?(action)
@@ -78,6 +78,8 @@ class User < ActiveRecord::Base
 		when :see_service_list
 			role == "technician"
 		when :see_all_services
+			false
+		when :see_all_locations
 			false
 		when :see_all_users
 			false

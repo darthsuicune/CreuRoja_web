@@ -91,6 +91,7 @@ describe Location do
 		let(:service) { FactoryGirl.create(:service, end_time: 1.month.from_now, assembly_id: subassembly.id) }
 		let(:user) { FactoryGirl.create(:user) }
 		before do
+			user.add_type("asi")
 			user.add_to_assembly(assembly)
 			service.add_location(location1)
 			location2.save
@@ -108,7 +109,9 @@ describe Location do
 		end
 	end
 
-	describe "filter_by_user_types" do
+	describe "serviced filtered by user types" do
+		let(:assembly) { FactoryGirl.create(:assembly) }
+		let(:service) { FactoryGirl.create(:service, assembly_id: assembly.id) }
 		let(:acu) { FactoryGirl.create(:user) }
 		let(:asi) { FactoryGirl.create(:user) }
 		let(:b1) { FactoryGirl.create(:user) }
@@ -124,135 +127,159 @@ describe Location do
 			d1.add_type("d1")
 			per.add_type("per")
 			soc.add_type("soc")
+			acu.add_to_assembly(assembly)
+			asi.add_to_assembly(assembly)
+			b1.add_to_assembly(assembly)
+			btp.add_to_assembly(assembly)
+			d1.add_to_assembly(assembly)
+			per.add_to_assembly(assembly)
+			soc.add_to_assembly(assembly)
 		end
 		
+		# General, should be always visible for all
 		describe "asamblea" do
 			let(:asamblea) { FactoryGirl.create(:location, location_type: "asamblea") }
 			it "should be visible for all" do
-				expect(acu.locations).to match_array([asamblea])
-				expect(asi.locations).to match_array([asamblea])
-				expect(b1.locations).to match_array([asamblea])
-				expect(btp.locations).to match_array([asamblea])
-				expect(d1.locations).to match_array([asamblea])
-				expect(per.locations).to match_array([asamblea])
-				expect(soc.locations).to match_array([asamblea])
+				expect(acu.map_elements).to match_array([asamblea])
+				expect(asi.map_elements).to match_array([asamblea])
+				expect(b1.map_elements).to match_array([asamblea])
+				expect(btp.map_elements).to match_array([asamblea])
+				expect(d1.map_elements).to match_array([asamblea])
+				expect(per.map_elements).to match_array([asamblea])
+				expect(soc.map_elements).to match_array([asamblea])
 			end
 		end
 		
 		describe "cuap" do
 			let(:cuap) { FactoryGirl.create(:location, location_type: "cuap") }
 			it "should be visible for all" do
-				expect(acu.locations).to match_array([cuap])
-				expect(asi.locations).to match_array([cuap])
-				expect(b1.locations).to match_array([cuap])
-				expect(btp.locations).to match_array([cuap])
-				expect(d1.locations).to match_array([cuap])
-				expect(per.locations).to match_array([cuap])
-				expect(soc.locations).to match_array([cuap])
-			end
-		end
-		
-		describe "gasolinera" do
-			let(:gasolinera) { FactoryGirl.create(:location, location_type: "gasolinera") }
-			it "should be visible for b1, d1, btp" do
-				expect(acu.locations).to match_array([])
-				expect(asi.locations).to match_array([])
-				expect(b1.locations).to match_array([gasolinera])
-				expect(btp.locations).to match_array([gasolinera])
-				expect(d1.locations).to match_array([gasolinera])
-				expect(per.locations).to match_array([])
-				expect(soc.locations).to match_array([])
+				expect(acu.map_elements).to match_array([cuap])
+				expect(asi.map_elements).to match_array([cuap])
+				expect(b1.map_elements).to match_array([cuap])
+				expect(btp.map_elements).to match_array([cuap])
+				expect(d1.map_elements).to match_array([cuap])
+				expect(per.map_elements).to match_array([cuap])
+				expect(soc.map_elements).to match_array([cuap])
 			end
 		end
 		
 		describe "hospital" do
 			let(:hospital) { FactoryGirl.create(:location, location_type: "hospital") }
 			it "should be visible for all" do
-				expect(acu.locations).to match_array([hospital])
-				expect(asi.locations).to match_array([hospital])
-				expect(b1.locations).to match_array([hospital])
-				expect(btp.locations).to match_array([hospital])
-				expect(d1.locations).to match_array([hospital])
-				expect(per.locations).to match_array([hospital])
-				expect(soc.locations).to match_array([hospital])
-			end
-		end
-		
-		describe "salvamento" do
-			let(:salvamento) { FactoryGirl.create(:location, location_type: "salvamento") }
-			it "should be visible for acu, per" do
-				expect(acu.locations).to match_array([salvamento])
-				expect(asi.locations).to match_array([])
-				expect(b1.locations).to match_array([])
-				expect(btp.locations).to match_array([])
-				expect(d1.locations).to match_array([])
-				expect(per.locations).to match_array([salvamento])
-				expect(soc.locations).to match_array([])
+				expect(acu.map_elements).to match_array([hospital])
+				expect(asi.map_elements).to match_array([hospital])
+				expect(b1.map_elements).to match_array([hospital])
+				expect(btp.map_elements).to match_array([hospital])
+				expect(d1.map_elements).to match_array([hospital])
+				expect(per.map_elements).to match_array([hospital])
+				expect(soc.map_elements).to match_array([hospital])
 			end
 		end
 		
 		describe "nostrum" do
 			let(:nostrum) { FactoryGirl.create(:location, location_type: "nostrum") }
 			it "should be visible for all" do
-				expect(acu.locations).to match_array([nostrum])
-				expect(asi.locations).to match_array([nostrum])
-				expect(b1.locations).to match_array([nostrum])
-				expect(btp.locations).to match_array([nostrum])
-				expect(d1.locations).to match_array([nostrum])
-				expect(per.locations).to match_array([nostrum])
-				expect(soc.locations).to match_array([nostrum])
+				expect(acu.map_elements).to match_array([nostrum])
+				expect(asi.map_elements).to match_array([nostrum])
+				expect(b1.map_elements).to match_array([nostrum])
+				expect(btp.map_elements).to match_array([nostrum])
+				expect(d1.map_elements).to match_array([nostrum])
+				expect(per.map_elements).to match_array([nostrum])
+				expect(soc.map_elements).to match_array([nostrum])
 			end
 		end
 		
+		# Don't need to have a service to be displayed
+		describe "salvamento" do
+			let(:salvamento) { FactoryGirl.create(:location, location_type: "salvamento") }
+			it "should be visible for acu, per" do
+				expect(acu.map_elements).to match_array([salvamento])
+				expect(asi.map_elements).to match_array([])
+				expect(b1.map_elements).to match_array([])
+				expect(btp.map_elements).to match_array([])
+				expect(d1.map_elements).to match_array([])
+				expect(per.map_elements).to match_array([salvamento])
+				expect(soc.map_elements).to match_array([])
+			end
+		end
+		
+		describe "gasolinera" do
+			let(:gasolinera) { FactoryGirl.create(:location, location_type: "gasolinera") }
+			it "should be visible for b1, d1, btp" do
+				expect(acu.map_elements).to match_array([])
+				expect(asi.map_elements).to match_array([])
+				expect(b1.map_elements).to match_array([gasolinera])
+				expect(btp.map_elements).to match_array([gasolinera])
+				expect(d1.map_elements).to match_array([gasolinera])
+				expect(per.map_elements).to match_array([])
+				expect(soc.map_elements).to match_array([])
+			end
+		end
+		
+		# Need to have a service to be displayed
 		describe "terrestre" do
 			let(:terrestre) { FactoryGirl.create(:location, location_type: "terrestre") }
+			before do
+				assembly.add_location(terrestre)
+				service.add_location(terrestre)
+			end
+			
 			it "should be visible for asi" do
-				expect(acu.locations).to match_array([])
-				expect(asi.locations).to match_array([terrestre])
-				expect(b1.locations).to match_array([])
-				expect(btp.locations).to match_array([])
-				expect(d1.locations).to match_array([])
-				expect(per.locations).to match_array([])
-				expect(soc.locations).to match_array([])
+				expect(acu.map_elements).to match_array([])
+				expect(asi.map_elements).to match_array([terrestre])
+				expect(b1.map_elements).to match_array([])
+				expect(btp.map_elements).to match_array([])
+				expect(d1.map_elements).to match_array([])
+				expect(per.map_elements).to match_array([])
+				expect(soc.map_elements).to match_array([])
 			end
 		end
 		
 		describe "maritimo" do
 			let(:maritimo) { FactoryGirl.create(:location, location_type: "maritimo") }
-			it "should be visible for acu, per" do
-				expect(acu.locations).to match_array([maritimo])
-				expect(asi.locations).to match_array([])
-				expect(b1.locations).to match_array([])
-				expect(btp.locations).to match_array([])
-				expect(d1.locations).to match_array([])
-				expect(per.locations).to match_array([maritimo])
-				expect(soc.locations).to match_array([])
+			before do
+				maritimo.add_to_service(service)
+			end
+			it "should be visible only for acu, per" do
+				expect(acu.map_elements).to match_array([maritimo])
+				expect(asi.map_elements).to match_array([])
+				expect(b1.map_elements).to match_array([])
+				expect(btp.map_elements).to match_array([])
+				expect(d1.map_elements).to match_array([])
+				expect(per.map_elements).to match_array([maritimo])
+				expect(soc.map_elements).to match_array([])
 			end
 		end
 		
 		describe "adaptadas" do
 			let(:adaptadas) { FactoryGirl.create(:location, location_type: "adaptadas") }
-			it "should be visible for soc" do
-				expect(acu.locations).to match_array([])
-				expect(asi.locations).to match_array([])
-				expect(b1.locations).to match_array([])
-				expect(btp.locations).to match_array([])
-				expect(d1.locations).to match_array([])
-				expect(per.locations).to match_array([])
-				expect(soc.locations).to match_array([adaptadas])
+			before do
+				adaptadas.add_to_service(service)
+			end
+			it "should be visible only for soc" do
+				expect(acu.map_elements).to match_array([])
+				expect(asi.map_elements).to match_array([])
+				expect(b1.map_elements).to match_array([])
+				expect(btp.map_elements).to match_array([])
+				expect(d1.map_elements).to match_array([])
+				expect(per.map_elements).to match_array([])
+				expect(soc.map_elements).to match_array([adaptadas])
 			end
 		end
 		
 		describe "bravo" do
 			let(:bravo) { FactoryGirl.create(:location, location_type: "bravo") }
-			it "should be visible for asi" do
-				expect(acu.locations).to match_array([])
-				expect(asi.locations).to match_array([bravo])
-				expect(b1.locations).to match_array([])
-				expect(btp.locations).to match_array([])
-				expect(d1.locations).to match_array([])
-				expect(per.locations).to match_array([])
-				expect(soc.locations).to match_array([])
+			before do
+				bravo.add_to_service(service)
+			end
+			it "should be visible only for asi" do
+				expect(acu.map_elements).to match_array([])
+				expect(asi.map_elements).to match_array([bravo])
+				expect(b1.map_elements).to match_array([])
+				expect(btp.map_elements).to match_array([])
+				expect(d1.map_elements).to match_array([])
+				expect(per.map_elements).to match_array([])
+				expect(soc.map_elements).to match_array([])
 			end
 		end
 	end
@@ -268,7 +295,22 @@ describe Location do
 		let(:soc) { FactoryGirl.create(:user_type, user_id: user.id, user_type: "soc") }
 		
 		it "should return proper values" do
-			expect(Location.allowed_types([b1, per])).to match_array(["asamblea","cuap","hospital", "nostrum", "gasolinera", "salvamento", "maritimo"])
+			expect(Location.allowed_types([b1, per])).to match_array(["maritimo"])
+		end
+	end
+	
+	describe "allowed_general_types" do
+		let(:user) { FactoryGirl.create(:user) }
+		let(:acu) { FactoryGirl.create(:user_type, user_id: user.id, user_type: "acu") }
+		let(:asi) { FactoryGirl.create(:user_type, user_id: user.id, user_type: "asi") }
+		let(:b1) { FactoryGirl.create(:user_type, user_id: user.id, user_type: "b1") }
+		let(:btp) { FactoryGirl.create(:user_type, user_id: user.id, user_type: "btp") }
+		let(:d1) { FactoryGirl.create(:user_type, user_id: user.id, user_type: "d1") }
+		let(:per) { FactoryGirl.create(:user_type, user_id: user.id, user_type: "per") }
+		let(:soc) { FactoryGirl.create(:user_type, user_id: user.id, user_type: "soc") }
+		
+		it "should return proper values" do
+			expect(Location.allowed_general_types([b1, per])).to match_array(["asamblea", "hospital","cuap","nostrum","salvamento","gasolinera"])
 		end
 	end
 end
