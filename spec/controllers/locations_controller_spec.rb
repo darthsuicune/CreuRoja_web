@@ -232,12 +232,12 @@ describe LocationsController do
 		end
 		
 		describe "as normal user" do
-			let(:location) { FactoryGirl.create(:location) }
+			let(:location) { FactoryGirl.create(:location, location_type: "hospital") }
 			let(:user) { FactoryGirl.create(:user) }
-			before { 
+			before do
 				sign_in user
 				location.save
-			}
+			end
 			
 			describe "as JSON" do
 				describe "index" do
@@ -249,7 +249,7 @@ describe LocationsController do
 						expect(response.header["Content-Type"]).to include("application/json")
 					end
 					it "assigns the locations to @locations" do
-						expect(assigns(:locations)).to eq(Location.active_locations)
+						expect(assigns(:locations)).to eq(user.locations)
 					end
 				end
 			end
