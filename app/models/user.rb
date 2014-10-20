@@ -1,4 +1,16 @@
 class User < ActiveRecord::Base
+	# This class contains two references to services, "services" which replies with the
+	# services the user has signed up for, and available_services, that returns the services the user
+	# can see.
+	
+	# It also contains two ways of getting its types. user_types (relation) returns a relation with the
+	# user types, while "types" returns a comma-separated string with all together.
+	
+	# Other convenience methods include:
+	# assembly_users: Retrieves the users from the same and dependant assemblies
+	# assembly_ids: Retrieves the ids of the assemblies the user has access to
+	# types: Returns a string with a comma separated list of the user types
+	
 	default_scope { order(name: :asc, surname: :asc) }
 	has_secure_password
 
@@ -36,6 +48,11 @@ class User < ActiveRecord::Base
 	def add_to_service(service, user_position, location = nil, vehicle = nil)
 		service_users.create(service_id: service.id, vehicle_id: vehicle.id, user_position: user_position) if location.nil?
 		service_users.create(service_id: service.id, location_id: location.id, user_position: user_position) if vehicle.nil?
+	end
+	
+	#The type should be passed as a string
+	def add_type(type)
+		user_types.create(user_type: type)
 	end
 	
 	def locations(updated_at = nil)

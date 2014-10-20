@@ -36,6 +36,7 @@ describe User do
 			it { should_not be_valid }
 		end
 	end
+	
 	describe "surname" do
 		describe "is not present" do
 			before { @user.surname = " " }
@@ -46,6 +47,7 @@ describe User do
 			it { should_not be_valid }
 		end
 	end
+	
 	describe "email" do
 		describe "is not present" do
 			before { @user.email = " " }
@@ -86,6 +88,7 @@ describe User do
 			end
 		end
 	end
+	
 	describe "password" do
 		describe "is not present" do
 			before { @user.password = @user.password_confirmation = " " }
@@ -107,6 +110,7 @@ describe User do
 			it { should_not be_valid }
 		end
 	end
+	
 	describe "return value of authenticate method" do
 		before { @user.save }
 		let(:found_user) { User.find_by_email(@user.email) }
@@ -122,6 +126,7 @@ describe User do
 			end
 		end
 	end
+	
 	describe "permission system" do
 		describe "admins" do
 			before { @user.role = "admin"
@@ -317,6 +322,15 @@ describe User do
 		end
 		it "should contain the ids of its assemblies and dependants, but not others" do
 			expect(user.assembly_ids).to match_array([assembly1.id, assembly2.id])
+		end
+	end
+
+	describe "add_type" do
+		let(:user) { FactoryGirl.create(:user) }
+		it "should add the user the type" do
+			expect {
+				user.add_type("something")
+			}.to change(UserType, :count).by(1)
 		end
 	end
 end

@@ -35,7 +35,7 @@ class Location < ActiveRecord::Base
 	end
 	
 	def general?
-		location_type != "terrestre" && location_type != "maritimo"
+		location_type != "terrestre" && location_type != "maritimo" && location_type != "adaptadas" && location_type != "bravo"
 	end
 	
 	def self.serviced(user)
@@ -45,14 +45,42 @@ class Location < ActiveRecord::Base
 	
 	def self.filter_by_user_types(user_types, updated_at = nil)
 		if updated_at
-			updated_after updated_at 
+			updated_after(updated_at).where(location_type: allowed_types(user_types))
 		else
-			active_locations
+			active_locations.where(location_type: allowed_types(user_types))
 		end
 	end
 	
 	def self.location_types
 		Location.active_locations.select(:location_type).distinct
+	end
+	
+	def self.allowed_types(user_types)
+		types = ["asamblea", "hospital", "cuap", "nostrum"]
+		unless user_types.nil?
+			user_types.each do |user_type|
+				case user_type.user_type
+				when "acu"
+					types << "maritimo"
+					types << "salvamento"
+				when "asi"
+					types << "terrestre"
+					types << "bravo"
+				when "b1"
+					types << "gasolinera"
+				when "btp"
+					types << "gasolinera"
+				when "d1"
+					types << "gasolinera"
+				when "per"
+					types << "salvamento"
+					types << "maritimo"
+				when "soc"
+					types << "adaptadas"
+				end
+			end
+		end
+		types.uniq
 	end
 	
 	private
