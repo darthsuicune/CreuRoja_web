@@ -243,6 +243,43 @@ describe User do
 		end
 	end
 
+	describe "available_services" do
+		let(:assembly1) { FactoryGirl.create(:assembly) }
+		let(:assembly2) { FactoryGirl.create(:assembly) }
+		let(:assembly3) { FactoryGirl.create(:assembly) }
+		let(:service1) { FactoryGirl.create(:service, assembly_id: assembly1.id) }
+		let(:service2) { FactoryGirl.create(:service, assembly_id: assembly2.id) }
+		let(:service3) { FactoryGirl.create(:service, assembly_id: assembly3.id) }
+		let(:user1) { FactoryGirl.create(:user) }
+		before do
+			user1.add_to_assembly(assembly1)
+			user1.add_to_assembly(assembly2)
+		end
+		it "should return services that are available to the user assembly" do
+			expect(user1.available_services).to match_array([service1, service2])
+		end
+	end
+	
+	describe "assembly_users" do
+		let(:assembly1) { FactoryGirl.create(:assembly) }
+		let(:assembly2) { FactoryGirl.create(:assembly) }
+		let(:assembly3) { FactoryGirl.create(:assembly) }
+		let(:user1) { FactoryGirl.create(:user) }
+		let(:user2) { FactoryGirl.create(:user) }
+		let(:user3) { FactoryGirl.create(:user) }
+		let(:user4) { FactoryGirl.create(:user) }
+		before do
+			user1.add_to_assembly(assembly1)
+			user2.add_to_assembly(assembly2)
+			user3.add_to_assembly(assembly3)
+			user4.add_to_assembly(assembly1)
+			user4.add_to_assembly(assembly2)
+		end
+		it "should return the users that share an assembly with the user" do
+			expect(user4.assembly_users).to match_array([user1, user2, user4])
+		end
+	end
+
 	describe "for_session" do
 		before do
 			@user.save

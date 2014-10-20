@@ -60,6 +60,10 @@ class User < ActiveRecord::Base
 			false
 		when :see_service_list
 			role == "technician"
+		when :see_all_services
+			false
+		when :see_all_users
+			false
 		when :add_to_own_assembly
 			role == "technician"
 		when :add_to_any_assembly
@@ -126,6 +130,22 @@ class User < ActiveRecord::Base
 			Vehicle.all
 		else
 			Vehicle.distinct.joins(:vehicle_assemblies).where(vehicle_assemblies: { assembly_id: assembly_ids })
+		end
+	end
+	
+	def available_services
+		if self.allowed_to?(:see_all_services)
+			Service.all
+		else
+			Service.where(assembly_id: assembly_ids)
+		end
+	end
+	
+	def assembly_users
+		if self.allowed_to?(:see_all_users)
+			User.all
+		else
+			User.distinct.joins(:user_assemblies).where(user_assemblies: { assembly_id: assembly_ids })
 		end
 	end
 	
