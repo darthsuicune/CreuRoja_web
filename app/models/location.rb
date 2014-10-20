@@ -43,7 +43,12 @@ class Location < ActiveRecord::Base
 	end
 	
 	def self.serviced(user, updated_at = nil)
+		# Extracted to avoid repetition. Requires 3 additional parameters for the 3 variables, that are:
+		# -Ids of the locations that have services available for the user
+		# -location types for service-based locations, filtered by user type
+		# -location types for general, filtered by user type
 		where_query = "(id IN (?) AND location_type IN (?)) OR (location_type IN (?))"
+		
 		pending_service_ids = Service.joins(:location_services).where("(end_time) > ?", Time.now.to_s).where(assembly_id: user.assembly_ids).distinct.ids
 		if updated_at
 			updated_after(updated_at).where(where_query, pending_service_ids, allowed_types(user.user_types), allowed_general_types(user.user_types))
