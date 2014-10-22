@@ -42,20 +42,22 @@ class Location < ActiveRecord::Base
 		location_type != "terrestre" && location_type != "maritimo" && location_type != "adaptadas" && location_type != "bravo"
 	end
 	
-	def self.serviced(user, updated_at = nil)
+	def self.serviced(user, updated_at = nil)		
+		pending_services = Service.unfinished_before(Time.now.to_s).where(assembly_id: user.assembly_ids).ids
+		services_locations = Location.joins(:location_services).where("service_id IN (?)", pending_services).ids
+		if updated_at
+			updated_after(updated_at).filter_by_user_types(services_locations, user.user_types)
+		else
+			active_locations.filter_by_user_types(services_locations, user.user_types)
+		end
+	end
+	
+	def self.filter_by_user_types(services_locations, user_types)
 		# Extracted to avoid repetition. Requires 3 additional parameters for the 3 variables, that are:
 		# -Ids of the locations that have services available for the user
 		# -location types for service-based locations, filtered by user type
 		# -location types for general, filtered by user type
-		where_query = "(id IN (?) AND location_type IN (?)) OR (location_type IN (?))"
-		
-		pending_services = Service.unfinished_before(Time.now.to_s).where(assembly_id: user.assembly_ids).ids
-		services_locations = Location.joins(:location_services).where("service_id IN (?)", pending_services).ids
-		if updated_at
-			updated_after(updated_at).where(where_query, services_locations, allowed_types(user.user_types), allowed_general_types(user.user_types))
-		else
-			active_locations.where(where_query, services_locations, allowed_types(user.user_types), allowed_general_types(user.user_types))
-		end
+		where("(id IN (?) AND location_type IN (?)) OR (location_type IN (?))", services_locations, allowed_types(user_types), allowed_general_types(user_types))
 	end
 	
 	def self.allowed_general_types(user_types)
