@@ -1,5 +1,5 @@
 class Vehicle < ActiveRecord::Base
-	default_scope { order(indicative: :asc) }
+	default_scope { order(vehicle_type: :asc, indicative: :asc) }
 	
 	has_many :vehicle_services, dependent: :destroy
 	has_many :services, through: :vehicle_services
