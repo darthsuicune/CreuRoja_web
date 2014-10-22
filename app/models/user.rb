@@ -24,7 +24,7 @@ class User < ActiveRecord::Base
 	accepts_nested_attributes_for :user_types, allow_destroy: true
 	
 	before_save { email.downcase!
-	              role.downcase unless role.nil? }
+	              role.downcase! unless role.nil? }
 	
 	before_create :defaults
 	before_validation :set_initial_password
@@ -174,7 +174,7 @@ class User < ActiveRecord::Base
 			ids += assembly.managed_ids
 			ids << assembly.id
 		end
-		ids.uniq!
+		ids.uniq
 	end
 	
 	def types

@@ -49,11 +49,12 @@ class Location < ActiveRecord::Base
 		# -location types for general, filtered by user type
 		where_query = "(id IN (?) AND location_type IN (?)) OR (location_type IN (?))"
 		
-		pending_service_ids = Service.joins(:location_services).where("(end_time) > ?", Time.now.to_s).where(assembly_id: user.assembly_ids).distinct.ids
+		pending_service_ids = Service.joins(:location_services).where("(end_time) > ?", Time.now.to_s).where(assembly_id: user.assembly_ids).ids
+		services_locations_ids = Location.joins(:location_services).where("service_id IN (?)", pending_service_ids).ids
 		if updated_at
-			updated_after(updated_at).where(where_query, pending_service_ids, allowed_types(user.user_types), allowed_general_types(user.user_types))
+			updated_after(updated_at).where(where_query, services_locations_ids, allowed_types(user.user_types), allowed_general_types(user.user_types))
 		else
-			active_locations.where(where_query, pending_service_ids, allowed_types(user.user_types), allowed_general_types(user.user_types))
+			active_locations.where(where_query, services_locations_ids, allowed_types(user.user_types), allowed_general_types(user.user_types))
 		end
 	end
 	

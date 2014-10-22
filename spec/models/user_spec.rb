@@ -310,14 +310,12 @@ describe User do
 		let(:assembly1) { FactoryGirl.create(:assembly) }
 		let(:assembly2) { FactoryGirl.create(:assembly) }
 		let(:assembly3) { FactoryGirl.create(:assembly) }
+		let(:assembly4) { FactoryGirl.create(:assembly) }
 		let(:user) { FactoryGirl.create(:user) }
 		before do
-			assembly1.save
 			assembly2.depends_on = assembly1.id
 			assembly2.save
 			assembly3.depends_on = -1
-			assembly3.save
-			user.save
 			user.add_to_assembly(assembly1)
 		end
 		it "should contain the ids of its assemblies and dependants, but not others" do
