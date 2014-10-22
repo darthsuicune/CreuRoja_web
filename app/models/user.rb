@@ -44,10 +44,14 @@ class User < ActiveRecord::Base
 	def add_to_assembly(assembly)
 		user_assemblies.create(assembly_id: assembly.id)
 	end
-	
+
+	#Only location XOR vehicle should be nil. One of them should be not nil, the other one has to be nil.
 	def add_to_service(service, user_position, location = nil, vehicle = nil)
-		service_users.create(service_id: service.id, vehicle_id: vehicle.id, user_position: user_position) if location.nil?
-		service_users.create(service_id: service.id, location_id: location.id, user_position: user_position) if vehicle.nil?
+		if location.nil?
+			service_users.create(service_id: service.id, vehicle_id: vehicle.id, user_position: user_position)
+		else
+			service_users.create(service_id: service.id, location_id: location.id, user_position: user_position)
+		end
 	end
 	
 	#The type should be passed as a string

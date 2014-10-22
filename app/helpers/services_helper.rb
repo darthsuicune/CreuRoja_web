@@ -1,12 +1,16 @@
 module ServicesHelper
+	#NOTE:
+	#This methods are extracted from the VIEWS to increase readability. 
+	#They are thought for creating an array of values usable in select forms.
+	
 	#Service: Service for which the vehicles are requested
-	#Assignment: Services for which the vehicle is already assigned
 	def get_available_vehicles(service)
 		availables = []
 		Vehicle.where(operative: true).each do |vehicle|
 			#If the service already has the vehicle, ignore
 			unless service.vehicles.include?(vehicle)
 				is_available = true
+				#Assignment: Services for which the vehicle is already assigned
 				vehicle.services.each do |assignment|
 					#If the assigned services match in time with the service wanted, mark it as not available
 					if (service.base_time < assignment.end_time && service.end_time > assignment.base_time)
