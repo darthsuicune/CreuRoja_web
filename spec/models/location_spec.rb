@@ -111,7 +111,7 @@ describe Location do
 
 	describe "serviced filtered by user types" do
 		let(:assembly) { FactoryGirl.create(:assembly) }
-		let(:service) { FactoryGirl.create(:service, assembly_id: assembly.id) }
+		let(:service) { FactoryGirl.create(:service, assembly_id: assembly.id, id: 1234) }
 		let(:acu) { FactoryGirl.create(:user) }
 		let(:asi) { FactoryGirl.create(:user) }
 		let(:b1) { FactoryGirl.create(:user) }

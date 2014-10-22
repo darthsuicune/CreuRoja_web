@@ -1,5 +1,6 @@
 class Service < ActiveRecord::Base
 	default_scope { order(base_time: :desc) }
+	scope :unfinished_before, ->(time) { where("end_time > ?", time) }
 	
 	belongs_to :assembly
 	has_many :vehicle_services, dependent: :destroy
