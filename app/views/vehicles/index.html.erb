@@ -16,8 +16,6 @@
 			<th><%= t(:form_vehicle_places) %></th>
 			<th><%= t(:form_vehicle_notes) %></th>
 			<th><%= t(:form_vehicle_operative) %></th>
-			<th><%= t(:form_vehicle_itv) %></th>
-			<th><%= t(:form_vehicle_sanitary_cert) %></th>
 			<th></th>
 			<th></th>
 			<th></th>
@@ -34,8 +32,6 @@
 			<td><%= vehicle.places %></td>
 			<td><%= vehicle.notes %></td>
 			<td><%= vehicle.operative %></td>
-			<td><%= vehicle.itv %></td>
-			<td><%= vehicle.sanitary_cert %></td>
 			<td><%= link_to t(:resource_show), vehicle %></td>
 			<% if current_user && current_user.allowed_to?(:manage_vehicles) %>
 				<td><%= link_to t(:resource_edit), edit_vehicle_path(vehicle) %></td>
