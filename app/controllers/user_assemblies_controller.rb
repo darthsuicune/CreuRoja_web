@@ -1,5 +1,6 @@
 class UserAssembliesController < ApplicationController
 	before_filter :signed_in_user
+	before_filter :set_user_assembly, only: [:update, :destroy]
 	before_filter :is_valid_user
 		
 	def create
@@ -12,19 +13,21 @@ class UserAssembliesController < ApplicationController
 	end
 	
 	def update
-		user_assembly = UserAssembly.find(params[:id])
-		user_assembly.update(user_assembly_params)
-		redirect_to(user_assembly.user)
+		@user_assembly.update(user_assembly_params)
+		redirect_to(@user_assembly.user)
 	end
 	
 	def destroy
-		user_assembly = UserAssembly.find(params[:id])
-		user = user_assembly.user
-		user_assembly.destroy
+		user = @user_assembly.user
+		@user_assembly.destroy
 		redirect_to(user)
 	end
 	
 	private
+		def set_user_assembly
+			@user_assembly = UserAssembly.find(params[:id])
+		end
+		
 		def user_assembly_params
 			params.require(:user_assembly).permit(:assembly_id, :user_id)
 		end

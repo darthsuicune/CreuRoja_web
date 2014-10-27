@@ -113,6 +113,8 @@ class User < ActiveRecord::Base
 			role == "technician"
 		when :assign_user_to_service
 			role == "technician"
+		when :assign_users_to_assemblies
+			role == "technician"
 		else
 			false
 		end

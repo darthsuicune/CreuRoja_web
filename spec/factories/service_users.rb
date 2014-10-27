@@ -6,5 +6,6 @@ FactoryGirl.define do
 		service_id 1
 		location_id 1
 		vehicle_id 1
+		user_position "something"
 	end
 end
