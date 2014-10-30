@@ -4,17 +4,21 @@ class UserType < ActiveRecord::Base
 	validates :user_id, presence: true
 	validates :user_type, presence: true
 	
-	def self.available_types
-		[["asi", I18n.t(:asi)],
-		 ["acu", I18n.t(:acu)],
-		 ["tes", I18n.t(:tes)],
-		 ["due", I18n.t(:due)],
-		 ["doc", I18n.t(:doc)],
-		 ["b1", I18n.t(:b1)],
-		 ["btp", I18n.t(:btp)],
-		 ["d1", I18n.t(:d1)],
-		 ["per", I18n.t(:per)],
-		 ["ci", I18n.t(:ci)]]
+	def self.available_types(user = nil)
+		if user
+			where(user_id: user.id)
+		else
+			[[I18n.t(:asi), "asi"],
+			[I18n.t(:acu), "acu"],
+			[I18n.t(:tes), "tes"],
+			[I18n.t(:due), "due"],
+			[I18n.t(:doc), "doc"],
+			[I18n.t(:b1), "b1"],
+			[I18n.t(:btp), "btp"],
+			[I18n.t(:d1), "d1"],
+			[I18n.t(:per), "per"],
+			[I18n.t(:ci), "ci"]]
+		end
 	end
 	
 	def to_s

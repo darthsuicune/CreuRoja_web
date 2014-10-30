@@ -27,4 +27,14 @@ describe UserType do
 			end
 		end
 	end
+	
+	describe "available types for user" do
+		let(:user) { FactoryGirl.create(:user) }
+		let(:user_type1) { FactoryGirl.create(:user_type, user_id: user.id, user_type: "asi") }
+		let(:user_type2) { FactoryGirl.create(:user_type, user_id: user.id, user_type: "acu") }
+		
+		it "should return the proper data" do
+			expect(UserType.available_types(user)).to match_array([user_type1, user_type2])
+		end
+	end
 end

@@ -1,6 +1,6 @@
 class ServicesController < ApplicationController
 	before_filter :signed_in_user
-	before_filter :is_valid_user
+	before_filter :is_valid_user, except: [:show]
 	before_action :set_vehicle, only: [:index]
 	before_action :set_user, only: [:index]
 	before_action :set_service, only: [:show, :edit, :update, :destroy]
