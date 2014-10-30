@@ -36,10 +36,6 @@ class ServiceUsersController < ApplicationController
 	
 	def is_valid_data
 		service_user = ServiceUser.new(service_user_params)
-		if (service_user.location_id == -1 && service_user.vehicle_id != -1) || (service_user.location_id != -1 && service_user.vehicle_id == -1)
-			true
-		else
-			redirect_to service_user.service, notice: I18n.t(:form_add_user_to_service_warning_only_location_or_vehicle)
-		end
+		# redirect_to service_user.service, notice: I18n.t(:form_add_user_to_service_warning_only_location_or_vehicle)
 	end
 end
