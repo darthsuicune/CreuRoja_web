@@ -1,5 +1,6 @@
 <div id="form_user_join_service">
 	<%= form_for(@service_user) do |f| %>
+		<% @service_user.user_id = current_user.id %>
 		<% types = [] %>
 		<% UserType.available_types(current_user).each do |ut| %>
 			<% types << [t(ut.user_type.to_sym), ut.user_type] %>
