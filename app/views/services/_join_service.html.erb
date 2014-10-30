@@ -8,6 +8,7 @@
 		<%= f.select :user_position, types %>
 		
 		<%= f.hidden_field :user_id, value: current_user.id %>
+		<%= f.hidden_field :service_id, value: @service.id %>
 		
 		<div class="service_user_submit">
 			<%= f.submit t(:form_user_join_service) %>
