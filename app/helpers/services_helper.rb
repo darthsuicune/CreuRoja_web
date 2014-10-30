@@ -50,4 +50,22 @@ module ServicesHelper
 		end
 		availables
 	end
+	
+	def locations_for_service(locations)
+		available_locations = []
+		available_locations << [I18n.t(:user_goes_in_vehicle), -1]
+		locations.each do |location|
+			available_locations << [location.name, location.id]
+		end
+		available_locations
+	end
+	
+	def vehicles_for_service(vehicles)
+		available_vehicles = []
+		available_vehicles << [I18n.t(:user_goes_to_location), -1]
+		vehicles.each do |vehicle|
+			available_vehicles << [vehicle.indicative, vehicle.id]
+		end
+		available_vehicles
+	end
 end
