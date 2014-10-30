@@ -24,6 +24,7 @@
 					<%= raw "<td>#{location.name}</td>" if location %>
 					<%= raw "<td>#{vehicle.indicative}</td>" if vehicle %>
 				<% else %>
+					<td>
 					<%= form_for(service_user) do |f| %>
 						<%= f.label :location_id, t(:form_add_user_to_service_location_id) %>
 						<%= f.select :location_id, locations_for_service(@service.locations) %>
@@ -35,6 +36,7 @@
 							<%= f.submit t(:form_add_user_to_service_submit) %>
 						</div>
 					<% end %>
+					</td>
 				<% end %>
 				<td><%= service_user.user_position %></td>
 				<td><%= link_to t(:resource_show), user %></td>
