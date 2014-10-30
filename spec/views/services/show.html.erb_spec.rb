@@ -7,6 +7,7 @@ describe "services/show" do
 		sign_in user
 		@service = FactoryGirl.create(:service)
 		@service.assembly_id = assembly.id
+		@service_user = ServiceUser.new
 	end
 
 	it "renders attributes in <p>" do
