@@ -1,10 +1,10 @@
 class User < ActiveRecord::Base
 	# This class contains two references to services, "services" which replies with the
-	# services the user has signed up for, and available_services, that returns the services the user
-	# can see.
+	# services the user has signed up for, and available_services, that returns the services 
+	# the user can see.
 	
-	# It also contains two ways of getting its types. user_types (relation) returns a relation with the
-	# user types, while "types" returns a comma-separated string with all together.
+	# It also contains two ways of getting its types. user_types (relation) returns a relation 
+	# with the user types, while "types" returns a comma-separated string with all together.
 	
 	# Other convenience methods include:
 	# assembly_users: Retrieves the users from the same and dependant assemblies
@@ -47,11 +47,18 @@ class User < ActiveRecord::Base
 
 	#Only location XOR vehicle should be nil. One of them should be not nil, the other one has to be nil.
 	def add_to_service(service, user_position, location = nil, vehicle = nil)
-		if location.nil?
+		if location.nil? || vehicle.nil?
+			false
+		elsif location.nil?
 			service_users.create(service_id: service.id, vehicle_id: vehicle.id, user_position: user_position)
-		else
+		else 
 			service_users.create(service_id: service.id, location_id: location.id, user_position: user_position)
 		end
+	end
+	
+	#A user can sign up for a service without specifying location nor vehicle
+	def sign_up_for_service(service, user_position)
+		service_users.create(service_id: service.id, user_position: user_position)
 	end
 	
 	#The type should be passed as a string
@@ -60,7 +67,7 @@ class User < ActiveRecord::Base
 	end
 	
 	def map_elements(updated_at = nil)
-		(allowed_to?(:see_all_locations)) ? Location.all : Location.serviced(self, updated_at)
+		(self.allowed_to?(:see_all_locations)) ? Location.all : Location.serviced(self, updated_at)
 	end
 
 	def allowed_to?(action)
@@ -193,6 +200,10 @@ class User < ActiveRecord::Base
 	
 	def for_session
 		{ id: self.id, name: self.name, surname: self.surname, email: self.email, phone: self.phone, accessToken: self.sessions.last.token, role: self.role, active: self.active, types: self.types }
+	end
+	
+	def goes_to?(service)
+		service.users.include? self
 	end
 	
 	private

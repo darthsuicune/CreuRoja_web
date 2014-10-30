@@ -331,4 +331,16 @@ describe User do
 			}.to change(UserType, :count).by(1)
 		end
 	end
+
+	describe "goes_to" do
+		let(:user) { FactoryGirl.create(:user) }
+		let(:service) { FactoryGirl.create(:service) }
+		before do
+			service.save
+			user.sign_up_for_service service, "position"
+		end
+		it "should return true if the user goes" do
+			expect(user.goes_to?(service)).to be_truthy
+		end
+	end
 end

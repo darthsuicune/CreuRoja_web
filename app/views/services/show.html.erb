@@ -31,17 +31,21 @@
 	<%= link_to t(:resource_edit), edit_service_path(@service) if current_user.allowed_to?(:manage_services) %> |
 	<%= link_to t(:resource_back), services_path %>
 </div>
-<% unless @service.expired? || @service.archived %>
-	<div class="assignments">
-		<%= render 'assigned_locations' %>
-		<%= render 'add_location' if current_user && current_user.allowed_to?(:assign_service_to_location) %>
+<% if current_user.allowed_to?(:manage_services) %>
+	<% unless @service.expired? || @service.archived %>
+		<div class="assignments">
+			<%= render 'assigned_locations' %>
+			<%= render 'add_location' if current_user && current_user.allowed_to?(:assign_service_to_location) %>
 
-		<%= render 'assigned_vehicles' unless @service.vehicles.empty? %>
-		<%= render 'add_vehicle' if current_user && current_user.allowed_to?(:assign_vehicle_to_service) %>
+			<%= render 'assigned_vehicles' unless @service.vehicles.empty? %>
+			<%= render 'add_vehicle' if current_user && current_user.allowed_to?(:assign_vehicle_to_service) %>
 
-		<% unless @service.locations.empty?%>
-			<%= render 'assigned_users' unless @service.users.empty? %>
-			<%= render 'add_user' if current_user && current_user.allowed_to?(:assign_user_to_service) %>
-		<% end %>
-	</div>
+			<% unless @service.locations.empty?%>
+				<%= render 'assigned_users' unless @service.users.empty? %>
+				<%= render 'add_user' if current_user && current_user.allowed_to?(:assign_user_to_service) %>
+			<% end %>
+		</div>
+	<% end %>
+<% else %>
+	<%= render 'join_service' unless current_user.goes_to?(@service) %>
 <% end %>

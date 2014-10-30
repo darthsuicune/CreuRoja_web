@@ -39,7 +39,7 @@
 		<%= f.label :vehicle_id, t(:form_add_user_to_service_vehicle_id) %>
 		<%= f.select(:vehicle_id, available_vehicles) %>
 		
-		<%= f.label :doc, t(:form_add_user_to_service_doc) %>
+		<%= f.label :user_position, t(:form_add_user_to_service_doc) %>
 		<%= f.select :user_position, UserType.available_types %>
 
 		<div class="service_user_user_id">
