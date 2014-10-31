@@ -42,7 +42,7 @@ class User < ActiveRecord::Base
 	after_validation { self.errors.messages.delete(:password_digest) }
 	
 	def add_to_assembly(assembly)
-		user_assemblies.create(assembly_id: assembly.id)
+		user_assemblies.create(assembly_id: assembly.id) unless self.assemblies.include? assembly
 	end
 
 	#Only location XOR vehicle should be nil. One of them should be not nil, the other one has to be nil.
