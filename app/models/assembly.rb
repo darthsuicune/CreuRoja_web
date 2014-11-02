@@ -57,7 +57,7 @@ class Assembly < ActiveRecord::Base
 	end
 	
 	def self.levels
-		[[I18n.t(:assembly_level_local), "local"], [I18n.t(:assembly_level_province), "provincial"], [I18n.t(:assembly_level_region), "autonomica"]]
+		[[I18n.t(:assembly_level_local), "local"], [I18n.t(:assembly_level_comarcal), "comarcal"], [I18n.t(:assembly_level_province), "provincial"], [I18n.t(:assembly_level_region), "autonomica"]]
 	end
 	
 	def self.not_locals
@@ -70,8 +70,12 @@ class Assembly < ActiveRecord::Base
 			I18n.t(:level_region)
 		when "provincial"
 			I18n.t(:level_province)
-		else #when "local"
+		when "comarcal"
+			I18n.t(:level_comarcal)
+		when "local"
 			I18n.t(:level_local)
+		else
+			"dafuq"
 		end
 	end
 	
