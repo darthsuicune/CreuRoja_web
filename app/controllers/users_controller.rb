@@ -100,6 +100,10 @@ class UsersController < ApplicationController
 	
 	def parse_user_types
 		#I'm ashamed of this code. I really am. But can't do it with strong params yet. I'll work on that.
+		#For the record:
+		# -key is the index in the table. It will also be passed like that in the form
+		# -value is the object passed as value. It's usually of the form { "user_type" => "new_value" }
+		# If new_value is 0, it should be removed. If not, it should be done IN A BETTER WAY THAN THIS CRAP
 		if params[:user][:user_types_attributes]
 			params[:user][:user_types_attributes].each do |key, value|
 				if value[:user_type] == "0"
