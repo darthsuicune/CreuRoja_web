@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141014211017) do
+ActiveRecord::Schema.define(version: 20141103160301) do
 
   create_table "assemblies", force: true do |t|
     t.string   "name"
@@ -51,15 +51,6 @@ ActiveRecord::Schema.define(version: 20141014211017) do
     t.integer  "service_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "doc"
-    t.integer  "due"
-    t.integer  "tes"
-    t.integer  "ci"
-    t.integer  "asi"
-    t.integer  "btp"
-    t.integer  "b1"
-    t.integer  "acu"
-    t.integer  "per"
   end
 
   add_index "location_services", ["location_id", "service_id"], name: "index_location_services_on_location_id_and_service_id", unique: true
@@ -127,6 +118,15 @@ ActiveRecord::Schema.define(version: 20141014211017) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "archived",    default: false
+    t.integer  "doc",         default: 0
+    t.integer  "due",         default: 0
+    t.integer  "tes",         default: 0
+    t.integer  "ci",          default: 0
+    t.integer  "asi",         default: 0
+    t.integer  "btp",         default: 0
+    t.integer  "b1",          default: 0
+    t.integer  "acu",         default: 0
+    t.integer  "per",         default: 0
   end
 
   add_index "services", ["assembly_id"], name: "index_services_on_assembly_id"
@@ -211,15 +211,6 @@ ActiveRecord::Schema.define(version: 20141014211017) do
   create_table "vehicle_services", force: true do |t|
     t.integer  "vehicle_id"
     t.integer  "service_id"
-    t.integer  "doc"
-    t.integer  "due"
-    t.integer  "tes"
-    t.integer  "ci"
-    t.integer  "asi"
-    t.integer  "btp"
-    t.integer  "b1"
-    t.integer  "acu"
-    t.integer  "per"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

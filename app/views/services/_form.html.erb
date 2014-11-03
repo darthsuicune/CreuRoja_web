@@ -41,6 +41,42 @@
 		<%= f.label :code, t(:form_service_code) %><br>
 		<%= f.text_field :code %>
 	</div>
+	<div class="field">
+		<%= f.label :doc, t(:form_add_vehicle_to_service_doc) %>
+		<%= f.number_field(:doc, { value: 0 }) %>
+	</div>
+	<div class="field">
+		<%= f.label :due, t(:form_add_vehicle_to_service_due) %>
+		<%= f.number_field(:due, { value: 0 }) %>
+	</div>
+	<div class="field">
+		<%= f.label :tes, t(:form_add_vehicle_to_service_tes) %>
+		<%= f.number_field(:tes, { value: 0 }) %>
+	</div>
+	<div class="field">
+		<%= f.label :ci, t(:form_add_vehicle_to_service_ci) %>
+		<%= f.number_field(:ci, { value: 0 }) %>
+	</div>
+	<div class="field">
+		<%= f.label :asi, t(:form_add_vehicle_to_service_asi) %>
+		<%= f.number_field(:asi, { value: 0 }) %>
+	</div>
+	<div class="field">
+		<%= f.label :btp, t(:form_add_vehicle_to_service_btp) %>
+		<%= f.number_field(:btp, { value: 0 }) %>
+	</div>
+	<div class="field">
+		<%= f.label :b1, t(:form_add_vehicle_to_service_b1) %>
+		<%= f.number_field(:b1, { value: 0 }) %>
+	</div>
+	<div class="field">
+		<%= f.label :acu, t(:form_add_vehicle_to_service_acu) %>
+		<%= f.number_field(:acu, { value: 0 }) %>
+	</div>
+	<div class="field">
+		<%= f.label :per, t(:form_add_vehicle_to_service_per) %>
+		<%= f.number_field(:per, { value: 0 }) %>
+	</div>
 	<div class="actions">
 		<%= f.submit t(:form_service_submit) %>
 	</div>
