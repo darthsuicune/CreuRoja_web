@@ -51,7 +51,7 @@ describe UsersController do
 										"password" => "MyPass", 
 										"password_confirmation" => "MyPass", 
 										"assemblies" => { "assembly_id" => 1 },
-										"user_types_attributes" => { "0" => { "user_types" => "type1" } } } 
+										"user_types_attributes" => { "0" => { "user_type" => "asi" } } } 
 							}
 
 	# This should return the minimal set of values that should be in the session
@@ -220,8 +220,17 @@ describe UsersController do
 					}.to change(Session, :count).by(-1)
 				end
 			end
+			
+			describe "user_types" do
+				before { user.save }
+				it "should add a user_type" do
+					expect{
+						put :update, {:id => user.id, :user => user_types}
+					}.to change(UserType, :count).by(1)
+				end
+			end
 		end
-
+		
 		describe "with invalid params" do
 			before do
 				allow_any_instance_of(User).to receive(:save).and_return(false)
