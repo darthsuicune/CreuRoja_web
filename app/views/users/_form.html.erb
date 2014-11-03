@@ -64,7 +64,7 @@
 			</div>
 			<div class="field">
 				<%= f.label :user_types, t(:form_user_types) %><br>
-				<% UserType.available_types.each do |usertype,shown| %>
+				<% UserType.available_types.each do |shown,usertype| %>
 					<%= f.fields_for :user_types, @user.user_types.new do |type_form| %>
 						<%= type_form.label shown %>
 						<%= type_form.check_box :user_type, {checked: !UserType.where(user_id: @user.id, user_type: usertype).empty?}, usertype %>
