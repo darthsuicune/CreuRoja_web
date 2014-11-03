@@ -20,8 +20,4 @@ class UserType < ActiveRecord::Base
 			[I18n.t(:ci), "ci"]]
 		end
 	end
-	
-	def to_s
-		self.user_type
-	end
 end

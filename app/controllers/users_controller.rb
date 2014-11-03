@@ -99,7 +99,8 @@ class UsersController < ApplicationController
 	end
 	
 	def parse_user_types
-		#I'm ashamed of this code. I really am. But can't do it with strong params yet. I'll work on that.
+		#I'm ashamed of this code. I really am. But can't do it with strong params yet. 
+		#I'll work on that.
 		#For the record:
 		# -key is the index in the table. It will also be passed like that in the form
 		# -value is the object passed as value. It's usually of the form { "user_type" => "new_value" }
