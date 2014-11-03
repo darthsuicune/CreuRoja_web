@@ -26,11 +26,13 @@ en:
    login: "Log in"
    logout: "Log out"
    menu_resources: "Administration"
+   show_vehicle_positions: "Vehicles positions"
    
    vehicle: "Vehicle"
    service: "Service"
    location: "Location"
    user: "User"
+   profile: "Profile"
    
    map: "Map"
    user_list_title: "Users"
@@ -117,9 +119,15 @@ en:
    form_add_vehicle_to_service_submit: "Add"
    
    assembly_list_title: "Asambleas"
+   assembly_level_local: "Asamblea Local"
+   assembly_level_comarcal: "Asamblea Comarcal"
+   assembly_level_province: "Asamblea Provincial"
+   assembly_level_region: "Asamblea Autonómica"
    level_local: "Asamblea Local de"
+   level_comarcal: "Asamblea Comarcal de"
    level_province: "Asamblea Provincial de"
    level_region: "Asamblea Autonómica de"
+   form_assembly_new: "Añadir asamblea"
    
    date:
     abbr_day_names:
