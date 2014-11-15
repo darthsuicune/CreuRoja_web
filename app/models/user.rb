@@ -47,7 +47,7 @@ class User < ActiveRecord::Base
 
 	#Only location XOR vehicle should be nil. One of them should be not nil, the other one has to be nil.
 	def add_to_service(service, user_position, location = nil, vehicle = nil)
-		if location.nil? || vehicle.nil?
+		if location.nil? && vehicle.nil?
 			false
 		elsif location.nil?
 			service_users.create(service_id: service.id, vehicle_id: vehicle.id, user_position: user_position)
