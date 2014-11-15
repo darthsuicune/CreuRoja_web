@@ -2,34 +2,22 @@
 <h1><%= t(:assembly_list_title) %></h1>
 
 <%= link_to t(:form_assembly_new), new_assembly_path %>
-
 <ul>
-	<% @assemblies.autonomicas.each do |autonomica| %>
+	<% @assemblies.estate.each do |estatal| %>
 		<li>
-			<%= link_to "#{autonomica.translated_level} #{autonomica.name} - #{autonomica.address} - #{autonomica.phone}", autonomica %>
+			<%= link_to "#{estatal.translated_level} #{estatal.name} - #{estatal.address} - #{estatal.phone}", estatal %>
 		</li>
 		<ul>
-		<% autonomica.children.provincials.each do |provincial| %>
+	<ul>
+		<% estatal.children.autonomicas.each do |autonomica| %>
 			<li>
-				<%= link_to "#{provincial.translated_level} #{provincial.name} - #{provincial.address} - #{provincial.phone}", provincial %>
+				<%= link_to "#{autonomica.translated_level} #{autonomica.name} - #{autonomica.address} - #{autonomica.phone}", autonomica %>
 			</li>
 			<ul>
-				<% provincial.children.locals.each do |local| %>
-					<li>
-						<%= link_to "#{local.translated_level} #{local.name} - #{local.address} - #{local.phone}", local %>
-					</li>
-				<% end %>
-			</ul>
-		<% end %>
-		</ul>
-		<br>
-	<% end %>
-	<li>
-		<%= t(:unclassified_provincial_assemblies) %>
-		<% @assemblies.independent_provincials.each do |provincial| %>
-			<li>
-				<%= link_to "#{provincial.translated_level} #{provincial.name} - #{provincial.address} - #{provincial.phone}", provincial %>
-			</li>
+			<% autonomica.children.provincials.each do |provincial| %>
+				<li>
+					<%= link_to "#{provincial.translated_level} #{provincial.name} - #{provincial.address} - #{provincial.phone}", provincial %>
+				</li>
 				<ul>
 					<% provincial.children.locals.each do |local| %>
 						<li>
@@ -37,14 +25,33 @@
 						</li>
 					<% end %>
 				</ul>
+			<% end %>
+			</ul>
+			<br>
 		<% end %>
-	</li>
-	<li>
-		<%= t(:unclassified_local_assemblies) %>
-		<% @assemblies.independent_locals.each do |local| %>
-			<li>
-				<%= link_to "#{local.translated_level} #{local.name} - #{local.address} - #{local.phone}", local %>
-			</li>
-		<% end %>
-	</li>
+		<li>
+			<%= t(:unclassified_provincial_assemblies) %>
+			<% @assemblies.independent_provincials.each do |provincial| %>
+				<li>
+					<%= link_to "#{provincial.translated_level} #{provincial.name} - #{provincial.address} - #{provincial.phone}", provincial %>
+				</li>
+					<ul>
+						<% provincial.children.locals.each do |local| %>
+							<li>
+								<%= link_to "#{local.translated_level} #{local.name} - #{local.address} - #{local.phone}", local %>
+							</li>
+						<% end %>
+					</ul>
+			<% end %>
+		</li>
+		<li>
+			<%= t(:unclassified_local_assemblies) %>
+			<% @assemblies.independent_locals.each do |local| %>
+				<li>
+					<%= link_to "#{local.translated_level} #{local.name} - #{local.address} - #{local.phone}", local %>
+				</li>
+			<% end %>
+		</li>
+	</ul>
+	<% end %>
 </ul>
