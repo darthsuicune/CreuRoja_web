@@ -61,7 +61,7 @@ class Assembly < ActiveRecord::Base
 	end
 	
 	def self.not_locals
-		Assembly.where.not(level: "local")
+		Assembly.where.not(level: ["local","comarcal","delegation")
 	end
 	
 	def translated_level
