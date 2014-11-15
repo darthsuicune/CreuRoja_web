@@ -1,0 +1,35 @@
+<div id="assembly_users">
+	<table>
+		<thead>
+			<tr>
+				<th><%= t(:form_user_name) %></th>
+				<th><%= t(:form_user_role) %></th>
+				<th><%= t(:form_user_active) %></th>
+				<th></th>
+				<th></th>
+				<th></th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<% @assembly.vehicles.each do |user|%> 
+				<tr>
+				<td><%= "#{user.name} #{user.surname}" %></td>
+				<td><%= user.translated_role %></td>
+				<td><%= user.active %></td>
+				<td><%= link_to t(:resource_show), user %></td>
+				<td><%= link_to t(:resource_edit), edit_user_path(user) if current_user?(user) || current_user.allowed_to?(:manage_users) %></td>
+				<% if user.active %>
+					<% if current_user && current_user != user && current_user.allowed_to?(:destroy_users) %>
+					<td><%= link_to t(:deactivate_user), user_path(user, :user => {:active => false}), method: :put, data: { confirm: t(:resource_destroy_confirm) } %></td>
+					<% end %>
+				<% else %>
+					<% if current_user && current_user.allowed_to?(:destroy_users) %>
+					<td><%= link_to t(:reactivate_user), user_path(user, :user => {:active => true}), method: :put %></td>
+					<% end %>
+				<% end %>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>
+</div>
