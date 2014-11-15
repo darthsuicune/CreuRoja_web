@@ -5,6 +5,7 @@ class Assembly < ActiveRecord::Base
 	scope :provincials, -> { where(level: "provincial") }
 	scope :locals, -> { where(level: ["local","comarcal","delegation"]) }
 	scope :independent_provincials, -> { provincials.where(depends_on: nil) }
+	scope :independent_locals, -> { locals.where(depends_on: nil) }
 	
 	has_many :user_assemblies, dependent: :destroy
 	has_many :users, through: :user_assemblies
