@@ -7,28 +7,16 @@
 	<% @assemblies.autonomicas.each do |autonomica| %>
 		<li>
 			<%= link_to "#{autonomica.translated_level} #{autonomica.name} - #{autonomica.address} - #{autonomica.phone}", autonomica %>
-			<% if current_user.allowed_to?(:manage_assemblies) %>
-				<%= link_to t(:resource_edit), edit_assembly_path(autonomica) %>
-				<%= link_to t(:resource_destroy), autonomica, method: :delete, data: { confirm: t(:resource_destroy_confirm) } %>
-			<% end %>
 		</li>
 		<ul>
 		<% autonomica.children.provincials.each do |provincial| %>
 			<li>
 				<%= link_to "#{provincial.translated_level} #{provincial.name} - #{provincial.address} - #{provincial.phone}", provincial %>
-				<% if current_user.allowed_to?(:manage_assemblies) %>
-					<%= link_to t(:resource_edit), edit_assembly_path(provincial) %>
-					<%= link_to t(:resource_destroy), provincial, method: :delete, data: { confirm: t(:resource_destroy_confirm) } %>
-				<% end %>
 			</li>
 			<ul>
 				<% provincial.children.locals.each do |local| %>
 					<li>
 						<%= link_to "#{local.translated_level} #{local.name} - #{local.address} - #{local.phone}", local %>
-						<% if current_user.allowed_to?(:manage_assemblies) %>
-							<%= link_to t(:resource_edit), edit_assembly_path(local) %>
-							<%= link_to t(:resource_destroy), local, method: :delete, data: { confirm: t(:resource_destroy_confirm) } %>
-						<% end %>
 					</li>
 				<% end %>
 			</ul>
@@ -36,4 +24,27 @@
 		</ul>
 		<br>
 	<% end %>
+	<li>
+		<%= t(:unclassified_provincial_assemblies) %>
+		<% @assemblies.independent_provincials.each do |provincial| %>
+			<li>
+				<%= link_to "#{provincial.translated_level} #{provincial.name} - #{provincial.address} - #{provincial.phone}", provincial %>
+			</li>
+				<ul>
+					<% provincial.children.locals.each do |local| %>
+						<li>
+							<%= link_to "#{local.translated_level} #{local.name} - #{local.address} - #{local.phone}", local %>
+						</li>
+					<% end %>
+				</ul>
+		<% end %>
+	</li>
+	<li>
+		<%= t(:unclassified_local_assemblies) %>
+		<% @assemblies.independent_locals.each do |local| %>
+			<li>
+				<%= link_to "#{local.translated_level} #{local.name} - #{local.address} - #{local.phone}", local %>
+			</li>
+		<% end %>
+	</li>
 </ul>
