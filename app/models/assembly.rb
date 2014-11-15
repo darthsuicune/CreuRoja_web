@@ -63,7 +63,7 @@ class Assembly < ActiveRecord::Base
 	end
 	
 	def self.levels
-		[[I18n.t(:assembly_level_local), "local"], [I18n.t(:assembly_level_delegation), "delegation"], [I18n.t(:assembly_level_comarcal), "comarcal"], [I18n.t(:assembly_level_province), "provincial"], [I18n.t(:assembly_level_region), "autonomica"]]
+		[[I18n.t(:assembly_level_delegation), "delegation"], [I18n.t(:assembly_level_local), "local"], [I18n.t(:assembly_level_comarcal), "comarcal"], [I18n.t(:assembly_level_province), "provincial"], [I18n.t(:assembly_level_region), "autonomica"], [I18n.t(:assembly_level_state), "estatal"]]
 	end
 	
 	def self.not_locals
@@ -72,16 +72,18 @@ class Assembly < ActiveRecord::Base
 	
 	def translated_level
 		case level
+		when "estatal"
+			I18n.t(:level_state)
 		when "autonomica"
 			I18n.t(:level_region)
 		when "provincial"
 			I18n.t(:level_province)
 		when "comarcal"
 			I18n.t(:level_comarcal)
-		when "delegation"
-			I18n.t(:level_delegation)
 		when "local"
 			I18n.t(:level_local)
+		when "delegation"
+			I18n.t(:level_delegation)
 		else
 			"dafuq"
 		end
