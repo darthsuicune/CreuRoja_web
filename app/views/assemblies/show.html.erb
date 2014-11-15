@@ -41,7 +41,7 @@
 </p>
 
 <%= render 'users' %>
-<%= render 'vehicules' %>
+<%= render 'vehicles' %>
 
 <%= link_to t(:resource_edit), edit_assembly_path(@assembly) if current_user.allowed_to?(:manage_assemblies) %> |
 <%= link_to t(:resource_back), assemblies_path %>
