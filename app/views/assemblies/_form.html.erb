@@ -18,7 +18,7 @@
 	
 	<% parents = ["-"] %>
 	<% Assembly.not_locals.each do |assembly| %>
-		<% parents << ["#{I18n.t(:office} #{assembly.level} #{assembly.name}", assembly.id] %>
+		<% parents << ["#{I18n.t(:office)} #{assembly.level} #{assembly.name}", assembly.id] %>
 	<% end %>
 
 	<div class="field">

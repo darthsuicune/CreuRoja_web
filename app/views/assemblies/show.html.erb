@@ -4,28 +4,28 @@
 <% end %>
 
 <p>
-  <strong><%= t(:form_assembly_name) %>:</strong>
-  <%= @assembly.name %>
+	<strong><%= t(:form_assembly_name) %>:</strong>
+	<%= @assembly.name %>
 </p>
 
 <p>
-  <strong><%= t(:form_assembly_description) %>:</strong>
-  <%= @assembly.description %>
+	<strong><%= t(:form_assembly_description) %>:</strong>
+	<%= @assembly.description %>
 </p>
 
 <p>
-  <strong><%= t(:form_assembly_address) %>:</strong>
-  <%= @assembly.address %>
+	<strong><%= t(:form_assembly_address) %>:</strong>
+	<%= @assembly.address %>
 </p>
 
 <p>
-  <strong><%= t(:form_assembly_phone) %>:</strong>
-  <%= @assembly.phone %>
+	<strong><%= t(:form_assembly_phone) %>:</strong>
+	<%= @assembly.phone %>
 </p>
 
 <p>
-  <strong><%= t(:form_assembly_level) %>:</strong>
-  <%= @assembly.level %>
+	<strong><%= t(:form_assembly_level) %>:</strong>
+	<%= @assembly.level %>
 </p>
 
 <% if @assembly.parent %>
@@ -36,9 +36,10 @@
 <% end %>
 
 <p>
-  <strong><%= t(:form_assembly_office) %>:</strong>
-  <%= link_to @assembly.office.name, @assembly.office %>
+	<strong><%= t(:form_assembly_office) %>:</strong>
+	<%= link_to @assembly.office.name, @assembly.office %>
 </p>
+
 
 <%= link_to t(:resource_edit), edit_assembly_path(@assembly) if current_user.allowed_to?(:manage_assemblies) %> |
 <%= link_to t(:resource_back), assemblies_path %>
