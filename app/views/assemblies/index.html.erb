@@ -25,7 +25,7 @@
 	<% end %>
 	<li>
 		<%= t(:unclassified_provincial_assemblies) %>
-		<% @assemblies.indepenedent_provincials.each do |provincial| %>
+		<% @assemblies.independent_provincials.each do |provincial| %>
 			<li>
 				<%= link_to "#{provincial.translated_level} #{provincial.name} - #{provincial.address} - #{provincial.phone}", provincial %>
 			</li>
