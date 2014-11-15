@@ -13,6 +13,7 @@ class AssembliesController < ApplicationController
 
 	def create
 		@assembly = Assembly.new(assembly_params)
+		verify_parent(@assembly)
 		if @assembly.save
 			redirect_to @assembly
 		else
@@ -28,6 +29,7 @@ class AssembliesController < ApplicationController
 
 	def update
 		@assembly.update(assembly_params)
+		verify_parent(@assembly)
 		redirect_to @assembly
 	end
 
@@ -47,5 +49,11 @@ class AssembliesController < ApplicationController
 		
 		def set_assembly
 			@assembly = Assembly.find(params[:id])
+		end
+		def verify_parent(assembly)
+			if assembly.depends_on == "-" || assembly.depends_on == 0
+				assembly.depends_on = nil 
+				assembly.save
+			end
 		end
 end
