@@ -120,10 +120,12 @@ ca:
    
    assembly_list_title: "Assembleas"
    assembly_level_local: "Assemblea Local"
+   assembly_level_delegation: "Delegació Local"
    assembly_level_comarcal: "Assemblea Comarcal"
    assembly_level_province: "Assemblea Provincial"
    assembly_level_region: "Assemblea Autonòmica"
    level_local: "Assemblea Local de"
+   level_delegation: "Delegació Local de"
    level_comarcal: "Assemblea Comarcal de"
    level_province: "Assemblea Provincial de"
    level_region: "Assemblea Autonòmica de"

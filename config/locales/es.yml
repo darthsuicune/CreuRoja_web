@@ -120,10 +120,12 @@ es:
    
    assembly_list_title: "Asambleas"
    assembly_level_local: "Asamblea Local"
+   assembly_level_delegation: "Delegación Local"
    assembly_level_comarcal: "Asamblea Comarcal"
    assembly_level_province: "Asamblea Provincial"
    assembly_level_region: "Asamblea Autonómica"
    level_local: "Asamblea Local de"
+   level_delegation: "Delegación Local de"
    level_comarcal: "Asamblea Comarcal de"
    level_province: "Asamblea Provincial de"
    level_region: "Asamblea Autonómica de"
