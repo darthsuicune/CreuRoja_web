@@ -1,6 +1,9 @@
 class Assembly < ActiveRecord::Base
 	default_scope { order(name: :asc, level: :asc) }
 	default_scope { order(name: :asc) }
+	scope :autonomicas, -> { where(level: "autonomica") }
+	scope :provincials, -> { where(level: "provincial") }
+	scope :locals, -> { where(level: ["local","comarcal","delegation"]) }
 	
 	has_many :user_assemblies, dependent: :destroy
 	has_many :users, through: :user_assemblies
@@ -9,6 +12,7 @@ class Assembly < ActiveRecord::Base
 	has_many :vehicle_assemblies, dependent: :destroy
 	has_many :vehicles, through: :vehicle_assemblies
 	has_many :services
+	has_many :children, class_name: "Assembly", foreign_key: "depends_on"
 	
 	before_validation :defaults
 	
@@ -29,7 +33,7 @@ class Assembly < ActiveRecord::Base
 	end
 	
 	def parent
-		Assembly.where(id: self.depends_on).first if self.depends_on
+		Assembly.find(self.depends_on) if self.depends_on
 	end
 	
 	def add_vehicle(vehicle)

@@ -3,31 +3,42 @@
 
 <%= link_to t(:form_assembly_new), new_assembly_path %>
 
-<table>
-	<thead>
-		<tr>
-			<th><%= t(:form_location_name) %></th>
-			<th><%= t(:form_location_address) %></th>
-			<th><%= t(:form_location_phone) %></th>
-			<th colspan="3"></th>
-		</tr>
-	</thead>
-
-	<tbody>
-		<% @assemblies.each do |assembly| %>
-			<tr>
-			<td><%= "#{assembly.translated_level} #{assembly.name}" %></td>
-			<td><%= assembly.address %></td>
-			<td><%= assembly.phone %></td>
-			<td><%= link_to t(:resource_show), assembly %></td>
+<ul>
+	<% @assemblies.autonomicas.each do |autonomica| %>
+		<li>
+			<%= "#{autonomica.translated_level} #{autonomica.name} - #{autonomica.address} - #{autonomica.phone} " %>
+			<%= link_to t(:resource_show), autonomica %>
 			<% if current_user.allowed_to?(:manage_assemblies) %>
-				<td><%= link_to t(:resource_edit), edit_assembly_path(assembly) %></td>
-				<td><%= link_to t(:resource_destroy), assembly, method: :delete, data: { confirm: t(:resource_destroy_confirm) } %></td>
+				<%= link_to t(:resource_edit), edit_assembly_path(autonomica) %>
+				<%= link_to t(:resource_destroy), autonomica, method: :delete, data: { confirm: t(:resource_destroy_confirm) } %>
 			<% end %>
-			</tr>
+		</li>
+		<ul>
+		<% autonomica.children.provincials.each do |provincial| %>
+			<li>
+				<%= "#{provincial.translated_level} #{provincial.name} - #{provincial.address} - #{provincial.phone} " %>
+				<%= link_to t(:resource_show), provincial %>
+				<% if current_user.allowed_to?(:manage_assemblies) %>
+					<%= link_to t(:resource_edit), edit_assembly_path(provincial) %>
+					<%= link_to t(:resource_destroy), provincial, method: :delete, data: { confirm: t(:resource_destroy_confirm) } %>
+				<% end %>
+			</li>
+			<ul>
+				<% provincial.children.locals.each do |local| %>
+					<li>
+						<%= "#{local.translated_level} #{local.name} - #{local.address} - #{local.phone} " %>
+						<%= link_to t(:resource_show), local %>
+						<% if current_user.allowed_to?(:manage_assemblies) %>
+							<%= link_to t(:resource_edit), edit_assembly_path(local) %>
+							<%= link_to t(:resource_destroy), local, method: :delete, data: { confirm: t(:resource_destroy_confirm) } %>
+						<% end %>
+					</li>
+				<% end %>
+			</ul>
 		<% end %>
-	</tbody>
-</table>
+		</ul>
+	<% end %>
+</ul>
 
 <br>
 
