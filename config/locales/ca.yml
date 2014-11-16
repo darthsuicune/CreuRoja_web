@@ -124,11 +124,13 @@ ca:
    assembly_level_comarcal: "Assemblea Comarcal"
    assembly_level_province: "Assemblea Provincial"
    assembly_level_region: "Assemblea Autonòmica"
+   assembly_level_state: "Assemblea Estatal"
    level_local: "Assemblea Local de"
    level_delegation: "Delegació Local de"
    level_comarcal: "Assemblea Comarcal de"
    level_province: "Assemblea Provincial de"
    level_region: "Assemblea Autonòmica de"
+   level_state: "Assemblea Estatal de"
    form_assembly_new: "Afegir assemblea"
    
    date:
