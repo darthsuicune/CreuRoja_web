@@ -1,31 +1,26 @@
 <% provide(:title, t(:form_assembly_show_title)) %>
+<h1><%= @assembly.translated_level %> <%= @assembly.name %></h1>
+
 <% if notice %>
 	<p id="notice"><%= notice %></p>
 <% end %>
 
-<p>
-	<strong><%= t(:form_assembly_name) %>:</strong>
-	<%= @assembly.name %>
-</p>
+<%= link_to t(:resource_edit), edit_assembly_path(@assembly) if current_user.allowed_to?(:manage_assemblies) %> |
+<%= link_to t(:resource_back), assemblies_path %>
 
 <p>
-	<strong><%= t(:form_assembly_description) %>:</strong>
+	<strong><%= t(:form_location_description) %>:</strong>
 	<%= @assembly.description %>
 </p>
 
 <p>
-	<strong><%= t(:form_assembly_address) %>:</strong>
+	<strong><%= t(:form_location_address) %>:</strong>
 	<%= @assembly.address %>
 </p>
 
 <p>
-	<strong><%= t(:form_assembly_phone) %>:</strong>
+	<strong><%= t(:form_location_phone) %>:</strong>
 	<%= @assembly.phone %>
-</p>
-
-<p>
-	<strong><%= t(:form_assembly_level) %>:</strong>
-	<%= @assembly.level %>
 </p>
 
 <% if @assembly.parent %>
@@ -36,12 +31,9 @@
 <% end %>
 
 <p>
-	<strong><%= t(:form_assembly_office) %>:</strong>
+	<strong><%= t(:location) %>:</strong>
 	<%= link_to @assembly.office.name, @assembly.office %>
 </p>
 
 <%= render 'users' %>
 <%= render 'vehicles' %>
-
-<%= link_to t(:resource_edit), edit_assembly_path(@assembly) if current_user.allowed_to?(:manage_assemblies) %> |
-<%= link_to t(:resource_back), assemblies_path %>

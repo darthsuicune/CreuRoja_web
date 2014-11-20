@@ -1,6 +1,6 @@
 <% assemblies = [] %>
 <% Assembly.all.each do |assembly| %>
-	<% assemblies << [assembly.name, assembly.id] unless @user.assemblies.include?(assembly) %>
+	<% assemblies << ["#{assembly.translated_level} #{assembly.name}", assembly.id] unless @user.assemblies.include?(assembly) %>
 <% end %>
 <% if assemblies.count > 0 %>
 	<div id="collaboration_form">
