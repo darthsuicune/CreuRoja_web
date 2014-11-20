@@ -43,5 +43,6 @@
   <%= @location.active %>
 </p>
 
+<%= render 'services' if @location.services.count > 0 %> 
 <%= link_to t(:resource_edit), edit_location_path(@location) if current_user.allowed_to?(:manage_locations) %> |
 <%= link_to t(:resource_back), locations_path %>
