@@ -34,7 +34,8 @@ class Location < ActiveRecord::Base
 	end
 	
 	def active_services
-		services
+		#unless @service.expired? || @service.archived
+		services 
 	end
 	
 	def self.general

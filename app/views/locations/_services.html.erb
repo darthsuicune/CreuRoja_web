@@ -1,8 +1,19 @@
 <div id="location_services">
 	<h3><%= t(:available_services) %></h3>
 	<ul>
-	<% @location.services.each do |service| %>
-		<li><%= link_to service.name, service %></li>
+	<% @location.active_services.each do |service| %>
+		<li>
+			<%= link_to service.name, service %>
+			<%= form_for(ServiceUser.new) do |f| %>
+				<%= f.hidden_field :service_id, value: service.id %>
+				<%= f.hidden_field :user_id, value: current_user.id %>
+				<%= f.label :notes, t(:join_service_notes) %>
+				<%= f.text_field :notes %>
+				<div class="join_service_submit">
+					<%= f.submit t(:request_join_service) %>
+				</div>
+			<% end %>
+		</li>
 	<% end %>
 	</ul>
 </div>
