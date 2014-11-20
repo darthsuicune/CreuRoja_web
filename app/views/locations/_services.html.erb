@@ -1,0 +1,8 @@
+<div id="location_services">
+	<h3><%= t(:available_services) %></h3>
+	<ul>
+	<% @location.services.each do |service| %>
+		<li><%= link_to service.name, service %></li>
+	<% end %>
+	</ul>
+</div>
