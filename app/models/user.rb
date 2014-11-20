@@ -173,6 +173,10 @@ class User < ActiveRecord::Base
 		end
 	end
 	
+	def in_service?(service)
+		services.include? service
+	end
+	
 	def assembly_users
 		if self.allowed_to?(:see_all_users)
 			User.all

@@ -2,8 +2,9 @@
 	<h3><%= t(:available_services) %></h3>
 	<ul>
 	<% @location.active_services.each do |service| %>
+		<% unless current_user.in_service?(service) %>
 		<li>
-			<%= link_to service.name, service %>
+			<%= link_to "#{service.name }, #{service.base_time} - #{service.end_time} ", service %>
 			<%= form_for(ServiceUser.new) do |f| %>
 				<%= f.hidden_field :service_id, value: service.id %>
 				<%= f.hidden_field :user_id, value: current_user.id %>
@@ -14,6 +15,7 @@
 				</div>
 			<% end %>
 		</li>
+		<% end %>
 	<% end %>
 	</ul>
 </div>
