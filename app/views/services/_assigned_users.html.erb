@@ -6,6 +6,7 @@
 				<th><%= t(:form_user_name) %></th>
 				<th><%= t(:form_user_email) %></th>
 				<th><%= t(:form_user_phone) %></th>
+				<th><%= t(:form_user_notes) %></th>
 				<th><%= t(:form_user_location) %></th>
 				<th><%= t(:form_user_position) %></th>
 				<th></th>
@@ -20,6 +21,7 @@
 					<td><%= "#{user.name} #{user.surname}" %></td>
 					<td><%= user.email %></td>
 					<td><%= user.phone %></td>
+					<td><%= service_user.notes %></td>
 					<td>
 					<%= form_for(service_user) do |f| %>
 						<%= f.label :location_id, t(:form_add_user_to_service_location_id) %>
