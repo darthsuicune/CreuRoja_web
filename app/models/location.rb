@@ -1,6 +1,5 @@
 class Location < ActiveRecord::Base
 	default_scope { order(location_type: :desc) }
-	scope :updated_after, ->(time) { where("updated_at > ?", time) }
 	scope :active_locations, -> { where(active: true) }
 	scope :offices, -> { where(active: true, location_type: "asamblea") }
 	
@@ -28,6 +27,14 @@ class Location < ActiveRecord::Base
 	
 	def add_user_to_service(user, user_position, service)
 		service_users.create(user_id: user.id, service_id: service.id, user_position: user_position)
+	end
+	
+	def updated_after(time)
+		where("updated_at > ?", time)
+	end
+	
+	def active_services
+		services
 	end
 	
 	def self.general

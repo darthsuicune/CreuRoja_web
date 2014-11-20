@@ -55,13 +55,17 @@ function drawMarker(map, location) {
 function getMarkerContent(marker) {
 	var content = "<strong>" + marker.name + "</strong><br>";	
 	if(marker.description != null){
-		content = content + marker.description + "<br>";
+		content += marker.description + "<br>";
 	}
 	if(marker.address != null) {
-		content = content + marker.address + "<br>";
+		content += marker.address + "<br>";
 	}
 	if(marker.phone != null) {
-		content = content + marker.phone + "<br>";
+		content += marker.phone + "<br>";
+	}
+	services = marker.active_services
+	if(services.length > 0) {
+		content += "<a href=\"locations/" + marker.id + "\">" + services.length + " services available</a><br>";
 	}
 	return content;
 }
