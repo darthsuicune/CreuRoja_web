@@ -34,8 +34,7 @@ class Location < ActiveRecord::Base
 	end
 	
 	def active_services
-		#unless @service.expired? || @service.archived
-		Service.unfinished_before(Time.now).not_archived
+		Service.unfinished_before(Time.now).not_archived.public_data
 	end
 	
 	def self.general
