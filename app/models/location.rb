@@ -34,7 +34,7 @@ class Location < ActiveRecord::Base
 	end
 	
 	def active_services
-		Service.unfinished_before(Time.now).not_archived.public_data
+		services.unfinished_before(Time.now).not_archived.public_data
 	end
 	
 	def self.general
