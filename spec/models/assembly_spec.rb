@@ -23,11 +23,11 @@ RSpec.describe Assembly, :type => :model do
 		let(:assembly2) { FactoryGirl.create(:assembly, depends_on: assembly1.id) }
 		let(:assembly3) { FactoryGirl.create(:assembly, depends_on: nil) }
 		
-		before {
+		before do
 			assembly1.save
 			assembly2.save
 			assembly3.save
-		}
+		end
 		
 		it "should retrieve child assemblies" do
 			expect(assembly.managed_assemblies).to match_array([assembly, assembly1, assembly2])
@@ -39,11 +39,11 @@ RSpec.describe Assembly, :type => :model do
 		let(:assembly2) { FactoryGirl.create(:assembly, depends_on: assembly1.id) }
 		let(:assembly3) { FactoryGirl.create(:assembly, depends_on: nil) }
 		
-		before {
+		before do
 			assembly1.save
 			assembly2.save
 			assembly3.save
-		}
+		end
 		
 		it "should retrieve child assemblies" do
 			expect(assembly.managed_ids).to match_array([assembly.id, assembly1.id, assembly2.id])
@@ -52,10 +52,10 @@ RSpec.describe Assembly, :type => :model do
 	
 	describe "office" do
 		let(:location) { FactoryGirl.create(:location) }
-		before {
+		before do
 			assembly.location_id = location.id
 			assembly.save
-		}
+		end
 		
 		it "should be a location" do
 			expect(assembly.office).to be_a(Location)
@@ -65,10 +65,10 @@ RSpec.describe Assembly, :type => :model do
 	
 	describe "address" do
 		let(:location) { FactoryGirl.create(:location) }
-		before {
+		before do
 			assembly.location_id = location.id
 			assembly.save
-		}
+		end
 		
 		it "should be a location" do
 			expect(assembly.address).to eq(location.address)
@@ -77,10 +77,10 @@ RSpec.describe Assembly, :type => :model do
 	
 	describe "phone" do
 		let(:location) { FactoryGirl.create(:location) }
-		before {
+		before do
 			assembly.location_id = location.id
 			assembly.save
-		}
+		end
 		
 		it "should be a location" do
 			expect(assembly.phone).to eq(location.phone)
