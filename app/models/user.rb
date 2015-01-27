@@ -20,11 +20,14 @@ class User < ActiveRecord::Base
 	has_many :user_types, dependent: :destroy
 	has_many :service_users
 	has_many :services, through: :service_users
+	belongs_to :province
 	
 	accepts_nested_attributes_for :user_types, allow_destroy: true
 	
-	before_save { email.downcase!
-	              role.downcase! unless role.nil? }
+	before_save do
+		email.downcase!
+		role.downcase! unless role.nil?
+	end
 	
 	before_create :defaults
 	before_validation :set_initial_password
@@ -40,6 +43,14 @@ class User < ActiveRecord::Base
 	validates :password_confirmation, length: { minimum: 6 }, on: :update, allow_blank: true
   
 	after_validation { self.errors.messages.delete(:password_digest) }
+	
+	def map_elements(updated_at = nil)
+		if self.allowed_to?(:see_all_locations)
+			Location.all 
+		else
+			Location.serviced(self, updated_at)
+		end
+	end
 	
 	def add_to_assembly(assembly)
 		user_assemblies.create(assembly_id: assembly.id) unless self.assemblies.include? assembly
@@ -65,10 +76,6 @@ class User < ActiveRecord::Base
 	def add_type(type)
 		user_types.create(user_type: type)
 	end
-	
-	def map_elements(updated_at = nil)
-		(self.allowed_to?(:see_all_locations)) ? Location.all : Location.serviced(self, updated_at)
-	end
 
 	def allowed_to?(action)
 		return false if active == false
@@ -84,28 +91,16 @@ class User < ActiveRecord::Base
 			role == "technician"
 		when :see_vehicle_list
 			role == "technician"
-		when :see_all_vehicles
-			false
 		when :see_service_list
 			role == "technician"
-		when :see_all_services
-			false
-		when :see_all_locations
-			false
-		when :see_all_users
-			false
 		when :add_to_own_assembly
 			role == "technician"
-		when :add_to_any_assembly
-			false
 		when :manage_users
 			role == "technician"
 		when :destroy_users
 			role == "technician"
-		when :manage_admin_users
-			false
 		when :manage_assemblies
-			role == "assemblies"
+			role == "technician"
 		when :manage_issues
 			role == "technician"
 		when :manage_locations
@@ -122,6 +117,18 @@ class User < ActiveRecord::Base
 			role == "technician"
 		when :assign_users_to_assemblies
 			role == "technician"
+		when :add_to_any_assembly #For admins or future use
+			false
+		when :see_all_vehicles
+			false
+		when :see_all_services
+			false
+		when :see_all_locations
+			false
+		when :see_all_users
+			false
+		when :manage_admin_users
+			false
 		else
 			false
 		end

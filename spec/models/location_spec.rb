@@ -1,17 +1,19 @@
 require 'rails_helper'
 
 describe Location do
-	let(:location) { FactoryGirl.create(:location) }
+	let(:pr1) { FactoryGirl.create(:province) }
+	let(:location) { FactoryGirl.create(:location, province_id: pr1.id) }
 	
 	subject { location }
 	
-	it { should respond_to("latitude") }
-	it { should respond_to("longitude") }
-	it { should respond_to("name") }
-	it { should respond_to("address") }
-	it { should respond_to("location_type") }
-	it { should respond_to("services") }
-	it { should respond_to("active") }
+	it { should respond_to(:latitude) }
+	it { should respond_to(:longitude) }
+	it { should respond_to(:name) }
+	it { should respond_to(:address) }
+	it { should respond_to(:location_type) }
+	it { should respond_to(:services) }
+	it { should respond_to(:active) }
+	it { should respond_to(:province) }
 	
 	describe "with invalid parameters" do
 		describe "without name" do
@@ -83,13 +85,13 @@ describe Location do
 	end
 	
 	describe "serviced locations" do
-		let(:location1) { FactoryGirl.create(:location, location_type: "terrestre") }
-		let(:location2) { FactoryGirl.create(:location, location_type: "hospital") }
+		let(:location1) { FactoryGirl.create(:location, location_type: "terrestre", province_id: pr1.id) }
+		let(:location2) { FactoryGirl.create(:location, location_type: "hospital", province_id: pr1.id) }
 		let(:location3) { FactoryGirl.create(:location, location_type: "maritimo") }
 		let(:assembly) { FactoryGirl.create(:assembly) }
 		let(:subassembly) { FactoryGirl.create(:assembly, depends_on: assembly.id) }
 		let(:service) { FactoryGirl.create(:service, end_time: 1.month.from_now, assembly_id: subassembly.id) }
-		let(:user) { FactoryGirl.create(:user) }
+		let(:user) { FactoryGirl.create(:user, province_id: pr1.id) }
 		before do
 			user.add_type("asi")
 			user.add_to_assembly(assembly)
@@ -112,13 +114,13 @@ describe Location do
 	describe "serviced filtered by user types" do
 		let(:assembly) { FactoryGirl.create(:assembly) }
 		let(:service) { FactoryGirl.create(:service, assembly_id: assembly.id, id: 1234) }
-		let(:acu) { FactoryGirl.create(:user) }
-		let(:asi) { FactoryGirl.create(:user) }
-		let(:b1) { FactoryGirl.create(:user) }
-		let(:btp) { FactoryGirl.create(:user) }
-		let(:d1) { FactoryGirl.create(:user) }
-		let(:per) { FactoryGirl.create(:user) }
-		let(:soc) { FactoryGirl.create(:user) }
+		let(:acu) { FactoryGirl.create(:user, province_id: pr1.id) }
+		let(:asi) { FactoryGirl.create(:user, province_id: pr1.id) }
+		let(:b1) { FactoryGirl.create(:user, province_id: pr1.id) }
+		let(:btp) { FactoryGirl.create(:user, province_id: pr1.id) }
+		let(:d1) { FactoryGirl.create(:user, province_id: pr1.id) }
+		let(:per) { FactoryGirl.create(:user, province_id: pr1.id) }
+		let(:soc) { FactoryGirl.create(:user, province_id: pr1.id) }
 		before do
 			acu.add_type("acu")
 			asi.add_type("asi")
@@ -138,7 +140,7 @@ describe Location do
 		
 		describe "general, visible for all" do
 			describe "asamblea" do
-				let(:asamblea) { FactoryGirl.create(:location, location_type: "asamblea") }
+				let(:asamblea) { FactoryGirl.create(:location, location_type: "asamblea", province_id: pr1.id) }
 				it "should be visible for all" do
 					expect(acu.map_elements).to match_array([asamblea])
 					expect(asi.map_elements).to match_array([asamblea])
@@ -151,7 +153,7 @@ describe Location do
 			end
 			
 			describe "cuap" do
-				let(:cuap) { FactoryGirl.create(:location, location_type: "cuap") }
+				let(:cuap) { FactoryGirl.create(:location, location_type: "cuap", province_id: pr1.id) }
 				it "should be visible for all" do
 					expect(acu.map_elements).to match_array([cuap])
 					expect(asi.map_elements).to match_array([cuap])
@@ -164,7 +166,7 @@ describe Location do
 			end
 			
 			describe "hospital" do
-				let(:hospital) { FactoryGirl.create(:location, location_type: "hospital") }
+				let(:hospital) { FactoryGirl.create(:location, location_type: "hospital", province_id: pr1.id) }
 				it "should be visible for all" do
 					expect(acu.map_elements).to match_array([hospital])
 					expect(asi.map_elements).to match_array([hospital])
@@ -177,7 +179,7 @@ describe Location do
 			end
 			
 			describe "nostrum" do
-				let(:nostrum) { FactoryGirl.create(:location, location_type: "nostrum") }
+				let(:nostrum) { FactoryGirl.create(:location, location_type: "nostrum", province_id: pr1.id) }
 				it "should be visible for all" do
 					expect(acu.map_elements).to match_array([nostrum])
 					expect(asi.map_elements).to match_array([nostrum])
@@ -192,7 +194,7 @@ describe Location do
 		describe "don't require service" do
 			# Don't need to have a service to be displayed
 			describe "salvamento" do
-				let(:salvamento) { FactoryGirl.create(:location, location_type: "salvamento") }
+				let(:salvamento) { FactoryGirl.create(:location, location_type: "salvamento", province_id: pr1.id) }
 				it "should be visible for acu, per" do
 					expect(acu.map_elements).to match_array([salvamento])
 					expect(asi.map_elements).to match_array([])
@@ -205,7 +207,7 @@ describe Location do
 			end
 			
 			describe "gasolinera" do
-				let(:gasolinera) { FactoryGirl.create(:location, location_type: "gasolinera") }
+				let(:gasolinera) { FactoryGirl.create(:location, location_type: "gasolinera", province_id: pr1.id) }
 				it "should be visible for b1, d1, btp" do
 					expect(acu.map_elements).to match_array([])
 					expect(asi.map_elements).to match_array([])
@@ -221,7 +223,7 @@ describe Location do
 		describe "require a service" do
 			# Need to have a service to be displayed
 			describe "terrestre" do
-				let(:terrestre) { FactoryGirl.create(:location, location_type: "terrestre") }
+				let(:terrestre) { FactoryGirl.create(:location, location_type: "terrestre", province_id: pr1.id) }
 				before do
 					service.add_location(terrestre)
 				end
@@ -238,7 +240,7 @@ describe Location do
 			end
 			
 			describe "maritimo" do
-				let(:maritimo) { FactoryGirl.create(:location, location_type: "maritimo") }
+				let(:maritimo) { FactoryGirl.create(:location, location_type: "maritimo", province_id: pr1.id) }
 				before do
 					maritimo.add_to_service(service)
 				end
@@ -254,7 +256,7 @@ describe Location do
 			end
 			
 			describe "adaptadas" do
-				let(:adaptadas) { FactoryGirl.create(:location, location_type: "adaptadas") }
+				let(:adaptadas) { FactoryGirl.create(:location, location_type: "adaptadas", province_id: pr1.id) }
 				before do
 					adaptadas.add_to_service(service)
 				end
@@ -270,7 +272,7 @@ describe Location do
 			end
 			
 			describe "bravo" do
-				let(:bravo) { FactoryGirl.create(:location, location_type: "bravo") }
+				let(:bravo) { FactoryGirl.create(:location, location_type: "bravo", province_id: pr1.id) }
 				before do
 					bravo.add_to_service(service)
 				end
@@ -284,6 +286,18 @@ describe Location do
 					expect(soc.map_elements).to match_array([])
 				end
 			end
+		end
+	end
+	
+	describe "from_province" do
+		let(:pr2) { FactoryGirl.create(:province) }
+		let(:loc1) { FactoryGirl.create(:location, province_id: pr1.id) }
+		let(:loc2) { FactoryGirl.create(:location, province_id: pr2.id) }
+		let(:user) { FactoryGirl.create(:user, province_id: pr1.id) }
+		
+		it "should show only the locations from the same province than the user" do
+			expect(Location.from_province(user.province.id)).to match_array([loc1])
+			expect(Location.from_province(user.province.id)).not_to match_array([loc2])
 		end
 	end
 	

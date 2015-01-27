@@ -23,6 +23,7 @@ describe User do
 	it { should respond_to(:services) }
 	it { should respond_to(:resettoken) }
 	it { should respond_to(:resettime) }
+	it { should respond_to(:province) }
 
 	it { should be_valid }
 

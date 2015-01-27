@@ -269,13 +269,13 @@ describe LocationsController do
 					end
 				end
 				describe "GET show" do
-					it "does not assign the location" do
+					it "assigns the location" do
 						get :show, {id: location.id}, valid_session
-						expect(assigns(:location)).not_to eq(location)
+						expect(assigns(:location)).to eq(location)
 					end
-					it "redirects to map" do
+					it "doesn't redirect to map" do
 						get :show, {id: location.id}, valid_session
-						expect(response).to redirect_to(root_url)
+						expect(response).not_to redirect_to(root_url)
 					end
 				end
 			end
