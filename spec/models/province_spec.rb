@@ -6,4 +6,5 @@ RSpec.describe Province, :type => :model do
 	
 	it { should respond_to(:users) }
 	it { should respond_to(:locations) }
+	it { should respond_to(:assembly) }
 end

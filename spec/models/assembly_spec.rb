@@ -16,6 +16,7 @@ RSpec.describe Assembly, :type => :model do
 	it { should respond_to(:phone) }
 	it { should respond_to(:location_id) }
 	it { should respond_to(:office) }
+	it { should respond_to(:province) }
 	
 	describe "managed_assemblies" do
 		let(:assembly1) { FactoryGirl.create(:assembly, depends_on: assembly.id) }
