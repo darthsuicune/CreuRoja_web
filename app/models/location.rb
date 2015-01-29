@@ -3,6 +3,7 @@ class Location < ActiveRecord::Base
 	scope :active_locations, -> { where(active: true) }
 	scope :offices, -> { where(active: true, location_type: "asamblea") }
 	scope :from_province, -> (province) { where(province_id: province) }
+	scope :updated_after, -> (time) { where("updated_at > ?", time) }
 	
 	has_many :assembly_locations, dependent: :destroy
 	has_many :assemblies, through: :assembly_locations
@@ -29,10 +30,6 @@ class Location < ActiveRecord::Base
 	
 	def add_user_to_service(user, user_position, service)
 		service_users.create(user_id: user.id, service_id: service.id, user_position: user_position)
-	end
-	
-	def updated_after(time)
-		where("updated_at > ?", time)
 	end
 	
 	def active_services

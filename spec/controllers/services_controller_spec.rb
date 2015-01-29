@@ -68,6 +68,24 @@ require 'rails_helper'
 		let(:service) { FactoryGirl.create(:service) }
 		let(:user) { FactoryGirl.create(:admin) }
 		before { sign_in user }
+		
+		describe "GET graphic" do
+			it "assigns all services as @services" do
+				get :graphic, {}, valid_session
+				expect(assigns(:services)).to eq([service])
+			end
+			it "assigns date as the params date if present" do
+				year = 2015
+				month = 1
+				day = 29
+				get :graphic, {date: {year: year, month: month, day: day}}, valid_session
+				expect(assigns(:date)).to eq(Date.new(year, month, day))
+			end
+			it "assigns date to today if not present" do
+				get :graphic, {}, valid_session
+				expect(assigns(:date)).to eq(Date.today)
+			end
+		end
 
 		describe "GET index" do
 			it "assigns all services as @services" do

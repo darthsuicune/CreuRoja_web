@@ -53,6 +53,20 @@ describe UsersController do
 										"assemblies" => { "assembly_id" => 1 },
 										"user_types_attributes" => { "0" => { "user_type" => "asi" } } } 
 							}
+	let(:user_types_remove) { { "name" => "MyString", 
+										"surname" => "MyString2",
+										"email" => "email1@something.com", 
+										"phone" => "13470198723",
+										"resettoken" => "123öjipouhn09819832r190832",
+										"resettime" => Time.now,
+										"language" => "ca",
+										"role" => "volunteer",
+										"active" => true,
+										"password" => "MyPass", 
+										"password_confirmation" => "MyPass", 
+										"assemblies" => { "assembly_id" => 1 },
+										"user_types_attributes" => { "0" => { "user_type" => "0" } } } 
+							}
 
 	# This should return the minimal set of values that should be in the session
 	# in order to pass any filters (e.g. authentication) defined in
@@ -227,6 +241,14 @@ describe UsersController do
 					expect{
 						put :update, {:id => user.id, :user => user_types}
 					}.to change(UserType, :count).by(1)
+				end
+				describe "remove type" do
+					it "should remove the current type" do
+						put :update, {:id => user.id, :user => user_types}
+						expect{
+							put :update, {:id => user.id, :user => user_types_remove}
+						}.to change(UserType, :count).by(-1)
+					end
 				end
 			end
 		end

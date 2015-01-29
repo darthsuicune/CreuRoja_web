@@ -55,11 +55,11 @@ describe Location do
 	describe "types" do
 		let(:location1) { FactoryGirl.create(:location, location_type: "asdf") }
 		let(:location2) { FactoryGirl.create(:location, location_type: "asdf") }
-		before {
+		before do
 			location.save
 			location1.save
 			location2.save
-		}
+		end
 		it "should display all location types" do
 			expect(Location.location_types).to be_an(ActiveRecord::Relation)
 		end
@@ -87,27 +87,50 @@ describe Location do
 	describe "serviced locations" do
 		let(:location1) { FactoryGirl.create(:location, location_type: "terrestre", province_id: pr1.id) }
 		let(:location2) { FactoryGirl.create(:location, location_type: "hospital", province_id: pr1.id) }
-		let(:location3) { FactoryGirl.create(:location, location_type: "maritimo") }
+		let(:location3) { FactoryGirl.create(:location, location_type: "maritimo", province_id: pr1.id) }
 		let(:assembly) { FactoryGirl.create(:assembly) }
 		let(:subassembly) { FactoryGirl.create(:assembly, depends_on: assembly.id) }
 		let(:service) { FactoryGirl.create(:service, end_time: 1.month.from_now, assembly_id: subassembly.id) }
 		let(:user) { FactoryGirl.create(:user, province_id: pr1.id) }
-		before do
-			user.add_type("asi")
-			user.add_to_assembly(assembly)
-			service.add_location(location1)
-			location2.save
+		describe "for web" do
+			before do
+				user.add_type("asi")
+				user.add_to_assembly(assembly)
+				service.add_location(location1)
+				location2.save
+			end
+			
+			it "should be a relation" do
+				expect(Location.serviced user).to be_an(ActiveRecord::Relation)
+			end
+			
+			it "should list general and serviced but not without assigned services" do
+				locations = Location.serviced user
+				expect(locations).to include(location1)
+				expect(locations).to include(location2)
+				expect(locations).not_to include(location3)
+			end
 		end
 		
-		it "should be a relation" do
-			expect(Location.serviced user).to be_an(ActiveRecord::Relation)
-		end
-		
-		it "should list general and serviced but not without assigned services" do
-			locations = Location.serviced user
-			expect(locations).to include(location1)
-			expect(locations).to include(location2)
-			expect(locations).not_to include(location3)
+		describe "for app" do
+			before do
+				user.add_type("per")
+				user.add_to_assembly(assembly)
+				service.add_location(location3)
+				location3.active = false
+				location3.updated_at = Time.now
+				location3.save
+				location2.updated_at = 2.minutes.ago
+				location2.save
+			end
+			it "should retrieve inactive locations" do
+				locations = Location.serviced user, 1.minute.ago
+				expect(locations).to include(location3)
+			end
+			it "should retrieve inactive locations" do
+				locations = Location.serviced user, 1.minute.ago
+				expect(locations).not_to include(location2)
+			end
 		end
 	end
 
@@ -298,6 +321,44 @@ describe Location do
 		it "should show only the locations from the same province than the user" do
 			expect(Location.from_province(user.province.id)).to match_array([loc1])
 			expect(Location.from_province(user.province.id)).not_to match_array([loc2])
+		end
+	end
+	
+	describe "add_to_assembly" do
+		let(:assembly) { FactoryGirl.create(:assembly) }
+		let(:location) { FactoryGirl.create(:location) }
+		it "should increment the number of assembly_locations" do
+			expect {
+				location.add_to_assembly(assembly)
+			}.to change(AssemblyLocation, :count).by(1)
+		end
+	end
+	
+	describe "add_user_to_service" do
+		let(:service) { FactoryGirl.create(:service) }
+		let(:location) { FactoryGirl.create(:location) }
+		let(:user) { FactoryGirl.create(:user) }
+		let(:user_position) { "b1" }
+		it "should increment the number of assembly_locations" do
+			expect {
+				location.add_user_to_service(user, user_position, service)
+			}.to change(ServiceUser, :count).by(1)
+		end
+	end
+	
+	describe "active_services" do
+		let(:location) { FactoryGirl.create(:location) }
+		let(:service1) { FactoryGirl.create(:service, end_time: 1.day.from_now) }
+		let(:service2) { FactoryGirl.create(:service, end_time: 1.day.ago) }
+		before do
+			location.add_to_service(service1)
+			location.add_to_service(service2)
+		end
+		it "should retrieve active services" do
+			expect(location.active_services).to include(service1)
+		end
+		it "should avoid inactive services" do
+			expect(location.active_services).not_to include(service2)
 		end
 	end
 	

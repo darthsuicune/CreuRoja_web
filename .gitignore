@@ -22,3 +22,4 @@ database.yml
 .secret
 .idea
 public
+coverage
