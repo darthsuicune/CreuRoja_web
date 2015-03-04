@@ -12,9 +12,10 @@ module SessionsHelper
 	end
 	
 	def sign_out
+		session = Session.find_by_token(cookies[:remember_token])
+		session.destroy! if session
+		cookies.delete(:remember_token) if cookies[:remember_token]
 		@current_user = nil
-		Session.find_by_token(cookies[:remember_token]).destroy!
-		cookies.delete(:remember_token)
 	end
 	
 	def current_user=(user)
