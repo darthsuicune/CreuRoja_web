@@ -23,6 +23,7 @@ describe User do
 	it { should respond_to(:services) }
 	it { should respond_to(:resettoken) }
 	it { should respond_to(:resettime) }
+	it { should respond_to(:province) }
 
 	it { should be_valid }
 
@@ -157,19 +158,18 @@ describe User do
 	
 	describe "create_reset_password_token" do
 		let(:user) { FactoryGirl.create(:user) }
-		before { user.create_reset_password_token }
 		it "creates a token" do
 			expect {
 				user.create_reset_password_token
 			}.to change(user, :resettoken)
 		end
 		it "sets the resettime to now" do
+			user.create_reset_password_token
 			expect(user.resettime).to be_within(5.seconds).of(Time.now)
 		end
 		it "can create tokens that last further" do
-			expect {
-				user.create_reset_password_token(1.year.from_now)
-			}
+			user.create_reset_password_token(1.year.from_now)
+			expect(user.resettime).to be_within(5.seconds).of(1.year.from_now)
 		end
 	end
 	

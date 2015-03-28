@@ -5,7 +5,7 @@ RSpec.describe ServiceUser, :type => :model do
 	let(:service) { FactoryGirl.create(:service) }
 	let(:location) { FactoryGirl.create(:location) }
 	let(:vehicle) { FactoryGirl.create(:vehicle) }
-	let (:su) { ServiceUser.create(user_id: user.id, service_id: service.id, user_position: position) }
+	let(:su) { ServiceUser.create(user_id: user.id, service_id: service.id, user_position: position) }
 	let(:position) { "some position" }
 	
 	let(:service_user) { FactoryGirl.create(:service_user, user_id: user.id, service_id: service.id, user_position: position) }
@@ -61,6 +61,17 @@ RSpec.describe ServiceUser, :type => :model do
 			su.add_to_vehicle vehicle, position
 			expect(su.location).to be_nil
 			expect(su.vehicle).to eq vehicle
+		end
+	end
+	
+	describe "service_user name" do
+		it "should match the user name" do
+			expect(su.name).to eq(user.name)
+		end
+	end
+	describe "service_user surname" do
+		it "should match the user surname" do
+			expect(su.surname).to eq(user.surname)
 		end
 	end
 end

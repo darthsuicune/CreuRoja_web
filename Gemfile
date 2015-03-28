@@ -17,6 +17,7 @@ group :development, :test do
 	gem 'childprocess'
 	gem 'factory_girl_rails'
 	gem 'thin'
+	gem 'simplecov'
 end
 
 group :production do

@@ -2,12 +2,15 @@ class Location < ActiveRecord::Base
 	default_scope { order(location_type: :desc) }
 	scope :active_locations, -> { where(active: true) }
 	scope :offices, -> { where(active: true, location_type: "asamblea") }
+	scope :from_province, -> (province) { where(province_id: province) }
+	scope :updated_after, -> (time) { where("updated_at > ?", time) }
 	
 	has_many :assembly_locations, dependent: :destroy
 	has_many :assemblies, through: :assembly_locations
 	has_many :location_services, dependent: :destroy
 	has_many :services, through: :location_services
 	has_many :service_users, dependent: :destroy
+	belongs_to :province
 	
 	before_validation :defaults
 	
@@ -29,10 +32,6 @@ class Location < ActiveRecord::Base
 		service_users.create(user_id: user.id, service_id: service.id, user_position: user_position)
 	end
 	
-	def updated_after(time)
-		where("updated_at > ?", time)
-	end
-	
 	def active_services
 		services.unfinished_before(Time.now).not_archived.public_data
 	end
@@ -49,9 +48,9 @@ class Location < ActiveRecord::Base
 		location_type != "terrestre" && location_type != "maritimo" && location_type != "adaptadas" && location_type != "bravo"
 	end
 	
-	def self.serviced(user, updated_at = nil)		
+	def self.serviced(user, updated_at = nil)
 		pending_services = Service.unfinished_before(Time.now.to_s).where(assembly_id: user.assembly_ids).ids
-		services_locations = Location.joins(:location_services).where("service_id IN (?)", pending_services).ids
+		services_locations = Location.joins(:location_services).from_province(user.province).where("service_id IN (?)", pending_services).ids
 		if updated_at
 			updated_after(updated_at).filter_by_user_types(services_locations, user.user_types)
 		else
@@ -64,7 +63,8 @@ class Location < ActiveRecord::Base
 		# -Ids of the locations that have services available for the user
 		# -location types for service-based locations, filtered by user type
 		# -location types for general, filtered by user type
-		where("(id IN (?) AND location_type IN (?)) OR (location_type IN (?))", services_locations, allowed_types(user_types), allowed_general_types(user_types))
+		conditions = "(id IN (?) AND location_type IN (?)) OR (location_type IN (?))"
+		where(conditions, services_locations, allowed_types(user_types), allowed_general_types(user_types))
 	end
 	
 	def self.allowed_general_types(user_types)

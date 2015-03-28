@@ -28,8 +28,8 @@ class AssembliesController < ApplicationController
 	end
 
 	def update
-		@assembly.update(assembly_params)
 		verify_parent(@assembly)
+		@assembly.update(assembly_params)
 		redirect_to @assembly
 	end
 
@@ -50,10 +50,10 @@ class AssembliesController < ApplicationController
 		def set_assembly
 			@assembly = Assembly.find(params[:id])
 		end
+		
 		def verify_parent(assembly)
 			if assembly.depends_on == "-" || assembly.depends_on == 0
-				assembly.depends_on = nil 
-				assembly.save
+				assembly.depends_on = nil
 			end
 		end
 end

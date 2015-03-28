@@ -10,5 +10,6 @@ FactoryGirl.define do
 		longitude 1.5
 		location_type "MyType"
 		active true
+		province_id 1
 	end
 end

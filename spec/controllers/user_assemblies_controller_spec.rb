@@ -36,6 +36,11 @@ describe UserAssembliesController do
 					post :create, { user_assembly: { user_id: user.id, assembly_id: assembly.id } }
 					expect(response).to redirect_to(user)
 				end
+				it "doesn't allow duplicates" do
+					expect {
+						post :create, { user_assembly: { user_id: -7, assembly_id: assembly.id } }
+					}.to raise_error(ActionController::ActionControllerError)
+				end
 			end
 			describe "PUT update" do
 				it "is allowed" do

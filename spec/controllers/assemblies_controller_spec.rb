@@ -6,6 +6,7 @@ RSpec.describe AssembliesController, :type => :controller do
 	let(:assembly) { FactoryGirl.create(:assembly) }
 	let(:location) { FactoryGirl.create(:location) }
 	let(:values) { { name: "asdf", level: "level", location_id: location.id } }
+	let(:values_with_nil_parent) { { name: "asdf", level: "level", location_id: location.id, depends_on: "-" } }
 
 	describe "without signin in" do
 		describe "GET index" do
@@ -147,6 +148,10 @@ RSpec.describe AssembliesController, :type => :controller do
 				it "redirects" do
 					post :create, { assembly: values }
 					expect(response).to redirect_to(Assembly.last)
+				end
+				it "verifies parents correctly" do
+					post :create, { assembly: values_with_nil_parent }
+					expect(Assembly.last.depends_on).to be_nil
 				end
 			end
 
