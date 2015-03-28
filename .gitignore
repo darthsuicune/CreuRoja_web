@@ -22,10 +22,7 @@ database.yml
 .secret
 .idea
 public
-<<<<<<< HEAD
 .ssl
 gems
 *.keep
-=======
 coverage
->>>>>>> ba4e86cd8c886364081b8bfe9218c8456135582c
