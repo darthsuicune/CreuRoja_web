@@ -4,7 +4,7 @@ module SessionsHelper
 		user.create_session_token
 		cookies.permanent[:remember_token] = user.sessions.last.token #For HTML clients
 		@session = user.sessions.last.token # For JSON clients
-		current_user = user
+		@current_user = user
 	end
 	
 	def signed_in?

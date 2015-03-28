@@ -13,6 +13,11 @@ require 'rails_helper'
 describe SessionsHelper do
 	let(:user) { FactoryGirl.create(:user) }
 	describe "sign_in(user)" do
+		before { sign_in user }
+		
+		it "shouldnt be nil" do
+			expect(@current_user).not_to be_nil
+		end
 	end
 	
 	describe "signed_in?" do
