@@ -22,3 +22,6 @@ database.yml
 .secret
 .idea
 public
+.ssl
+gems
+*.keep

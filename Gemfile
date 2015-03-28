@@ -16,6 +16,7 @@ group :development, :test do
 	gem 'guard-spork'
 	gem 'childprocess'
 	gem 'factory_girl_rails'
+	gem 'thin'
 end
 
 group :production do
