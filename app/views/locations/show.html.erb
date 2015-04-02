@@ -43,6 +43,8 @@
   <%= @location.active %>
 </p>
 
-<%= render 'services' if @location.services.count > 0 %> 
+<%= render 'services' unless @location.services.empty? %> 
+<%= render 'assemblies' unless @location.assemblies.empty? %>
+<%= render 'assign_to_assembly' if can_add_assemblies?(current_user, @location) %>
 <%= link_to t(:resource_edit), edit_location_path(@location) if current_user.allowed_to?(:manage_locations) %> |
 <%= link_to t(:resource_back), locations_path %>

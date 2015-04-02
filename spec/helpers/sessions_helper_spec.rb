@@ -21,6 +21,28 @@ describe SessionsHelper do
 	end
 	
 	describe "signed_in?" do
+		describe "without signin in" do
+			it "should return false" do
+				expect(signed_in?).to be_falsey
+			end
+		end
+		
+		describe "after sign in" do
+			before { sign_in user }
+			it "should return true" do
+				expect(signed_in?).to be_truthy
+			end
+		end
+		
+		describe "after sign out" do
+			before do
+				sign_in user
+				sign_out
+			end
+			it "should return false" do
+				expect(signed_in?).to be_falsey
+			end
+		end
 	end
 	
 	describe "sign_out" do
@@ -39,9 +61,6 @@ describe SessionsHelper do
 		end
 	end
 	
-	describe "current_user" do
-	end
-	
 	describe "current_user?(user)" do
 	end
 	
@@ -53,5 +72,4 @@ describe SessionsHelper do
 	
 	describe "signed_in_user" do
 	end
-	
 end

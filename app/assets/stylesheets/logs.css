@@ -1,0 +1,11 @@
+/*
+  Place all the styles related to the matching controller here.
+  They will automatically be included in application.css.
+*/
+.successful_action{
+	background-color: #00ff00
+}
+
+.failed_action {
+	background-color: #ff0000
+}

@@ -35,7 +35,7 @@ class UsersController < ApplicationController
 	def create
 		@user = User.new(user_params)
 		respond_to do |format|
-			if @user.save
+			if log_action_result @user, @user.save
 				parse_user_types
 				@user.add_to_assembly current_user.assemblies.first
 				@user.create_reset_password_token(2.years.from_now)
@@ -53,7 +53,7 @@ class UsersController < ApplicationController
 	def update
 		respond_to do |format|
 			parse_user_types
-			if @user.update(user_params)
+			if log_action_result @user, @user.update(user_params)
 				@user.add_to_assembly current_user.assemblies.first
 				verify_active @user
 				format.html { redirect_to @user, notice: I18n.t(:user_updated) }
@@ -68,6 +68,7 @@ class UsersController < ApplicationController
 	# DELETE /users/1
 	# DELETE /users/1.json
 	def destroy
+		log_action_result @user
 		@user.destroy
 		respond_to do |format|
 			format.html { redirect_to users_url }

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe SessionsController do
-	let(:user) { FactoryGirl.create(:user, phone: "123") }
+	let(:user) { FactoryGirl.create(:user) }
 	
 	describe "new" do
 	end

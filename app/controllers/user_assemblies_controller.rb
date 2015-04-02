@@ -5,17 +5,18 @@ class UserAssembliesController < ApplicationController
 		
 	def create
 		@user_assembly = UserAssembly.new(user_assembly_params)
-		@user_assembly.save
+		log_action_result @user_assembly, @user_assembly.save
 		redirect_to @user_assembly.user, notice: I18n.t(:user_assigned_to_assembly)
 	end
 	
 	def update
-		@user_assembly.update(user_assembly_params)
+		log_action_result @user_assembly, @user_assembly.update(user_assembly_params)
 		redirect_to(@user_assembly.user)
 	end
 	
 	def destroy
 		user = @user_assembly.user
+		log_action_result @user_assembly
 		@user_assembly.destroy
 		redirect_to(user)
 	end

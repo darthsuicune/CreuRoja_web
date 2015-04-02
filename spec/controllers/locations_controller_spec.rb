@@ -249,7 +249,7 @@ describe LocationsController do
 						expect(response.header["Content-Type"]).to include("application/json")
 					end
 					it "assigns the locations to @locations" do
-						expect(assigns(:locations)).to eq(user.map_elements)
+						expect(assigns(:locations)).to eq([location])
 					end
 				end
 			end

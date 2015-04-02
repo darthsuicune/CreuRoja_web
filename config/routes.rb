@@ -22,6 +22,7 @@ CreuRoja::Application.routes.draw do
 	get '/email_sent' => 'static_pages#email_sent'
 	get '/services/graphic' => 'services#graphic'
 	get '/locations/map' => 'locations#map'
+	get '/logs' => 'logs#index'
 
 	#Resource routes (maps HTTP verbs to controller actions automatically):
 	resources :users do
@@ -36,6 +37,7 @@ CreuRoja::Application.routes.draw do
 	resources :locations
 	resources :service_users, only: [:create, :update, :destroy]
 	resources :location_services, only: [:create, :update, :destroy]
+	resources :assembly_locations, only: [:create, :update, :destroy]
 	resources :user_assemblies, only: [:create, :update, :destroy]
 	resources :vehicle_services, only: [:create, :update, :destroy]
 	resources :vehicle_assemblies, only: [:create, :update, :destroy]

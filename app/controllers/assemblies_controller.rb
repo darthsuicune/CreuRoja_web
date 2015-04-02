@@ -14,7 +14,7 @@ class AssembliesController < ApplicationController
 	def create
 		@assembly = Assembly.new(assembly_params)
 		verify_parent(@assembly)
-		if @assembly.save
+		if log_action_result @assembly, @assembly.save
 			redirect_to @assembly
 		else
 			render 'new'
@@ -29,16 +29,18 @@ class AssembliesController < ApplicationController
 
 	def update
 		verify_parent(@assembly)
-		@assembly.update(assembly_params)
+		log_action_result @assembly, @assembly.update(assembly_params)
 		redirect_to @assembly
 	end
 
 	def destroy
+		log_action_result @assembly
 		@assembly.destroy
 		redirect_to assemblies_url
 	end
 	
 	private
+		
 		def assembly_params
 			params.require(:assembly).permit(:name, :description, :level, :location_id, :depends_on)
 		end

@@ -5,7 +5,7 @@ class ServiceUsersController < ApplicationController
 	
 	def create
 		service_user = ServiceUser.new(service_user_params)
-		if service_user.save
+		if log_action_result service_user, service_user.save
 			redirect_to service_user.service, notice: I18n.t(:user_assigned_to_service)
 		else
 			redirect_to service_user.service
@@ -14,12 +14,13 @@ class ServiceUsersController < ApplicationController
 
 	def update
 		service_user = ServiceUser.find(params[:id])
-		service_user.update(service_user_params)
+		log_action_result service_user, service_user.update(service_user_params)
 		redirect_to service_user.service
 	end
 
 	def destroy
 		service_user = ServiceUser.find(params[:id])
+		log_action_result service_user
 		service = service_user.service
 		service_user.destroy
 		redirect_to service

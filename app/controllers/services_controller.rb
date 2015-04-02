@@ -44,7 +44,7 @@ class ServicesController < ApplicationController
 		@service = Service.new(service_params)
 
 		respond_to do |format|
-			if @service.save
+			if log_action_result @service, @service.save
 				format.html { redirect_to @service, notice: I18n.t(:service_created) }
 				format.json { render action: 'show', status: :created, location: @service }
 			else
@@ -58,7 +58,7 @@ class ServicesController < ApplicationController
 	# PATCH/PUT /services/1.json
 	def update
 		respond_to do |format|
-			if @service.update(service_params)
+			if log_action_result @service, @service.update(service_params)
 				format.html { redirect_to @service, notice: I18n.t(:service_updated) }
 				format.json { head :no_content }
 			else
@@ -71,6 +71,7 @@ class ServicesController < ApplicationController
 	# DELETE /services/1
 	# DELETE /services/1.json
 	def destroy
+		log_action_result @service
 		@service.destroy
 		respond_to do |format|
 			format.html { redirect_to services_url }

@@ -3,8 +3,9 @@ class ApplicationController < ActionController::Base
 	# For APIs, you may want to use :null_session instead.
 	# Through https://coderwall.com/p/8z7z3a
 	protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format == 'application/json' }
-	before_action :log
-	before_action :set_locale
+	before_filter :log, only: [:create, :update, :destroy]
+	before_filter :log_locations_index, only: [:index]
+	before_filter :set_locale
 	
 	include SessionsHelper
 	
@@ -23,15 +24,29 @@ class ApplicationController < ActionController::Base
 	private
 		def log
 			unless controller_name == "vehicle_positions"
-				if (action_name == "create" || action_name == "update" || action_name == "destroy")
-					user_id = (current_user) ? current_user.id : 0
-					Log.log(user_id, controller_name, action_name, request.remote_ip)
-				end
-				if (action_name == "index" && controller_name == "locations")
-					user_id = (current_user) ? current_user.id : 0
-					Log.log(user_id, controller_name, action_name, request.remote_ip)
-				end
+				user_id = (current_user) ? current_user.id : 0
+				requested_param = (params && params[:id]) ? params[:id] : 0
+				@log = Log.new(user_id: user_id, controller: controller_name, action: action_name, ip: request.remote_ip, requested_param: requested_param)
+				@log.save
 			end
+		end
+		
+		def log_locations_index
+			if controller_name == "locations" 
+				user_id = (current_user) ? current_user.id : 0
+				@log = Log.new(user_id: user_id, controller: controller_name, action: action_name, ip: request.remote_ip)
+				@log.save
+			end
+		end
+		
+		def log_action_result(object, success = true)
+			if @log
+				@log.requested_param = object.id if object
+				@log.action_success = success
+				@log.user_id = current_user.id if current_user && @log.user_id == 0
+				@log.save
+			end
+			success
 		end
 		
 		def set_locale

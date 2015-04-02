@@ -30,7 +30,7 @@ class VehiclesController < ApplicationController
 		@vehicle = Vehicle.new(vehicle_params)
 
 		respond_to do |format|
-			if @vehicle.save
+			if log_action_result @vehicle, @vehicle.save
 				format.html { redirect_to @vehicle, notice: I18n.t(:vehicle_created) }
 				format.json { render action: 'show', status: :created, location: @vehicle }
 			else
@@ -44,7 +44,7 @@ class VehiclesController < ApplicationController
 	# PATCH/PUT /vehicles/1.json
 	def update
 		respond_to do |format|
-			if @vehicle.update(vehicle_params)
+			if log_action_result @vehicle, @vehicle.update(vehicle_params)
 				format.html { redirect_to @vehicle, notice: I18n.t(:vehicle_updated) }
 				format.json { head :no_content }
 			else
@@ -57,6 +57,7 @@ class VehiclesController < ApplicationController
 	# DELETE /vehicles/1
 	# DELETE /vehicles/1.json
 	def destroy
+		log_action_result @vehicle
 		@vehicle.destroy
 		respond_to do |format|
 			format.html { redirect_to vehicles_url }

@@ -1,0 +1,24 @@
+<% assemblies = available_services current_user.managed_assemblies, @location.assemblies %>
+<div id="assign_location_to_assembly" class="add_location_to_assembly_form">
+	<strong> <%= t(:form_assign_location_to_assembly) %>: </strong>
+	<%= form_for(@assembly_location) do |f| %>
+	<% if @assembly_location.errors.any? %>
+		<div id="error_explanation">
+			<h2><%= "#{pluralize(@assembly_location.errors.count, "error")} #{t(:form_errors_found)}:" %></h2>
+			<ul>
+				<% @assembly_location.errors.full_messages.each do |msg| %>
+					<li><%= msg %></li>
+				<% end %>
+			</ul>
+		</div>
+	<% end %>
+	<%= f.hidden_field :location_id, :value => @location.id %>
+	
+	<%= f.label :assembly_id, t(:form_add_assembly_to_location_id) %>
+	<%= f.select(:assembly_id, assemblies) %>
+
+	<div class="assembly_location_submit">
+		<%= f.submit t(:form_assign_location_to_assembly_submit) %>
+	</div>
+	<% end %>
+</div>

@@ -3,7 +3,7 @@ ENV["RAILS_ENV"] ||= 'test'
 
 #Test coverage. Check base_address/coverage/index.html
 require 'simplecov'
-SimpleCov.start
+SimpleCov.start 'rails'
 
 require 'spec_helper'
 require File.expand_path("../../config/environment", __FILE__)

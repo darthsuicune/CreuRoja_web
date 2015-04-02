@@ -305,3 +305,4 @@ en:
    form_add_user_to_service_user_id: "User"
    form_add_user_to_service_vehicle_id: "Vehicle"
    form_add_user_to_service_warning_only_location_or_vehicle: "Warning: You can only select a location or a vehicle, not both"
+   form_assign_location_to_assembly_submit: "Assign to assembly"

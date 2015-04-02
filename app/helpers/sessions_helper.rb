@@ -8,7 +8,7 @@ module SessionsHelper
 	end
 	
 	def signed_in?
-		!current_user.nil?
+		!@current_user.nil?
 	end
 	
 	def sign_out
@@ -16,10 +16,6 @@ module SessionsHelper
 		session.destroy! if session
 		cookies.delete(:remember_token) if cookies[:remember_token]
 		@current_user = nil
-	end
-	
-	def current_user=(user)
-		@current_user = user
 	end
 	
 	def current_user
@@ -33,7 +29,7 @@ module SessionsHelper
 	end
 	
 	def current_user?(user)
-		user == current_user
+		user == @current_user
 	end
 	
 	def redirect_back_or(default)
@@ -48,13 +44,11 @@ module SessionsHelper
 	def signed_in_user
 		unless signed_in?
 			respond_to do |format|
-				format.html {
+				format.html do
 					store_location
 					redirect_to signin_url
-				}
-				format.json {
-					render file: "public/401.json", status: :unauthorized
-				}
+				end
+				format.json { render file: "public/401.json", status: :unauthorized }
 			end
 		end
 	end

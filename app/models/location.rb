@@ -36,6 +36,10 @@ class Location < ActiveRecord::Base
 		services.unfinished_before(Time.now).not_archived.public_data
 	end
 	
+	def self.from_assemblies(assembly_list)
+		Location.joins(:assembly_locations).where(assembly_id: assembly_list.ids)
+	end
+	
 	def self.general
 		["asamblea", "hospital", "cuap", "nostrum"]
 	end

@@ -4,7 +4,7 @@ class LocationServicesController < ApplicationController
 	
 	def create
 		location_service = LocationService.new(location_service_params)
-		if location_service.save
+		if log_action_result location_service, location_service.save
 			redirect_to location_service.service, notice: I18n.t(:service_assigned_to_location)
 		else
 			redirect_to location_service.service
@@ -13,12 +13,13 @@ class LocationServicesController < ApplicationController
 
 	def update
 		location_service = LocationService.find(params[:id])
-		location_service.update(location_service_params)
+		log_action_result location_service, location_service.update(location_service_params)
 		redirect_to(location_service.service)
 	end
 
 	def destroy
 		location_service = LocationService.find(params[:id])
+		log_action_result location_service
 		service = location_service.service
 		location_service.destroy
 		redirect_to(service)

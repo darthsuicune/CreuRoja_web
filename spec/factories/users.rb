@@ -8,6 +8,7 @@ FactoryGirl.define do
 		password "mypassword"
 		password_confirmation "mypassword"
 		sequence(:resettoken) { |n| "asdfasdf #{n}" }
+		phone "somephonenumber"
 		resettime 0
 		language "ca"
 		role "volunteer"

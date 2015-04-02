@@ -44,6 +44,26 @@ class User < ActiveRecord::Base
   
 	after_validation { self.errors.messages.delete(:password_digest) }
 	
+	def in_assembly_of?(user)
+		(assemblies & user.assemblies).count > 0
+	end
+	
+	def managed_assemblies
+		result = []
+		user_assemblies.each do |ua|
+			result << ua.assembly.managed_ids
+		end
+		Assembly.where(id: result)
+	end
+	
+	def available_locations
+		if self.allowed_to?(:see_all_locations)
+			Location.all 
+		else
+			Location.from_assemblies(self.managed_assemblies)
+		end
+	end
+	
 	def map_elements(updated_at = nil)
 		if self.allowed_to?(:see_all_locations)
 			Location.all 
@@ -116,6 +136,8 @@ class User < ActiveRecord::Base
 		when :assign_user_to_service
 			role == "technician"
 		when :assign_users_to_assemblies
+			role == "technician"
+		when :assign_location_to_assembly
 			role == "technician"
 		when :add_to_any_assembly #For admins or future use
 			false

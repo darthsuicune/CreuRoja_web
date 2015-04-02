@@ -10,7 +10,7 @@ class LocationsController < ApplicationController
 		respond_to do |format|
 			format.html {
 				redirect_to root_url unless current_user.allowed_to?(:manage_locations)
-				@locations = Location.all 
+				@locations = current_user.available_locations
 			}
 			format.json {
 				@locations = current_user.map_elements params[:updated_at]
@@ -21,6 +21,7 @@ class LocationsController < ApplicationController
 	# GET /locations/1
 	# GET /locations/1.json
 	def show
+		@assembly_location = AssemblyLocation.new
 	end
 	
 	def map
@@ -42,7 +43,7 @@ class LocationsController < ApplicationController
 		replace_commas 
 		@location = Location.new(location_params)
 		respond_to do |format|
-			if @location.save
+			if log_action_result @location, @location.save
 				format.html { redirect_to @location, notice: I18n.t(:location_created) }
 				format.json { render action: 'show', status: :created, location: @location }
 			else
@@ -58,7 +59,7 @@ class LocationsController < ApplicationController
 		#Change ',' characters for '.' so they work
 		replace_commas 
 		respond_to do |format|
-			if @location.update(location_params)
+			if log_action_result @location, @location.update(location_params)
 				format.html { redirect_to locations_path, notice: I18n.t(:location_updated) }
 				format.json { head :no_content }
 			else
@@ -71,6 +72,7 @@ class LocationsController < ApplicationController
 	# DELETE /locations/1
 	# DELETE /locations/1.json
 	def destroy
+		log_action_result @location
 		@location.destroy
 		respond_to do |format|
 			format.html { redirect_to locations_url }

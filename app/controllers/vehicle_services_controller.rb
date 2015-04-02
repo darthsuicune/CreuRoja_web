@@ -4,7 +4,7 @@ class VehicleServicesController < ApplicationController
 	
 	def create
 		vehicle_service = VehicleService.new(vehicle_service_params)
-		if vehicle_service.save
+		if log_action_result vehicle_service, vehicle_service.save
 			redirect_to vehicle_service.service, notice: I18n.t(:vehicle_assigned_to_service)
 		else
 			redirect_to vehicle_service.service
@@ -13,12 +13,13 @@ class VehicleServicesController < ApplicationController
 	
 	def update
 		vehicle_service = VehicleService.find(params[:id])
-		vehicle_service.update(vehicle_service_params)
+		log_action_result vehicle_service, vehicle_service.update(vehicle_service_params)
 		redirect_to(vehicle_service.service)
 	end
 	
 	def destroy
 		vehicle_service = VehicleService.find(params[:id])
+		log_action_result vehicle_service
 		service = vehicle_service.service
 		vehicle_service.destroy
 		redirect_to(service)

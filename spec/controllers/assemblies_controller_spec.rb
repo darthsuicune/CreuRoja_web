@@ -6,6 +6,7 @@ RSpec.describe AssembliesController, :type => :controller do
 	let(:assembly) { FactoryGirl.create(:assembly) }
 	let(:location) { FactoryGirl.create(:location) }
 	let(:values) { { name: "asdf", level: "level", location_id: location.id } }
+	let(:invalid_values) { { name: nil, level: "level", location_id: location.id } }
 	let(:values_with_nil_parent) { { name: "asdf", level: "level", location_id: location.id, depends_on: "-" } }
 
 	describe "without signin in" do
@@ -152,6 +153,10 @@ RSpec.describe AssembliesController, :type => :controller do
 				it "verifies parents correctly" do
 					post :create, { assembly: values_with_nil_parent }
 					expect(Assembly.last.depends_on).to be_nil
+				end
+				it "renders new if the values weren't valid" do
+					post :create, { assembly: invalid_values }
+					expect(response).to render_template(:new)
 				end
 			end
 
