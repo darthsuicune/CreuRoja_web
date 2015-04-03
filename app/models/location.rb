@@ -2,7 +2,6 @@ class Location < ActiveRecord::Base
 	default_scope { order(location_type: :desc) }
 	scope :active_locations, -> { where(active: true) }
 	scope :offices, -> { where(active: true, location_type: "asamblea") }
-	scope :from_province, -> (province) { where(province_id: province) }
 	scope :updated_after, -> (time) { where("updated_at > ?", time) }
 	
 	has_many :assembly_locations, dependent: :destroy
@@ -10,7 +9,6 @@ class Location < ActiveRecord::Base
 	has_many :location_services, dependent: :destroy
 	has_many :services, through: :location_services
 	has_many :service_users, dependent: :destroy
-	belongs_to :province
 	
 	before_validation :defaults
 	
@@ -54,7 +52,7 @@ class Location < ActiveRecord::Base
 	
 	def self.serviced(user, updated_at = nil)
 		pending_services = Service.unfinished_before(Time.now.to_s).where(assembly_id: user.assembly_ids).ids
-		services_locations = Location.joins(:location_services).from_province(user.province).where("service_id IN (?)", pending_services).ids
+		services_locations = Location.joins(:location_services).where("service_id IN (?)", pending_services).ids
 		if updated_at
 			updated_after(updated_at).filter_by_user_types(services_locations, user.user_types)
 		else

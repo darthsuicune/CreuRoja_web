@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150402192141) do
+ActiveRecord::Schema.define(version: 20150403175536) do
 
   create_table "assemblies", force: true do |t|
     t.string   "name"
@@ -67,7 +67,6 @@ ActiveRecord::Schema.define(version: 20150402192141) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "expiredate"
-    t.integer  "province_id"
   end
 
   add_index "locations", ["address"], name: "index_locations_on_address"
@@ -89,13 +88,6 @@ ActiveRecord::Schema.define(version: 20150402192141) do
   add_index "logs", ["controller"], name: "index_logs_on_controller"
   add_index "logs", ["ip"], name: "index_logs_on_ip"
   add_index "logs", ["user_id"], name: "index_logs_on_user_id"
-
-  create_table "provinces", force: true do |t|
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "assembly_id"
-  end
 
   create_table "service_users", force: true do |t|
     t.integer  "user_id"
@@ -178,7 +170,6 @@ ActiveRecord::Schema.define(version: 20150402192141) do
     t.boolean  "active",          default: true
     t.string   "phone"
     t.string   "notes"
-    t.integer  "province_id"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true

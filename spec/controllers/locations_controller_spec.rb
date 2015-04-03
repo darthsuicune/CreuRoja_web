@@ -234,27 +234,49 @@ describe LocationsController do
 		describe "as normal user" do
 			let(:location) { FactoryGirl.create(:location, location_type: "hospital") }
 			let(:user) { FactoryGirl.create(:user) }
-			before do
-				sign_in user
-				location.save
-			end
 			
 			describe "as JSON" do
 				describe "index" do
-					before { get :index, { format: :json } }
-					it "status is correct" do
-						expect(response.status).to eq(200)
+					describe "without token" do
+						before { get :index, { format: :json } }
+						it "throws a 401 without validation" do
+							expect(response.status).to eq(401)
+						end
+
+						it "has the json header" do
+							expect(response.header["Content-Type"]).to include("application/json")
+						end
+
+						it "doesn't assign the locations to @locations" do
+							expect(assigns(:locations)).not_to eq([location])
+						end
 					end
-					it "has the json header" do
-						expect(response.header["Content-Type"]).to include("application/json")
-					end
-					it "assigns the locations to @locations" do
-						expect(assigns(:locations)).to eq([location])
+					
+					describe "with token" do
+						let(:token) { "something" }
+						let(:header_token) { ActionController::HttpAuthentication::Token.encode_credentials token }
+						before do
+							Session.create(user_id: user.id, token: token)
+							request.env["HTTP_AUTHORIZATION"] = header_token
+							get :index, { format: :json }
+						end
+						it "validates a token" do
+							expect(response.status).to eq(200)
+						end
+
+						it "has the json header" do
+							expect(response.header["Content-Type"]).to include("application/json")
+						end
+
+						it "assigns the locations to @locations" do
+							expect(assigns(:locations)).to eq([location])
+						end
 					end
 				end
 			end
 			
 			describe "as web" do
+				before { sign_in user }
 				describe "GET index" do
 					it "assigns all locations as @locations" do
 						get :index, {}, valid_session

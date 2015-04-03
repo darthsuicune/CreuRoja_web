@@ -16,7 +16,6 @@ class Assembly < ActiveRecord::Base
 	has_many :vehicles, through: :vehicle_assemblies
 	has_many :services
 	has_many :children, class_name: "Assembly", foreign_key: "depends_on"
-	belongs_to :province
 	
 	before_validation :defaults
 	

@@ -20,7 +20,6 @@ class User < ActiveRecord::Base
 	has_many :user_types, dependent: :destroy
 	has_many :service_users
 	has_many :services, through: :service_users
-	belongs_to :province
 	
 	accepts_nested_attributes_for :user_types, allow_destroy: true
 	

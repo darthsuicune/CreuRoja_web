@@ -7,15 +7,15 @@ class LocationsController < ApplicationController
 	# GET /locations.json
 	def index
 		#This next piece has a retard as its ideological author. Don't blame my hands for it.
-		respond_to do |format|
-			format.html {
-				redirect_to root_url unless current_user.allowed_to?(:manage_locations)
-				@locations = current_user.available_locations
-			}
-			format.json {
-				@locations = current_user.map_elements params[:updated_at]
-			}
-		end
+			respond_to do |format|
+				format.html {
+					redirect_to root_url unless current_user.allowed_to?(:manage_locations)
+					@locations = current_user.available_locations
+				}
+				format.json {
+					@locations = current_user.map_elements params[:updated_at]
+				}
+			end
 	end
 
 	# GET /locations/1

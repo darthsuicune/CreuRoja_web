@@ -8,7 +8,7 @@ module SessionsHelper
 	end
 	
 	def signed_in?
-		!@current_user.nil?
+		@current_user
 	end
 	
 	def sign_out
@@ -19,13 +19,7 @@ module SessionsHelper
 	end
 	
 	def current_user
-		if @current_user
-			@current_user
-		else
-			token = cookies[:remember_token] || authenticate || params[:token] || nil
-			session = Session.find_by_token(token) if token
-			@current_user = session.user if session
-		end
+		@current_user ||= new_session
 	end
 	
 	def current_user?(user)
@@ -42,7 +36,7 @@ module SessionsHelper
 	end
 	
 	def signed_in_user
-		unless signed_in?
+		unless current_user
 			respond_to do |format|
 				format.html do
 					store_location
@@ -54,9 +48,15 @@ module SessionsHelper
 	end
 	
 	private
+	def new_session
+		token = authenticate || cookies[:remember_token] || params[:token] || nil
+		session = Session.find_by_token(token) if token
+		session.user if session
+	end
+	
 	def authenticate
 		authenticate_with_http_token do |token,options|
-			Session.exists?(token: token)
+			token if Session.exists?(token: token)
 		end
 	end
 end
