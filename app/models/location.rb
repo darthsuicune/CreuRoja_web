@@ -35,7 +35,7 @@ class Location < ActiveRecord::Base
 	end
 	
 	def self.from_assemblies(assembly_list)
-		Location.joins(:assembly_locations).where(assembly_id: assembly_list.ids)
+		Location.where(id: AssemblyLocation.joins(:location).where(assembly_id: assembly_list.ids))
 	end
 	
 	def self.general
