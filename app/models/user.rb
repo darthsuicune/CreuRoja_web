@@ -47,6 +47,10 @@ class User < ActiveRecord::Base
 		"#{name} #{surname}"
 	end
 	
+	def full_name_with_email
+		"#{name} #{surname} (#{email})"
+	end
+	
 	def in_assembly_of?(user)
 		(assemblies & user.assemblies).count > 0
 	end

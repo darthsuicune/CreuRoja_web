@@ -1,7 +1,6 @@
 <table>
 	<thead>
-		<th><%= I18n.t(:form_user_full_name) %></th>
-		<th><%= I18n.t(:form_user_email) %></th>
+		<th><%= "#{I18n.t(:form_user_full_name)} (#{<%= I18n.t(:form_user_email)})" %></th>
 		<th><%= I18n.t(:form_log_what) %></th>
 		<th><%= I18n.t(:form_log_ip) %></th>
 		<th><%= I18n.t(:form_log_param) %></th>
@@ -11,8 +10,7 @@
 		<% Log.find_each do |log| %>
 			<% if current_user.can_see_logs_of?(log.user) %>
 				<tr class="<%= (log.action_success) ? "successful_action" : "failed_action" %>">
-					<td><%= (log.user) ? log.user.full_name : t(:unknown_user) %></td>
-					<td><%= (log.user) ? log.user.email : t(:unknown_user) %></td>
+					<td><%= (log.user) ? log.user.full_name_with_email : t(:unknown_user) %></td>
 					<td><%= "#{log.action} #{log.formatted_controller}" %>
 					<%= link_to "(id #{log.requested_param})", log.link if log.has_link %></td>
 					<td><%= log.ip %></td>
