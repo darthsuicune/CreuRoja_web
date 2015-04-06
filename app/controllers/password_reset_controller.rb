@@ -3,8 +3,8 @@ class PasswordResetController < ApplicationController
 	end
 	
 	def create
-		user = User.find_by_email(params[:user][:email])
-		if log_action_result user, (user && user.create_reset_password_token)
+		@user = User.find_by_email(params[:user][:email])
+		if log_action_result @user, (@user && @user.create_reset_password_token)
 			redirect_to login_path, :notice => I18n.t(:password_recovery_email_sent)
 		else
 			@email = params[:user][:email]
@@ -24,7 +24,7 @@ class PasswordResetController < ApplicationController
 	
 	def update
 		@user = User.find_by_resettoken!(params[:id])
-		if log_action_result user, accept_password_reset?
+		if log_action_result @user, accept_password_reset?
 			sign_in @user
 			redirect_to @user
 		else
