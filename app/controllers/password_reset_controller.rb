@@ -24,7 +24,7 @@ class PasswordResetController < ApplicationController
 	
 	def update
 		@user = User.find_by_resettoken!(params[:id])
-		if log_action_result user, accept_password_reset?
+		if log_action_result @user, accept_password_reset?
 			sign_in @user
 			redirect_to @user
 		else
