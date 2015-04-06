@@ -1,6 +1,6 @@
 class VehicleServicesController < ApplicationController
 	before_filter :signed_in_user
-	before_filter :is_valid_user, only: [:new, :create, :edit, :update, :destroy]
+	before_filter :is_valid_user
 	
 	def create
 		vehicle_service = VehicleService.new(vehicle_service_params)

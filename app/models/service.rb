@@ -22,17 +22,24 @@ class Service < ActiveRecord::Base
 		location_services.create(location_id: location.id)
 	end
 	
-	def add_user(user, user_position, location = nil, vehicle = nil)
-		service_users.create(user_id: user.id, vehicle_id: vehicle.id, user_position: user_position) if location.nil?
-		service_users.create(user_id: user.id, location_id: location.id, user_position: user_position) if vehicle.nil?
-	end
-	
 	def add_vehicle(vehicle)
 		vehicle_services.create(vehicle_id: vehicle.id)
 	end
 	
+	def add_user(user, user_position)
+		service_users.create(user_id: user.id, user_position: user_position)
+	end
+	
+	def add_user_to_location(user, user_position, location)
+		service_users.create(user_id: user.id, location_id: location.id, user_position: user_position)
+	end
+	
+	def add_user_to_vehicle(user, user_position, vehicle)
+		service_users.create(user_id: user.id, vehicle_id: vehicle.id, user_position: user_position)
+	end
+	
 	def first_location_id
-		locations.first.id
+		locations.first.id unless locations.first.nil?
 	end
 	
 	def expired?

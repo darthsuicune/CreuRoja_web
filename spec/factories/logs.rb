@@ -6,5 +6,7 @@ FactoryGirl.define do
 		action "MyString"
 		controller "MyString"
 		ip "MyString"
+		action_success true
+		requested_param 1
 	end
 end

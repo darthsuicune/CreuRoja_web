@@ -9,7 +9,7 @@ class Log < ActiveRecord::Base
 	
 	def formatted_controller
 		if controller.include?("_")
-			"relation #{controller.split('_')[0]} #{controller.split('_')[1]} "
+			"relation #{controller.split('_')[0]} #{controller.split('_')[1]}"
 		else
 			controller
 		end

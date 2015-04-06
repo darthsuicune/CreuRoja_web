@@ -13,14 +13,9 @@ module ServicesHelper
 				#Assignment: Services for which the vehicle is already assigned
 				vehicle.services.each do |assignment|
 					#If the assigned services match in time with the service wanted, mark it as not available
-					if (service.base_time < assignment.end_time && service.end_time > assignment.base_time)
-						is_available = false
-					end
+					is_available = false if (service.base_time < assignment.end_time && service.end_time > assignment.base_time)
 				end
-				if is_available
-					tag = "#{vehicle.indicative}, #{vehicle.license}"
-					availables << [tag, vehicle.id] 
-				end
+				availables << [vehicle.tag, vehicle.id] if is_available
 			end
 		end
 		availables
@@ -43,15 +38,12 @@ module ServicesHelper
 					is_available = false if (service.base_time < assignment.end_time && service.end_time > assignment.base_time)
 				end
 			end
-			if is_available
-				tag = "#{user.name} #{user.surname}"
-				availables << [tag, user.id] 
-			end
+			availables << [user.full_name, user.id] if is_available
 		end
 		availables
 	end
 	
-	def locations_for_service(locations)
+	def locations_for_user_service(locations)
 		available_locations = []
 		available_locations << [I18n.t(:user_goes_in_vehicle), -1]
 		locations.each do |location|
@@ -60,7 +52,7 @@ module ServicesHelper
 		available_locations
 	end
 	
-	def vehicles_for_service(vehicles)
+	def vehicles_for_user_service(vehicles)
 		available_vehicles = []
 		available_vehicles << [I18n.t(:user_goes_to_location), -1]
 		vehicles.each do |vehicle|

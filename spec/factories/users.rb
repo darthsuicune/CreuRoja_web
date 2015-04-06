@@ -7,7 +7,6 @@ FactoryGirl.define do
 		sequence(:email) { |n| "person_#{n}@example.com" }
 		password "mypassword"
 		password_confirmation "mypassword"
-		sequence(:resettoken) { |n| "asdfasdf #{n}" }
 		phone "somephonenumber"
 		resettime 0
 		language "ca"

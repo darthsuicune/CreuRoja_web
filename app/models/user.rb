@@ -43,8 +43,16 @@ class User < ActiveRecord::Base
   
 	after_validation { self.errors.messages.delete(:password_digest) }
 	
+	def full_name
+		"#{name} #{surname}"
+	end
+	
 	def in_assembly_of?(user)
 		(assemblies & user.assemblies).count > 0
+	end
+	
+	def can_see_logs_of? (log_user)
+		self.role == "admin" || (!log_user.nil? && self.in_assembly_of?(log_user))
 	end
 	
 	def managed_assemblies
@@ -167,6 +175,7 @@ class User < ActiveRecord::Base
 		self.password = password
 		self.password_confirmation = password
 		self.resettoken = nil
+		self.resettime = 20.years.ago
 		self.save
 	end
 

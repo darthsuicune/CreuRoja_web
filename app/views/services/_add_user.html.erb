@@ -26,10 +26,10 @@
 			<%= f.select :user_position, UserType.available_types %>
 			
 			<%= f.label :location_id, t(:form_add_user_to_service_location_id) %>
-			<%= f.select :location_id, locations_for_service(@service.locations) %>
+			<%= f.select :location_id, locations_for_user_service(@service.locations) %>
 			
 			<%= f.label :vehicle_id, t(:form_add_user_to_service_vehicle_id) %>
-			<%= f.select :vehicle_id, vehicles_for_service(@service.vehicles) %>
+			<%= f.select :vehicle_id, vehicles_for_user_service(@service.vehicles) %>
 
 			<div class="service_user_submit">
 				<%= f.submit t(:form_add_user_to_service_submit) %>

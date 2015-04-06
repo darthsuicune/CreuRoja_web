@@ -21,6 +21,10 @@ class Vehicle < ActiveRecord::Base
 		"#{indicative}"
 	end
 	
+	def tag
+		"#{indicative}, #{license}"
+	end
+	
 	def add_to_service(service)
 		vehicle_services.create(service_id: service.id)
 	end

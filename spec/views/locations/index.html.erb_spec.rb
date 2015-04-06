@@ -17,8 +17,8 @@ describe "locations/index" do
 		expect(rendered).not_to match "Description"
 		expect(rendered).to match "Address"
 		expect(rendered).to match "Phone"
-		expect(rendered).not_to match "1.5"
-		expect(rendered).not_to match "2.5"
+		expect(rendered).not_to include "1.5"
+		expect(rendered).not_to include "2.5"
 		expect(rendered).to match "MyType"
 	end
 end
