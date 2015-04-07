@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150403175536) do
+ActiveRecord::Schema.define(version: 20150407221233) do
 
   create_table "assemblies", force: true do |t|
     t.string   "name"
@@ -186,7 +186,6 @@ ActiveRecord::Schema.define(version: 20150403175536) do
 
   create_table "vehicle_positions", force: true do |t|
     t.integer  "vehicle_id"
-    t.string   "indicative"
     t.float    "latitude",   limit: 50
     t.float    "longitude",  limit: 50
     t.datetime "created_at"

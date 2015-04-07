@@ -3,29 +3,25 @@ class VehiclePositionsController < ApplicationController
 	before_filter :is_valid_user
 	
 	def index
-		positions = VehiclePosition.select(:vehicle_id).distinct
+		vehicle_list = VehiclePosition.select(:vehicle_id).distinct
 		@vehicles = []
-		positions.each do |position|
-			@vehicles << position.vehicle.vehicle_positions.last
+		vehicle_list.each do |vehicle|
+			@vehicles << vehicle.last_position
 		end
 		@vehicles
 	end
 
 	def create
 		respond_to do |format|
-			format.html {
-				head :unauthorized 
-				redirect_to root_url
-			}
-			format.json {
+			format.html { head :unauthorized  }
+			format.json do
 				position = VehiclePosition.new(vehicle_positions_params)
-				position.indicative = position.vehicle.indicative
 				if position.save
 					head :created 
 				else
 					head :bad_request 
 				end
-			}
+			end
 		end
 	end
 	

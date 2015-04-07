@@ -4,9 +4,9 @@ class UserAssembliesController < ApplicationController
 	before_filter :is_valid_user
 		
 	def create
-		@user_assembly = UserAssembly.new(user_assembly_params)
-		log_action_result @user_assembly, @user_assembly.save
-		redirect_to @user_assembly.user, notice: I18n.t(:user_assigned_to_assembly)
+		user_assembly = UserAssembly.new(user_assembly_params)
+		log_action_result user_assembly, user_assembly.save
+		redirect_to user_assembly.user, notice: I18n.t(:user_assigned_to_assembly)
 	end
 	
 	def update

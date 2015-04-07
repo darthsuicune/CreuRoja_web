@@ -61,6 +61,14 @@ class Vehicle < ActiveRecord::Base
 	def available?
 		validate_licenses
 	end
+	
+	def update_position(lat, lng)
+		VehiclePosition.create!(vehicle_id: id, latitude: lat, longitude: lng)
+	end
+	
+	def last_position
+		self.vehicle_positions.last
+	end
 
 	protected
 		def defaults
