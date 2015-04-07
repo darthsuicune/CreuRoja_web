@@ -33,7 +33,7 @@ class Vehicle < ActiveRecord::Base
 		vehicle_assemblies.create(assembly_id: assembly.id)
 	end
 	
-	def add_to_service_user(user, service, user_position)
+	def add_user_to_service_in_vehicle(user, service, user_position)
 		service_users.create(user_id: user.id, service_id: service.id, user_position: user_position)
 	end
 	
