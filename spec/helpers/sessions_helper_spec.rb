@@ -48,7 +48,7 @@ describe SessionsHelper do
 	describe "sign_out" do
 		before { sign_in user }
 		
-		it "should log out the user" do
+		it "should reduce the session count by 1" do
 			expect {
 				sign_out
 			}.to change(Session, :count).by(-1)

@@ -46,15 +46,15 @@ class Service < ActiveRecord::Base
 		Time.now > end_time 
 	end
 	
-	def in_base_time?(time)
+	def in_base_time?(time = Time.now)
 		base_time <= time && time < start_time
 	end
 	
-	def started?(time)
+	def started?(time = Time.now)
 		start_time <= time && time < end_time
 	end
 	
-	def finished?(time)
+	def finished?(time = Time.now)
 		time >= end_time
 	end
 	

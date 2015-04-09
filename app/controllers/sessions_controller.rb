@@ -18,7 +18,7 @@ class SessionsController < ApplicationController
 					render 'new'
 				}
 				format.json {
-					render :json => "401", status: :unauthorized
+					head :unauthorized
 				}
 			end
 		end

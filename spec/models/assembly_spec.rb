@@ -128,4 +128,10 @@ RSpec.describe Assembly, :type => :model do
 			}.to change(AssemblyLocation, :count). by(1)
 		end
 	end
+	
+	describe "to_s" do
+		it "should show its name when being used with to_s" do
+			expect(assembly.to_s).to eq assembly.name
+		end
+	end
 end

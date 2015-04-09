@@ -2,6 +2,7 @@ class LocationsController < ApplicationController
 	before_filter :signed_in_user
 	before_filter :is_valid_user, except: [:index, :show, :map]
 	before_action :set_location, only: [:show, :edit, :update, :destroy]
+	before_filter :log_locations_index, only: [:index]
 
 	# GET /locations
 	# GET /locations.json
@@ -81,6 +82,14 @@ class LocationsController < ApplicationController
 	end
 
 	private
+		def log_locations_index
+			if controller_name == "locations" 
+				user_id = (current_user) ? current_user.id : 0
+				@log = Log.new(user_id: user_id, controller: controller_name, action: action_name, ip: request.remote_ip)
+				@log.save
+			end
+		end
+		
 		def replace_commas
 			params[:location][:latitude].sub! ",", "." if params[:location][:latitude]
 			params[:location][:longitude].sub! ",", "." if params[:location][:longitude]

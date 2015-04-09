@@ -93,18 +93,65 @@ describe Service do
 		end
 		
 		describe "expired?" do
+			it "should return true if the event ended before now" do
+				service.end_time = 1.year.ago
+				expect(service).to be_expired
+			end
+			it "should return false if the event ends in the future" do
+				service.end_time = 1.year.from_now
+				expect(service).not_to be_expired
+			end
 		end
 		
 		describe "in_base_time?" do
+			before do
+				service.base_time = 1.hour.ago
+				service.start_time = 1.hour.from_now
+			end
+			it "should be true for services that are in the time frame" do
+				expect(service).to be_in_base_time(Time.now)
+			end
+			it "should be false for services outside the time frame" do
+				expect(service).not_to be_in_base_time(1.year.from_now)
+				expect(service).not_to be_in_base_time(1.year.ago)
+			end
 		end
 		
 		describe "started?" do
+			before do
+				service.start_time = 1.hour.ago
+				service.end_time = 1.hour.from_now
+			end
+			it "should be true for services that are in the time frame" do
+				expect(service).to be_started(Time.now)
+			end
+			it "should be false for services outside the time frame" do
+				expect(service).not_to be_started(1.year.from_now)
+				expect(service).not_to be_started(1.year.ago)
+			end
 		end
 		
 		describe "finished?" do
+			before { service.end_time = 1.hour.ago }
+			
+			it "should be true for services that ended before the passed time" do
+				expect(service).to be_finished(Time.now)
+				expect(service).to be_finished(1.year.from_now)
+			end
+			it "should be false for services that end after the passed time" do
+				expect(service).not_to be_finished(1.year.ago)
+			end
 		end
 		
 		describe "self.last_date" do
+			let(:future_date) { 15.years.from_now }
+			before do
+				service.end_time = future_date
+				service.save
+			end
+			it "should return the last date in the database" do
+				expect(Service.last_date).to be_within(1.second).of(future_date)
+			end
 		end
 	end
 end

@@ -12,7 +12,7 @@ module SessionsHelper
 	end
 	
 	def sign_out
-		session = Session.find_by_token(cookies[:remember_token])
+		session = Session.find_by_token(token)
 		session.destroy! if session
 		cookies.delete(:remember_token) if cookies[:remember_token]
 		@current_user = nil
@@ -48,8 +48,11 @@ module SessionsHelper
 	end
 	
 	private
+	def token
+		cookies[:remember_token] || authenticate || params[:token] || nil
+	end
+	
 	def new_session
-		token = authenticate || cookies[:remember_token] || params[:token] || nil
 		session = Session.find_by_token(token) if token
 		session.user if session
 	end

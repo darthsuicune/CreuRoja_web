@@ -342,4 +342,40 @@ describe User do
 			expect(user.goes_to?(service)).to be_truthy
 		end
 	end
+	
+	describe "in assembly of" do
+		let(:user) { FactoryGirl.create(:user) }
+		let(:user2) { FactoryGirl.create(:user) }
+		let(:assembly) { FactoryGirl.create(:assembly) }
+		let(:assembly2){ FactoryGirl.create(:assembly) }
+		before do
+			@user.save
+			@user.add_to_assembly assembly
+			user.add_to_assembly assembly
+			user2.add_to_assembly assembly2
+		end
+		it "should be in user assembly" do
+			expect(@user).to be_in_assembly_of(user)
+		end
+		it "shouldnt be in user assembly" do
+			expect(@user).not_to be_in_assembly_of(user2)
+		end
+	end
+	
+	describe "map_elements" do
+		let(:location) { FactoryGirl.create(:location) }
+		let(:admin) { FactoryGirl.create(:admin) }
+		describe "for admin" do
+			before { sign_in admin }
+			it "should match the full location list" do
+				expect(admin.map_elements).to eq Location.all
+			end
+		end
+		describe "for admin" do
+			before { sign_in user }
+			it "should match the locations the user can see" do
+				expect(@user.map_elements).to eq Location.serviced(@user)
+			end
+		end
+	end
 end
