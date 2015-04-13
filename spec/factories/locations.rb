@@ -8,7 +8,7 @@ FactoryGirl.define do
 		sequence(:phone) { |n| "Phone #{n}" }
 		sequence(:latitude) { |n| 1.5 + n }
 		longitude 1.5
-		location_type "MyType"
+		location_type "hospital"
 		active true
 	end
 end

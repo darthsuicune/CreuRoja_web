@@ -63,8 +63,8 @@ describe Location do
 		end
 		it "should contain only the current types" do
 			types = Location.location_types
-			expect(types[0].location_type).to eq("asdf")
-			expect(types[1].location_type).to eq("MyType")
+			expect(types[0].location_type).to eq("hospital")
+			expect(types[1].location_type).to eq("asdf")
 		end
 	end
 	
@@ -116,16 +116,16 @@ describe Location do
 				user.add_to_assembly(assembly)
 				service.add_location(location3)
 				location3.active = false
-				location3.updated_at = Time.now
 				location3.save
-				location2.updated_at = 2.minutes.ago
+				location3.updated_at = Time.now
 				location2.save
+				location2.updated_at = 2.minutes.ago
 			end
-			it "should retrieve inactive locations" do
+			it "should retrieve locations updated after the user last checked" do
 				locations = Location.serviced user, 1.minute.ago
 				expect(locations).to include(location3)
 			end
-			it "should retrieve inactive locations" do
+			it "shouldn't retrieve locations that weren't updated since the user last checked" do
 				locations = Location.serviced user, 1.minute.ago
 				expect(locations).not_to include(location2)
 			end

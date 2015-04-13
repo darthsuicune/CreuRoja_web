@@ -1,5 +1,6 @@
 class LocationsController < ApplicationController
 	before_filter :signed_in_user
+	before_filter :can_see_map, only: [:map]
 	before_filter :is_valid_user, except: [:index, :show, :map]
 	before_action :set_location, only: [:show, :edit, :update, :destroy]
 	before_filter :log_locations_index, only: [:index]
@@ -14,7 +15,8 @@ class LocationsController < ApplicationController
 					@locations = current_user.available_locations
 				}
 				format.json {
-					@locations = current_user.map_elements params[:updated_at]
+					time = Time.parse(params[:updated_at]) if params[:updated_at]
+					@locations = current_user.map_elements time
 				}
 			end
 	end
@@ -82,29 +84,30 @@ class LocationsController < ApplicationController
 	end
 
 	private
-		def log_locations_index
-			if controller_name == "locations" 
-				user_id = (current_user) ? current_user.id : 0
-				@log = Log.new(user_id: user_id, controller: controller_name, action: action_name, ip: request.remote_ip)
-				@log.save
-			end
-		end
-		
-		def replace_commas
-			params[:location][:latitude].sub! ",", "." if params[:location][:latitude]
-			params[:location][:longitude].sub! ",", "." if params[:location][:longitude]
-		end
-		# Use callbacks to share common setup or constraints between actions.
-		def set_location
-			@location = Location.find(params[:id]) || not_found
-		end
+	def can_see_map
+		redirect_to signin_url unless current_user.allowed_to?(:see_map)
+	end
+	def log_locations_index
+		user_id = (current_user) ? current_user.id : 0
+		@log = Log.new(user_id: user_id, controller: controller_name, action: action_name, ip: request.remote_ip)
+		@log.save
+	end
+	
+	def replace_commas
+		params[:location][:latitude].sub! ",", "." if params[:location][:latitude]
+		params[:location][:longitude].sub! ",", "." if params[:location][:longitude]
+	end
+	# Use callbacks to share common setup or constraints between actions.
+	def set_location
+		@location = Location.find(params[:id]) || not_found
+	end
 
-		# Never trust parameters from the scary internet, only allow the white list through.
-		def location_params
-			params.require(:location).permit(:name, :description, :address, :phone, :latitude, :longitude, :location_type, :active)
-		end
-		
-		def is_valid_user
-			redirect_to root_url unless current_user && current_user.allowed_to?(:manage_locations)
-		end
+	# Never trust parameters from the scary internet, only allow the white list through.
+	def location_params
+		params.require(:location).permit(:name, :description, :address, :phone, :latitude, :longitude, :location_type, :active)
+	end
+	
+	def is_valid_user
+		redirect_to root_url unless current_user && current_user.allowed_to?(:manage_locations)
+	end
 end

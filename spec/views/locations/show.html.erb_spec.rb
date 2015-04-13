@@ -19,7 +19,7 @@ describe "locations/show" do
 		expect(rendered).to match(/Phone/)
 		expect(rendered).to match(/1.5/)
 		expect(rendered).to match(/1.5/)
-		expect(rendered).to match(/MyType/)
+		expect(rendered).to match(/hospital/)
 		expect(rendered).to match(/true/)
 		expect(rendered).to match(/assign_location_to_assembly/)
 	end

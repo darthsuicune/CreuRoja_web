@@ -232,7 +232,7 @@ describe LocationsController do
 		end
 		
 		describe "as normal user" do
-			let(:location) { FactoryGirl.create(:location, location_type: "hospital") }
+			let(:location) { FactoryGirl.create(:location) }
 			let(:user) { FactoryGirl.create(:user) }
 			
 			describe "as JSON" do
@@ -258,18 +258,32 @@ describe LocationsController do
 						before do
 							Session.create(user_id: user.id, token: token)
 							request.env["HTTP_AUTHORIZATION"] = header_token
-							get :index, { format: :json }
 						end
-						it "validates a token" do
-							expect(response.status).to eq(200)
-						end
+						describe "full request" do
+							before { get :index, { format: :json } }
+							it "validates a token" do
+								expect(response.status).to eq(200)
+							end
 
-						it "has the json header" do
-							expect(response.header["Content-Type"]).to include("application/json")
-						end
+							it "has the json header" do
+								expect(response.header["Content-Type"]).to include("application/json")
+							end
 
-						it "assigns the locations to @locations" do
-							expect(assigns(:locations)).to eq([location])
+							it "assigns the locations to @locations" do
+								expect(assigns(:locations)).to eq([location])
+							end
+						end
+						describe "request with lastUpdateTime" do
+							let(:location1) { FactoryGirl.create(:location) }
+							let(:update_time) { "2015-03-26T14:39:25.000Z" }
+							before do
+								location.updated_at = Time.now.change(year:2015, month:2)
+								location1.updated_at = 1.year.from_now
+								get :index, { format: :json, updated_at: update_time }
+							end
+							it "should return locations updated only after the marked time" do
+								expect(assigns(:locations)).to eq([location1])
+							end
 						end
 					end
 				end

@@ -366,15 +366,123 @@ describe User do
 		let(:location) { FactoryGirl.create(:location) }
 		let(:admin) { FactoryGirl.create(:admin) }
 		describe "for admin" do
-			before { sign_in admin }
 			it "should match the full location list" do
 				expect(admin.map_elements).to eq Location.all
 			end
 		end
 		describe "for admin" do
-			before { sign_in user }
 			it "should match the locations the user can see" do
 				expect(@user.map_elements).to eq Location.serviced(@user)
+			end
+		end
+	end
+	
+	describe "add_to_service" do
+		let(:service) { FactoryGirl.create(:service) }
+		let(:vehicle) { FactoryGirl.create(:vehicle) }
+		let(:location) { FactoryGirl.create(:location) }
+		let(:position) { "position" }
+		
+		before { @user.save }
+		
+		it "should create a service user if passed a location" do
+			expect{ @user.add_to_service_at_location(service,position,location) }.to change(ServiceUser, :count).by(1)
+		end
+		
+		it "should create a service user if passed a vehicle" do
+			expect{ @user.add_to_service_in_vehicle(service,position,vehicle) }.to change(ServiceUser, :count).by(1)
+		end
+	end
+	
+	describe "available_services" do
+		let(:assembly) { FactoryGirl.create(:assembly) }
+		let(:assembly1) { FactoryGirl.create(:assembly) }
+		let(:service) { FactoryGirl.create(:service, assembly_id: assembly.id) }
+		let(:service1) { FactoryGirl.create(:service, assembly_id: assembly1.id) }
+		let(:admin) { FactoryGirl.create(:admin) }
+		
+		before do
+			admin.save
+			@user.save
+			@user.add_to_assembly(assembly)
+			service.save
+			service1.save
+		end
+			
+		describe "for admin" do
+			it "should show all services" do
+				expect(admin.available_services).to eq Service.all
+			end
+		end
+		describe "for normal users" do
+			it "should show the services available for the user" do
+				expect(@user.available_services).to eq ([service])
+			end
+		end
+	end
+	
+	describe "in_service" do
+		let(:assembly) { FactoryGirl.create(:assembly) }
+		let(:assembly1) { FactoryGirl.create(:assembly) }
+		let(:location) { FactoryGirl.create(:location) }
+		let(:service) { FactoryGirl.create(:service, assembly_id: assembly.id) }
+		let(:service1) { FactoryGirl.create(:service, assembly_id: assembly1.id) }
+		
+		before do
+			@user.save
+			@user.add_to_assembly(assembly)
+			service.add_location(location)
+			service.save
+			service1.save
+			
+		end
+			
+		describe "in services it has signed up for" do
+			before { @user.sign_up_for_service(service, "position") }
+			it "should be in" do
+				expect(@user).to be_in_service (service)
+			end
+		end
+		
+		describe "in services where he was added" do
+			before { @user.add_to_service_at_location(service, "position", location) }
+			it "should be in" do
+				expect(@user).to be_in_service (service)
+			end
+		end
+		
+		describe "in services he hasnt signed up for nor was added" do
+			it "shouldnt be in" do
+				expect(@user).not_to be_in_service(service1)
+			end
+		end
+	end
+	
+	describe "assembly_users" do
+		let(:admin) { FactoryGirl.create(:admin) }
+		let(:assembly) { FactoryGirl.create(:assembly) }
+		let(:assembly1) { FactoryGirl.create(:assembly) }
+		let(:user) { FactoryGirl.create(:user) }
+		let(:user1) { FactoryGirl.create(:user) }
+		
+		before do
+			@user.save
+			user.save
+			user1.save
+			user.add_to_assembly assembly
+			user1.add_to_assembly assembly1
+			@user.add_to_assembly assembly
+		end
+		describe "for admin" do
+			before { admin.save }
+			it "should see all users" do
+				expect(admin.assembly_users).to eq User.all
+			end
+		end
+		
+		describe "for a regular user" do
+			it "should see users only from his assembly" do
+				expect(@user.assembly_users).to eq ([@user, user])
 			end
 		end
 	end
