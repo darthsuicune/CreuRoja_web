@@ -275,7 +275,7 @@ describe LocationsController do
 						end
 						describe "request with lastUpdateTime" do
 							let(:location1) { FactoryGirl.create(:location) }
-							let(:update_time) { DateTime.now.to_s }
+							let(:update_time) { Time.now.to_s }
 							before do
 								Timecop.travel(Time.now - 1.day) { location.save }
 								Timecop.travel(Time.now + 1.day) { location1.save }
