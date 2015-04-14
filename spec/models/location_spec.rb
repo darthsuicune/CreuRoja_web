@@ -116,19 +116,28 @@ describe Location do
 				user.add_to_assembly(assembly)
 				service.add_location(location3)
 				location3.active = false
-				location3.save
-				location3.updated_at = Time.now
 				location2.save
-				location2.updated_at = 2.minutes.ago
+				Timecop.travel(Time.now + 1.day) { location3.save }
 			end
 			it "should retrieve locations updated after the user last checked" do
-				locations = Location.serviced user, 1.minute.ago
+				locations = Location.serviced user, Time.now
 				expect(locations).to include(location3)
 			end
 			it "shouldn't retrieve locations that weren't updated since the user last checked" do
-				locations = Location.serviced user, 1.minute.ago
+				locations = Location.serviced user, Time.now
 				expect(locations).not_to include(location2)
 			end
+		end
+	end
+	
+	describe "updated_after" do
+		let(:location1) { FactoryGirl.create(:location) }
+		before do
+			location.save
+			Timecop.travel(Time.now + 1.day) { location1.save }
+		end
+		it "should bring out only locations updated after the time passed" do
+			expect(Location.updated_after Time.now).to eq([location1])
 		end
 	end
 

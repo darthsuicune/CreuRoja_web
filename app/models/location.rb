@@ -2,7 +2,6 @@ class Location < ActiveRecord::Base
 	default_scope { order(location_type: :desc) }
 	scope :active_locations, -> { where(active: true) }
 	scope :offices, -> { where(active: true, location_type: "asamblea") }
-	scope :updated_after, -> (time) { where("updated_at > ?", time) }
 	
 	has_many :assembly_locations, dependent: :destroy
 	has_many :assemblies, through: :assembly_locations
@@ -50,11 +49,15 @@ class Location < ActiveRecord::Base
 		location_type != "terrestre" && location_type != "maritimo" && location_type != "adaptadas" && location_type != "bravo"
 	end
 	
+	def self.updated_after(time = Time.now)
+		where("updated_at > ?", time)
+	end
+	
 	def self.serviced(user, updated_at = nil)
 		pending_services = Service.unfinished_before(Time.now.to_s).where(assembly_id: user.assembly_ids).ids
 		services_locations = Location.joins(:location_services).where("service_id IN (?)", pending_services).ids
 		if updated_at
-			updated_after(updated_at).filter_by_user_types(services_locations, user.user_types)
+			filter_by_user_types(services_locations, user.user_types).updated_after(updated_at)
 		else
 			active_locations.filter_by_user_types(services_locations, user.user_types)
 		end

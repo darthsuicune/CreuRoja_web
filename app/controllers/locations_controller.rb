@@ -16,7 +16,7 @@ class LocationsController < ApplicationController
 				}
 				format.json {
 					time = Time.parse(params[:updated_at]) if params[:updated_at]
-					@locations = current_user.map_elements time
+					@locations = current_user.map_elements params[:updated_at]
 				}
 			end
 	end

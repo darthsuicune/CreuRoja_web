@@ -18,6 +18,7 @@ group :development, :test do
 	gem 'factory_girl_rails'
 	gem 'thin'
 	gem 'simplecov'
+	gem 'timecop'
 end
 
 group :production do

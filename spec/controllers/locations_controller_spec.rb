@@ -275,10 +275,10 @@ describe LocationsController do
 						end
 						describe "request with lastUpdateTime" do
 							let(:location1) { FactoryGirl.create(:location) }
-							let(:update_time) { "2015-03-26T14:39:25.000Z" }
+							let(:update_time) { DateTime.now.to_s }
 							before do
-								location.updated_at = Time.now.change(year:2015, month:2)
-								location1.updated_at = 1.year.from_now
+								Timecop.travel(Time.now - 1.day) { location.save }
+								Timecop.travel(Time.now + 1.day) { location1.save }
 								get :index, { format: :json, updated_at: update_time }
 							end
 							it "should return locations updated only after the marked time" do
