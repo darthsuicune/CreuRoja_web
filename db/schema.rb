@@ -73,6 +73,11 @@ ActiveRecord::Schema.define(version: 20150414073947) do
   add_index "locations", ["name"], name: "index_locations_on_name"
   add_index "locations", ["updated_at"], name: "index_locations_on_updated_at"
 
+  create_table "locations_users", id: false, force: true do |t|
+    t.integer "location_id"
+    t.integer "user_id"
+  end
+
   create_table "logs", force: true do |t|
     t.integer  "user_id"
     t.string   "action"
@@ -146,6 +151,17 @@ ActiveRecord::Schema.define(version: 20150414073947) do
   end
 
   add_index "user_assemblies", ["assembly_id", "user_id"], name: "index_user_assemblies_on_assembly_id_and_user_id", unique: true
+
+  create_table "user_services", id: false, force: true do |t|
+    t.string   "user_type"
+    t.integer  "user_id"
+    t.integer  "service_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "user_services", ["user_id", "service_id"], name: "index_user_services_on_user_id_and_service_id", unique: true
+  add_index "user_services", ["user_type"], name: "index_user_services_on_user_type"
 
   create_table "user_types", force: true do |t|
     t.integer  "user_id"
