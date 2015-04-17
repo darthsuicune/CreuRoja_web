@@ -26,11 +26,6 @@ class VehiclePositionsController < ApplicationController
 	end
 	
 	private
-	def vehicle_positions_params
-		params.require(:vehicle_position).permit(:vehicle_id, :latitude, :longitude)
-		
-	end
-	
 	def parse_id
 		if params[:vehicle_position]
 			params[:vehicle_position][:vehicle_id]
