@@ -15,7 +15,7 @@ class VehiclePositionsController < ApplicationController
 		respond_to do |format|
 			format.html { head :unauthorized  }
 			format.json do
-				position = VehiclePosition.new(vehicle_id: parse_id, latitude: parse_lat, longitude: parse_long)
+				position = VehiclePosition.new(vehicle_positions_params)
 				if position.save
 					head :created 
 				else
@@ -26,28 +26,8 @@ class VehiclePositionsController < ApplicationController
 	end
 	
 	private
-	def parse_id
-		if params[:vehicle_position]
-			params[:vehicle_position][:vehicle_id]
-		elsif params
-			params[:vehicle_id]
-		end
-	end
-	
-	def parse_lat
-		if params[:vehicle_position]
-			params[:vehicle_position][:latitude]
-		elsif params
-			params[:latitude]
-		end
-	end
-	
-	def parse_long
-		if params[:vehicle_position]
-			params[:vehicle_position][:longitude]
-		elsif params
-			params[:longitude]
-		end
+	def vehicle_positions_params
+		params.require(:vehicle_position).permit(:vehicle_id, :latitude, :longitude)
 	end
 	
 	def is_valid_user
