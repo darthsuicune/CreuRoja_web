@@ -27,6 +27,7 @@ class VehiclePositionsController < ApplicationController
 	
 	private
 	def vehicle_positions_params
+		params[:vehicle_position] = JSON.parse(params[:vehicle_position]) if params[:vehicle_position]
 		params.require(:vehicle_position).permit(:vehicle_id, :latitude, :longitude)
 	end
 	
