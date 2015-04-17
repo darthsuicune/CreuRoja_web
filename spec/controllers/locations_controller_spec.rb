@@ -260,7 +260,7 @@ describe LocationsController do
 							request.env["HTTP_AUTHORIZATION"] = header_token
 						end
 						describe "full request" do
-							before { get :index, { format: :json } }
+							before { get :index, { format: :json, updated_at: "0" } }
 							it "validates a token" do
 								expect(response.status).to eq(200)
 							end
