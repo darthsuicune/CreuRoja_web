@@ -50,23 +50,33 @@ class Location < ActiveRecord::Base
 		location_type != "terrestre" && location_type != "maritimo" && location_type != "adaptadas" && location_type != "bravo"
 	end
 	
-	def self.serviced(user, updated_at = nil)
-		pending_services = Service.unfinished_before(Time.now.to_s).where(assembly_id: user.assembly_ids).ids
-		services_locations = Location.joins(:location_services).where("service_id IN (?)", pending_services).ids
+	def self.serviced(user, level, updated_at = nil)
 		if updated_at
-			updated_after(updated_at).filter_by_user_types(services_locations, user.user_types)
+			updated_after(updated_at).filter_by_location_types(user)
 		else
-			active_locations.filter_by_user_types(services_locations, user.user_types)
+			active_locations.filter_by_location_types(user)
 		end
 	end
 	
-	def self.filter_by_user_types(services_locations, user_types)
+	def self.filter_by_location_types(user)
 		# Extracted to avoid repetition. Requires 3 additional parameters for the 3 variables, that are:
 		# -Ids of the locations that have services available for the user
 		# -location types for service-based locations, filtered by user type
 		# -location types for general, filtered by user type
-		conditions = "(id IN (?) AND location_type IN (?)) OR (location_type IN (?))"
-		where(conditions, services_locations, allowed_types(user_types), allowed_general_types(user_types))
+		conditions = "(id IN (?) AND location_type IN (?)) OR (location_type IN (?) AND id IN (?))"
+		where(conditions, Location.locations_with_pending_services(user), allowed_types(user_types), allowed_general_types(user_types), Location.general_locations_for_user(user))
+	end
+	
+	def self.locations_with_pending_services(user)
+		Location.joins(:location_services).where("service_id IN (?)", Location.pending_services(user)).ids
+	end
+	
+	def self.pending_services(user)
+		Service.unfinished_before(Time.now.to_s).where(assembly_id: user.assembly_ids).ids
+	end
+	
+	def self.general_locations_for_user(user)
+		
 	end
 	
 	def self.allowed_general_types(user_types)

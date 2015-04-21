@@ -134,4 +134,20 @@ RSpec.describe Assembly, :type => :model do
 			expect(assembly.to_s).to eq assembly.name
 		end
 	end
+	
+	describe "find_autonomic" do
+		let(:assembly) { FactoryGirl.create(:comarcal) }
+		let(:provincial) { FactoryGirl.create(:provincial) }
+		let(:autonomic) { FactoryGirl.create(:autonomica) }
+		before do
+			assembly.depends_on = provincial.id
+			provincial.depends_on = autonomic.id
+			assembly.save
+			provincial.save
+			autonomic.save
+		end
+		it "should return the autonomic assembly" do
+			expect(assembly.find_parent_with_level("autonomica")).to eq autonomic
+		end
+	end
 end

@@ -90,6 +90,10 @@ class Assembly < ActiveRecord::Base
 		self.name
 	end
 	
+	def find_parent_with_level(level, assembly = self)
+		(assembly.level == level) ? assembly : find_parent_with_level(level, assembly.parent)
+	end
+	
 	private
 		def child_assemblies(assemblies, assembly = self)
 			dependants = Assembly.where(depends_on: assembly.id)

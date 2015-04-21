@@ -75,11 +75,11 @@ class User < ActiveRecord::Base
 		end
 	end
 	
-	def map_elements(updated_at = nil)
+	def map_elements(level, updated_at = nil)
 		if self.allowed_to?(:see_all_locations)
 			Location.all 
 		else
-			Location.serviced(self, updated_at)
+			Location.serviced(self, level, updated_at)
 		end
 	end
 	
@@ -246,6 +246,21 @@ class User < ActiveRecord::Base
 	
 	def goes_to?(service)
 		service.users.include? self
+	end
+	
+	def accessable_assemblies_until_level(level)
+		level_assemblies = []
+		self.assemblies.each do |assembly|
+			parent = assembly.find_parent_with_level(level)
+			level_assemblies << parent unless level_assemblies.include? parent
+		end
+		all_assemblies_in_level = []
+		level_assemblies.each do |assembly|
+			assembly.managed_assemblies.each do |managed|
+				all_assemblies_in_level << managed unless all_assemblies_in_level.include? managed
+			end
+		end
+		all_assemblies_in_level.sort
 	end
 	
 	private

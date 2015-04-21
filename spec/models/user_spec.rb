@@ -486,4 +486,23 @@ describe User do
 			end
 		end
 	end
+	
+	describe "autonomic_assemblies" do
+		let(:assembly) { FactoryGirl.create(:comarcal) }
+		let(:user) { FactoryGirl.create(:user) }
+		let(:provincial) { FactoryGirl.create(:provincial) }
+		let(:autonomic) { FactoryGirl.create(:autonomica) }
+		before do
+			assembly.depends_on = provincial.id
+			provincial.depends_on = autonomic.id
+			assembly.save
+			provincial.save
+			autonomic.save
+			user.save
+			user.add_to_assembly assembly
+		end
+		it "should return the 3 assemblies" do
+			expect(user.accessable_assemblies_until_level("autonomica")).to eq([assembly, provincial, autonomic])
+		end
+	end
 end
