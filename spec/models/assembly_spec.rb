@@ -95,10 +95,12 @@ RSpec.describe Assembly, :type => :model do
 	end
 	
 	describe "not_locals" do
-		let(:local) { FactoryGirl.create(:assembly, level: "local") }
+		let(:local) { FactoryGirl.create(:assembly) }
+		let(:not_local) { FactoryGirl.create(:assembly, level: "autonomica") }
 		
 		it "should not include local assemblies" do
-			expect(Assembly.not_locals).to match_array([assembly])
+			expect(Assembly.not_locals).to match_array([not_local])
+			expect(Assembly.not_locals).not_to include local
 		end
 	end
 	
@@ -135,7 +137,7 @@ RSpec.describe Assembly, :type => :model do
 		end
 	end
 	
-	describe "find_autonomic" do
+	describe "find_parent_with_level" do
 		let(:assembly) { FactoryGirl.create(:comarcal) }
 		let(:provincial) { FactoryGirl.create(:provincial) }
 		let(:autonomic) { FactoryGirl.create(:autonomica) }
@@ -148,6 +150,9 @@ RSpec.describe Assembly, :type => :model do
 		end
 		it "should return the autonomic assembly" do
 			expect(assembly.find_parent_with_level("autonomica")).to eq autonomic
+		end
+		it "should return nil if there is no parent with such level" do
+			
 		end
 	end
 end

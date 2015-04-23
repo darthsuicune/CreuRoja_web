@@ -153,5 +153,36 @@ describe Service do
 				expect(Service.last_date).to be_within(1.second).of(future_date)
 			end
 		end
+	
+		describe "pending_services for user" do
+			let(:assembly1) { FactoryGirl.create(:assembly) }
+			let(:assembly2) { FactoryGirl.create(:assembly) }
+			let(:user) { FactoryGirl.create(:user) }
+			let(:unfinished_service1) { FactoryGirl.create(:service) }
+			let(:unfinished_service2) { FactoryGirl.create(:service) }
+			let(:finished_service) { FactoryGirl.create(:service) }
+			
+			before do
+				assembly1.save
+				assembly2.save
+				user.save
+				user.add_to_assembly assembly1
+				unfinished_service1.end_time = 1.year.from_now
+				unfinished_service1.assembly_id = assembly1.id
+				unfinished_service2.end_time = 1.year.from_now
+				unfinished_service2.assembly_id = assembly2.id
+				finished_service.end_time = 1.year.ago
+				finished_service.assembly_id = assembly1.id
+				unfinished_service1.save
+				unfinished_service2.save
+				finished_service.save
+			end
+			
+			it "should return the unfinished service from the assembly only" do
+				expect(Service.pending_services(user)).to include unfinished_service1
+				expect(Service.pending_services(user)).not_to include unfinished_service2
+				expect(Service.pending_services(user)).not_to include finished_service
+			end
+		end
 	end
 end

@@ -91,6 +91,11 @@ describe Location do
 		let(:subassembly) { FactoryGirl.create(:assembly, depends_on: assembly.id) }
 		let(:service) { FactoryGirl.create(:service, end_time: 1.month.from_now, assembly_id: subassembly.id) }
 		let(:user) { FactoryGirl.create(:user) }
+		before do
+			location1.add_to_assembly(assembly)
+			location2.add_to_assembly(assembly)
+			location3.add_to_assembly(assembly)
+		end
 		describe "for web" do
 			before do
 				user.add_type("asi")
@@ -117,15 +122,15 @@ describe Location do
 				user.add_to_assembly(assembly)
 				service.add_location(location3)
 				location3.active = false
-				location2.save
+				Timecop.travel(Time.now - 1.day) { location2.save }
 				Timecop.travel(Time.now + 1.day) { location3.save }
 			end
 			it "should retrieve locations updated after the user last checked" do
-				locations = Location.serviced user, Time.now
+				locations = Location.serviced user, default_level, Time.now
 				expect(locations).to include(location3)
 			end
 			it "shouldn't retrieve locations that weren't updated since the user last checked" do
-				locations = Location.serviced user, Time.now
+				locations = Location.serviced user, default_level, Time.now
 				expect(locations).not_to include(location2)
 			end
 		end
@@ -172,6 +177,7 @@ describe Location do
 		describe "general, visible for all" do
 			describe "asamblea" do
 				let(:asamblea) { FactoryGirl.create(:location, location_type: "asamblea") }
+				before { asamblea.add_to_assembly assembly }
 				it "should be visible for all" do
 					expect(acu.map_elements(default_level)).to match_array([asamblea])
 					expect(asi.map_elements(default_level)).to match_array([asamblea])
@@ -185,6 +191,7 @@ describe Location do
 			
 			describe "cuap" do
 				let(:cuap) { FactoryGirl.create(:location, location_type: "cuap") }
+				before { cuap.add_to_assembly assembly }
 				it "should be visible for all" do
 					expect(acu.map_elements(default_level)).to match_array([cuap])
 					expect(asi.map_elements(default_level)).to match_array([cuap])
@@ -198,6 +205,7 @@ describe Location do
 			
 			describe "hospital" do
 				let(:hospital) { FactoryGirl.create(:location, location_type: "hospital") }
+				before { hospital.add_to_assembly assembly }
 				it "should be visible for all" do
 					expect(acu.map_elements(default_level)).to match_array([hospital])
 					expect(asi.map_elements(default_level)).to match_array([hospital])
@@ -211,6 +219,7 @@ describe Location do
 			
 			describe "nostrum" do
 				let(:nostrum) { FactoryGirl.create(:location, location_type: "nostrum") }
+				before { nostrum.add_to_assembly assembly }
 				it "should be visible for all" do
 					expect(acu.map_elements(default_level)).to match_array([nostrum])
 					expect(asi.map_elements(default_level)).to match_array([nostrum])
@@ -226,6 +235,7 @@ describe Location do
 			# Don't need to have a service to be displayed
 			describe "salvamento" do
 				let(:salvamento) { FactoryGirl.create(:location, location_type: "salvamento") }
+				before { salvamento.add_to_assembly assembly }
 				it "should be visible for acu, per" do
 					expect(acu.map_elements(default_level)).to match_array([salvamento])
 					expect(asi.map_elements(default_level)).to match_array([])
@@ -239,6 +249,7 @@ describe Location do
 			
 			describe "gasolinera" do
 				let(:gasolinera) { FactoryGirl.create(:location, location_type: "gasolinera") }
+				before { gasolinera.add_to_assembly assembly }
 				it "should be visible for b1, d1, btp" do
 					expect(acu.map_elements(default_level)).to match_array([])
 					expect(asi.map_elements(default_level)).to match_array([])

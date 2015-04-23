@@ -61,4 +61,8 @@ class Service < ActiveRecord::Base
 	def self.last_date
 		Service.order("end_time DESC").first.end_time
 	end
+	
+	def self.pending_services(user)
+		Service.unfinished_before(Time.now.to_s).where(assembly_id: user.assembly_ids)
+	end
 end

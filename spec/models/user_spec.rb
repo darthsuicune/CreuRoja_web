@@ -364,15 +364,24 @@ describe User do
 	
 	describe "map_elements" do
 		let(:location) { FactoryGirl.create(:location) }
+		let(:location1) { FactoryGirl.create(:location, location_type: "terrestre") }
 		let(:admin) { FactoryGirl.create(:admin) }
 		describe "for admin" do
 			it "should match the full location list" do
-				expect(admin.map_elements).to eq Location.all
+				expect(admin.map_elements "autonomica").to match_array([location1,location])
 			end
 		end
-		describe "for admin" do
+		describe "for user" do
+			let(:assembly) { FactoryGirl.create(:assembly) }
+			before do
+				assembly.save
+				@user.save
+				@user.add_to_assembly assembly
+				location.add_to_assembly assembly
+			end
 			it "should match the locations the user can see" do
-				expect(@user.map_elements).to eq Location.serviced(@user)
+				expect(@user.map_elements "autonomica").to include location
+				expect(@user.map_elements "autonomica").not_to include location1
 			end
 		end
 	end
@@ -487,22 +496,35 @@ describe User do
 		end
 	end
 	
-	describe "autonomic_assemblies" do
+	describe "accessable_assemblies_until_level" do
 		let(:assembly) { FactoryGirl.create(:comarcal) }
 		let(:user) { FactoryGirl.create(:user) }
-		let(:provincial) { FactoryGirl.create(:provincial) }
-		let(:autonomic) { FactoryGirl.create(:autonomica) }
+		
 		before do
-			assembly.depends_on = provincial.id
-			provincial.depends_on = autonomic.id
 			assembly.save
-			provincial.save
-			autonomic.save
 			user.save
 			user.add_to_assembly assembly
 		end
-		it "should return the 3 assemblies" do
-			expect(user.accessable_assemblies_until_level("autonomica")).to eq([assembly, provincial, autonomic])
+		
+		describe "on a normal scenario" do
+			let(:provincial) { FactoryGirl.create(:provincial) }
+			let(:autonomic) { FactoryGirl.create(:autonomica) }
+			before do
+				assembly.depends_on = provincial.id
+				provincial.depends_on = autonomic.id
+				assembly.save
+				provincial.save
+				autonomic.save
+			end
+			it "should return the 3 assemblies" do
+				expect(user.accessable_assemblies_until_level("autonomica")).to match_array([assembly, provincial, autonomic])
+			end
+		end
+
+		describe "on independent assemblies" do
+			it "should return the assembly" do
+				expect(user.accessable_assemblies_until_level("autonomica")).to match_array([assembly])
+			end
 		end
 	end
 end

@@ -233,7 +233,16 @@ describe LocationsController do
 		
 		describe "as normal user" do
 			let(:location) { FactoryGirl.create(:location) }
+			let(:assembly) { FactoryGirl.create(:assembly) }
 			let(:user) { FactoryGirl.create(:user) }
+			
+			before do
+				assembly.save
+				user.save
+				location.save
+				location.add_to_assembly assembly
+				user.add_to_assembly assembly
+			end
 			
 			describe "as JSON" do
 				describe "index" do
@@ -279,10 +288,12 @@ describe LocationsController do
 							before do
 								Timecop.travel(Time.now - 1.day) { location.save }
 								Timecop.travel(Time.now + 1.day) { location1.save }
+								location1.add_to_assembly assembly
 								get :index, { format: :json, updated_at: update_time }
 							end
 							it "should return locations updated only after the marked time" do
-								expect(assigns(:locations)).to eq([location1])
+								expect(assigns(:locations)).not_to include (location)
+								expect(assigns(:locations)).to include (location1)
 							end
 						end
 					end

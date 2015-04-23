@@ -91,7 +91,11 @@ class Assembly < ActiveRecord::Base
 	end
 	
 	def find_parent_with_level(level, assembly = self)
-		(assembly.level == level) ? assembly : find_parent_with_level(level, assembly.parent)
+		if(assembly.level == level || assembly.parent.nil?)
+			assembly
+		else
+			find_parent_with_level(level, assembly.parent)
+		end
 	end
 	
 	private

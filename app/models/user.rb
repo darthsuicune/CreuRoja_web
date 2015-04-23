@@ -252,7 +252,7 @@ class User < ActiveRecord::Base
 		level_assemblies = []
 		self.assemblies.each do |assembly|
 			parent = assembly.find_parent_with_level(level)
-			level_assemblies << parent unless level_assemblies.include? parent
+			level_assemblies << parent unless level_assemblies.include? parent || parent.nil?
 		end
 		all_assemblies_in_level = []
 		level_assemblies.each do |assembly|
@@ -260,7 +260,7 @@ class User < ActiveRecord::Base
 				all_assemblies_in_level << managed unless all_assemblies_in_level.include? managed
 			end
 		end
-		all_assemblies_in_level.sort
+		all_assemblies_in_level
 	end
 	
 	private

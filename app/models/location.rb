@@ -52,31 +52,33 @@ class Location < ActiveRecord::Base
 	
 	def self.serviced(user, level, updated_at = nil)
 		if updated_at
-			updated_after(updated_at).filter_by_location_types(user)
+			apply_filters(user, level).updated_after(updated_at)
 		else
-			active_locations.filter_by_location_types(user)
+			apply_filters(user, level).active_locations
 		end
 	end
-	
-	def self.filter_by_location_types(user)
-		# Extracted to avoid repetition. Requires 3 additional parameters for the 3 variables, that are:
-		# -Ids of the locations that have services available for the user
-		# -location types for service-based locations, filtered by user type
-		# -location types for general, filtered by user type
-		conditions = "(id IN (?) AND location_type IN (?)) OR (location_type IN (?) AND id IN (?))"
-		where(conditions, Location.locations_with_pending_services(user), allowed_types(user_types), allowed_general_types(user_types), Location.general_locations_for_user(user))
+
+=begin
+ Applies the following filters for general locations:
+ - The general locations are added to at least one assembly from all assemblies in the user's 
+       autonomic community. This inludes several autonomic communities in case a user is in 
+       assemblies from different communities.
+ - The locations that requiere a service to be shown are obtained from the list of services
+       that are available to the user through their assemblies and not yet finished
+=end
+	def self.apply_filters(user, level)
+		conditions = "(id IN (?) AND location_type IN (?)) OR (id IN (?) AND location_type IN (?))"
+		where(conditions, 
+		      Location.location_ids_with_pending_services(user), allowed_types(user.user_types), 
+		      Location.general_location_ids_for_user(user, level), allowed_general_types(user.user_types))
 	end
 	
-	def self.locations_with_pending_services(user)
-		Location.joins(:location_services).where("service_id IN (?)", Location.pending_services(user)).ids
+	def self.location_ids_with_pending_services(user)
+		Location.joins(:location_services).where("service_id IN (?)", Service.pending_services(user).ids).ids
 	end
 	
-	def self.pending_services(user)
-		Service.unfinished_before(Time.now.to_s).where(assembly_id: user.assembly_ids).ids
-	end
-	
-	def self.general_locations_for_user(user)
-		
+	def self.general_location_ids_for_user(user, level)
+		Location.joins(:assembly_locations).where("assembly_id IN (?)", user.accessable_assemblies_until_level(level)).ids
 	end
 	
 	def self.allowed_general_types(user_types)

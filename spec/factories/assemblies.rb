@@ -4,7 +4,7 @@ FactoryGirl.define do
 	factory :assembly do
 		sequence(:name) { |n| "Name #{n}" }
 		description "MyString"
-		level "MyString"
+		level "local"
 		location_id 1
 	
 		factory :estatal do 
