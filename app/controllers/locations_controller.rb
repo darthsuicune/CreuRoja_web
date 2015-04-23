@@ -15,7 +15,9 @@ class LocationsController < ApplicationController
 					@locations = current_user.available_locations
 				}
 				format.json {
-					@locations = current_user.map_elements "autonomica", params[:updated_at]
+					sanitized_level = ActionController::Base.helpers.sanitize(params[:level])
+					level = (Assembly.is_valid?(sanitized_level)) ? params[:level] : "autonomica"
+					@locations = current_user.map_elements level, params[:updated_at]
 				}
 			end
 	end

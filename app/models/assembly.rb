@@ -98,6 +98,10 @@ class Assembly < ActiveRecord::Base
 		end
 	end
 	
+	def self.is_valid?(level)
+		Assembly.exists?(level: level)
+	end
+	
 	private
 		def child_assemblies(assemblies, assembly = self)
 			dependants = Assembly.where(depends_on: assembly.id)
