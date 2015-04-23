@@ -24,6 +24,10 @@ RSpec.describe AssemblyLocationsController, type: :controller do
 				it "should create a relation" do
 					expect{ post :create, create_options }.to change(AssemblyLocation, :count).by(1)
 				end
+				it "should update the location" do
+					Timecop.travel(1.day.from_now) { post :create, create_options }
+					expect(location.updated_at).to be_within(5.seconds).of(1.day.from_now)
+				end
 			end
 			describe "with invalid params" do
 				it "should redirect to the assembly after post create if the assembly exists" do

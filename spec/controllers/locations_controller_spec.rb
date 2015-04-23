@@ -287,8 +287,7 @@ describe LocationsController do
 							let(:update_time) { Time.now.to_s }
 							before do
 								Timecop.travel(Time.now - 1.day) { location.save }
-								Timecop.travel(Time.now + 1.day) { location1.save }
-								location1.add_to_assembly assembly
+								Timecop.travel(Time.now + 1.day) { location1.add_to_assembly assembly }
 								get :index, { format: :json, updated_at: update_time }
 							end
 							it "should return locations updated only after the marked time" do
