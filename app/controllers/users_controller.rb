@@ -38,7 +38,7 @@ class UsersController < ApplicationController
 			if log_action_result @user, @user.save
 				parse_user_types
 				@user.add_to_assembly current_user.assemblies.first
-				@user.create_reset_password_token(2.years.from_now)
+				@user.create_token_and_send_welcome(2.years.from_now)
 				format.html { redirect_to users_path, notice: I18n.t(:user_created) }
 				format.json { render action: 'show', status: :created, location: @user }
 			else

@@ -1,0 +1,6 @@
+<p>Hola <%= @user.name %><br><br>
+
+Bienvenido a CR. Alguien le ha dado de alta, probablemente un stalker, asi que queremos que confirme su alta y cambie la contrasenya.
+Se li envia aquest correu per confirmar que és vostè qui sol·licita el canvi de contrasenya. El enllaç expira a les 4 hores següents a la seva petició.
+<br><br><%= "#{@reset_password_link}" %>
+</p>

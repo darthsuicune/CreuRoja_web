@@ -2,6 +2,14 @@ class UserMailer < ActionMailer::Base
 	default from: "08000-Tècnics Socors Oficina Local de Barcelona <tecnicssocors@creuroja.org>",
 			return_path: "08000-Tècnics Socors Oficina Local de Barcelona <tecnicssocors@creuroja.org>",
 			sender: "08000-Tècnics Socors Oficina Local de Barcelona <tecnicssocors@creuroja.org>"
+	
+	def user_welcome(user)
+		@user = user
+		@hostname = "http://creuroja.net"
+		@reset_password_link = "#{@hostname}#{edit_password_reset_path(@user.resettoken)}"
+	  
+		mail(to: @user.email, subject: '')
+	end
 
 	# Subject can be set in your I18n file at config/locales/en.yml
 	# with the following lookup:

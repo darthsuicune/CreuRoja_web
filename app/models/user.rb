@@ -172,6 +172,14 @@ class User < ActiveRecord::Base
 		end
 	end
 	
+	def create_token_and_send_welcome(time = Time.now)
+		self.resettoken = SecureRandom.urlsafe_base64
+		self.resettime = time
+		if self.save!
+			UserMailer.user_welcome(self).deliver
+		end
+	end
+	
 	def reset_password(password)
 		self.password = password
 		self.password_confirmation = password
