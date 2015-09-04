@@ -8,7 +8,7 @@ class UserMailer < ActionMailer::Base
 		@hostname = "http://creuroja.net"
 		@reset_password_link = "#{@hostname}#{edit_password_reset_path(@user.resettoken)}"
 	  
-		mail(to: @user.email, subject: '')
+		mail(to: @user.email, subject: 'Aplicació de Creu Roja a Catalunya')
 	end
 
 	# Subject can be set in your I18n file at config/locales/en.yml
@@ -21,6 +21,6 @@ class UserMailer < ActionMailer::Base
 		@hostname = "http://creuroja.net"
 		@reset_password_link = "#{@hostname}#{edit_password_reset_path(@user.resettoken)}"
 
-		mail(to: @user.email, subject: 'Recuperació de contrasenya de Creu Roja Catalunya')
+		mail(to: @user.email, subject: 'Recuperació de contrasenya de Creu Roja a Catalunya')
 	end
 end

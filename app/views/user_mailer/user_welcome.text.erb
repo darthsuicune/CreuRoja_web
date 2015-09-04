@@ -1,7 +1,9 @@
-Bienvenido/a a Creu Roja, alguien, probablemente algun stalker, le ha dado de alta.
+Hola <%= @user.name %>
 
-Heu sol·licitat un canvi de contrasenya per al mapa de Creu Roja.
+Et presentem una proposta que estem treballant gràcies a la col·laboració d’un voluntari per a facilitar la ubicació dels diferents espais que intervenen en els serveis preventius. Aquesta aplicació encara està en procés de formació i per tant està en fase de proves. Et facilitem l’enllaç per a que podeu provar-la i ens podeu donar la vostra opinió i valoració o comentaris al respecte per anar millorant-la i actualitzant-la.
 
-Se li envia aquest correu per confirmar que és vostè qui sol·licita el canvi de contrasenya. Aquest enllaç expira després de passar les 4 hores següents a la seva petició.
+Amb aquesta eina podrem visualitzar a través del ordinador o del telèfon mòbil mentre estiguem fent el servei preventiu, on tenim els hospitals o CUAPS més propers i que ens faci la ruta de com arribar, així com les benzineres o d’altres informacions que puguin ser necessàries. També ens permetrà saber quins serveis preventius hi ha més propers o altres Assemblees Locals de Creu Roja.
 
-<%= "#{@reset_password_link}" %>
+Per activar el teu compte, entra al següent enllaç i estableix una contrasenya per al teu compte d'usuari (recomanem que aquesta contraseña sigui diferent de la dels teus comptes de correu o xarxes socials): <%= "#{@reset_password_link}" %>
+
+Quan tinguis el compte d'usuari activat, pots entrar a l'aplicació amb l'enllaç http://creuroja.net i des de l'aplicació per Android https://play.google.com/store/apps/details?id=net.creuroja.android
