@@ -9,7 +9,7 @@ RSpec.describe UserMailer, :type => :mailer do
 		end
 
 		it "renders the headers" do
-			expect(@mail.subject).to eq("Recuperació de contrasenya de Creu Roja Catalunya")
+			expect(@mail.subject).to eq("Recuperació de contrasenya de Creu Roja a Catalunya")
 			expect(@mail.to).to eq([user.email])
 			expect(@mail.from).to eq(["tecnicssocors@creuroja.org"])
 		end

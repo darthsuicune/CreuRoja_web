@@ -15,9 +15,15 @@ class LocationsController < ApplicationController
 					@locations = current_user.available_locations
 				}
 				format.json {
-					sanitized_level = ActionController::Base.helpers.sanitize(params[:level])
-					level = (Assembly.is_valid?(sanitized_level)) ? params[:level] : "autonomica"
-					@locations = current_user.map_elements level, params[:updated_at]
+					sanitized_level = sanitize params[:level]
+					level = (Assembly.is_valid?(sanitized_level)) ? sanitized_level : "autonomica"
+					@locations = if params[:updated_at]
+						current_user.map_elements level, sanitize(params[:updated_at])
+					elsif params[:lastUpdateTime]
+						current_user.map_elements level, sanitize(params[:lastUpdateTime])
+					else
+						current_user.map_elements level
+					end
 				}
 			end
 	end
@@ -85,6 +91,10 @@ class LocationsController < ApplicationController
 	end
 
 	private
+	def sanitize(element)
+		ActionController::Base.helpers.sanitize(element)
+	end
+
 	def can_see_map
 		redirect_to signin_url unless current_user.allowed_to?(:see_map)
 	end

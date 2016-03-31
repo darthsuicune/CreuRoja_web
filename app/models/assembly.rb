@@ -36,7 +36,7 @@ class Assembly < ActiveRecord::Base
 	end
 	
 	def parent
-		Assembly.find(self.depends_on) if self.depends_on
+		Assembly.find(self.depends_on) if self.depends_on && Assembly.exists?(self.depends_on)
 	end
 	
 	def add_vehicle(vehicle)

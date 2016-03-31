@@ -106,7 +106,7 @@ class User < ActiveRecord::Base
 	end
 
 	def allowed_to?(action)
-		return false if active == false
+		return false unless active
 		return true if role == "admin"
 		case action
 		when :see_map
